@@ -1,0 +1,7 @@
+#!/bin/bash
+
+
+exec urxvt -hold -e sudo dockerd &
+sleep 6
+exec urxvt -hold -e docker-compose up &
+exec urxvt -hold -e php artisan serve
