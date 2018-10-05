@@ -1,0 +1,218 @@
+html{
+    font-size: 16px;
+}
+
+.navbar-dark .navbar-nav .nav-link,
+.navbar-dark .navbar-text {
+    color: rgba(255, 255, 255, .75);
+}
+
+.navbar-dark .navbar-nav .nav-link:focus,
+.navbar-dark .navbar-nav .nav-link:hover {
+    color: rgba(255, 255, 255, 1);
+}
+
+.sidebar {
+    min-width: 250px;
+    max-width: 250px;
+    min-height: calc(100vh - 56px);
+    transition: all 0.3s;
+}
+
+.sidebar ul li a {
+    display: block;
+    padding: .75rem 1rem;
+    color: rgba(255, 255, 255, .75);
+    text-decoration: none;
+}
+
+.sidebar ul li a:hover,
+.sidebar ul .active a {
+    color: rgba(255, 255, 255, 1);
+    background: rgba(0, 0, 0, .25);
+}
+
+.sidebar ul ul a {
+    padding-left: 2.5rem;
+    background: rgba(0, 0, 0, .25);
+}
+
+.sidebar [data-toggle="collapse"] {
+    position: relative;
+}
+
+.sidebar [data-toggle="collapse"]:before {
+    content: "\f0d7";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    position: absolute;
+    right: 1rem;
+}
+
+.sidebar [aria-expanded="true"] {
+    background: rgba(0, 0, 0, .25);
+}
+
+.sidebar.toggled {
+    margin-left: -250px;
+}
+
+.content {
+    width: 100%;
+}
+
+.display-5 {
+    font-size: 2.5rem;
+    font-weight: 300;
+    line-height: 1.2;
+}
+
+.borderless table {
+    border-top-style: none;
+    border-left-style: none;
+    border-right-style: none;
+    border-bottom-style: none;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        margin-left: -250px;
+    }
+    .sidebar.toggled {
+        margin-left: 0;
+    }
+}
+
+.hover:hover {
+    color: rgba(255, 255, 255, 1);
+    background: rgb(0, 0, 0);
+}
+
+
+/* Sticky footer styles
+-------------------------------------------------- */
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+}
+
+.fixed-footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+}
+
+@media (max-width: 992px) {
+    .hidden-p-md-down {
+        display: none;
+    }
+}
+
+@media (min-width: 992px) {
+    .hidden-p-md-up {
+        display: none;
+    }
+}
+
+@media (max-width: 350px) {
+    .notifications {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 250px) {
+    .notifications {
+        font-size: 9px;
+    }
+}
+
+.jumbotron-buttons {
+    width: 15.5em;
+    max-width: 90%
+}
+
+/****** ADMIN CSS****************/
+
+.card-body-icon {
+    position: absolute;
+    z-index: 0;
+    top: -25px;
+    right: -25px;
+    font-size: 5rem;
+    -webkit-transform: rotate(15deg);
+    -ms-transform: rotate(15deg);
+    transform: rotate(15deg);
+}
+
+@media (min-width: 576px) {
+    .card-columns {
+        column-count: 1;
+    }
+}
+.dropdown {
+    position: relative;
+}
+.dropdown-menu{
+    position: relative;
+    vertical-align: middle;
+}
+
+@media (min-width: 768px) {
+    .card-columns {
+        column-count: 2;
+    }
+}
+
+@media (min-width: 1200px) {
+    .card-columns {
+        column-count: 2;
+    }
+}
+
+.card-login {
+    max-width: 25rem;
+}
+
+.card-register {
+    max-width: 40rem;
+}
+
+body {
+    padding-top: 54px;
+}
+
+h1 {
+    margin-bottom: 40px;
+}
+
+label {
+    color: #333;
+}
+
+.btn-send {
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    margin-bottom: 20px;
+}
+
+.width100 {
+    width: 100%;
+}
+
+.footer-offset{
+    bottom: -60px;
+}
+
+#catslist {
+    max-height: 500px;
+    overflow-y: scroll;
+}
