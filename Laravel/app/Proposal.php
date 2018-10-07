@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Auction extends Model
+class Proposal extends Model
 {
 
   /**
@@ -19,11 +19,11 @@ class Auction extends Model
      *
      * @var string
      */
-    protected $table = 'auction';
+    protected $table = 'proposal';
 
     /**
      *
-     * The user that created this auction
+     * The user that created this proposal
      *
      */
     public function user()
@@ -33,7 +33,7 @@ class Auction extends Model
 
     /**
      *
-     * This auction's language
+     * This proposal's language
      *
      */
     public function language()
@@ -43,7 +43,7 @@ class Auction extends Model
 
     /**
      *
-     * This auction's publisher
+     * This proposal's publisher
      *
      */
     public function publisher()

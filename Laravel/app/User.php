@@ -20,7 +20,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'address', 'age', 'email', 'password','phone','postalcode','username','idcountry',
+        'name', 'email', 'password','phone', 'username','idfaculty',
     ];
 
     /**
@@ -34,20 +34,20 @@ class User extends Authenticatable
 
     /**
      *
-     * This user's country
+     * This user's faculty
      *
      */
-    public function country(){
-        return $this->hasOne('App\Country','id','idcountry');
+    public function faculty(){
+        return $this->hasOne('App\faculty','id','idfaculty');
     }
 
     /**
      *
-     * This user's auctions
+     * This user's proposals
      *
      */
-    public function auctions(){
-       return $this->hasMany('App\Auction','id','idseller');
+    public function proposals(){
+       return $this->hasMany('App\Proposal','id','idseller');
     }
 
 
@@ -67,10 +67,6 @@ class User extends Authenticatable
      */
     public function isBanned(){
         return $this->users_status=='banned';
-    }
-
-    public function isSuspended(){
-        return $this->users_status=='suspended';
     }
 
     public function isNormal(){

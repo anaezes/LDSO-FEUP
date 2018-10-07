@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\AuctionController;
+use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -28,10 +28,10 @@ class SearchController extends Controller
       */
     public function show()
     {
-        $auctions = [];
-        $responseSentence = "Use the advanced search options above to find auctions";
+        $facultys = [];
+        $responseSentence = "Use the advanced search options above to find facultys";
 
-        return view('pages.search', ['auctions' => $auctions, 'responseSentence' => $responseSentence]);
+        return view('pages.search', ['facultys' => $facultys, 'responseSentence' => $responseSentence]);
     }
 
     /**
@@ -43,7 +43,7 @@ class SearchController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'searchTerm' => 'nullable|string',
-            'category' => 'nullable|string',
+            'faculty' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
@@ -55,104 +55,104 @@ class SearchController extends Controller
 
         $input = $request->all();
         $searchTerm = $input['searchTerm'];
-        $category = $input['category'];
+        $faculty = $input['faculty'];
         $approved = "approved";
         $responseSentence = [];
         $ids = [];
-        $auctions = [];
+        $facultys = [];
 
         try {
             if ($searchTerm != null) {
-                $res = DB::select("SELECT auction.id FROM auction WHERE title @@ plainto_tsquery('english',?) and auction_status = ?", [$searchTerm, $approved]);
+                $res = DB::select("SELECT faculty.id FROM faculty WHERE title @@ plainto_tsquery('english',?) and faculty_status = ?", [$searchTerm, $approved]);
                 foreach ($res as $entry) {
                     array_push($ids, $entry->id);
                 }
 
                 array_push($responseSentence, ' with title "' . $searchTerm . '"');
             }
-            if ($category !== 'All') {
-                $res = DB::select('SELECT auction.id FROM auction, category_auction, category WHERE category_auction.idAuction = auction.id and category_auction.idCategory = category.id and categoryName = ? and auction_status = ?', [$category, $approved]);
+            if ($faculty !== 'All') {
+                $res = DB::select('SELECT faculty.id FROM faculty, faculty_faculty, faculty WHERE faculty_faculty.idfaculty = faculty.id and faculty_faculty.idfaculty = faculty.id and facultyName = ? and faculty_status = ?', [$faculty, $approved]);
                 foreach ($res as $entry) {
                     array_push($ids, $entry->id);
                 }
 
-                array_push($responseSentence, 'in category ' . $category);
+                array_push($responseSentence, 'in faculty ' . $faculty);
             } else {
-                $res = DB::select("SELECT id FROM auction WHERE auction_status = ?", [$approved]);
+                $res = DB::select("SELECT id FROM faculty WHERE faculty_status = ?", [$approved]);
                 foreach ($res as $entry) {
                     array_push($ids, $entry->id);
                 }
 
-                array_push($responseSentence, 'in any category');
+                array_push($responseSentence, 'in any faculty');
             }
 
             if (sizeof($ids) == 0) {
-                return view('pages.search', ['auctions' => [], 'responseSentence' => "No results were found"]);
+                return view('pages.search', ['facultys' => [], 'responseSentence' => "No results were found"]);
             }
             $parameters = implode(",", $ids);
 
-            $query = "SELECT auction.id, title, author, duration, dateApproved FROM auction WHERE auction.id IN (" . $parameters . ")";
-            $auctions = DB::select($query, []);
+            $query = "SELECT faculty.id, title, author, duration, dateApproved FROM faculty WHERE faculty.id IN (" . $parameters . ")";
+            $facultys = DB::select($query, []);
 
-            $this->buildTimestamps($auctions);
-            $this->getMaxBids($auctions);
-            $this->getImage($auctions);
+            $this->buildTimestamps($facultys);
+            $this->getMaxBids($facultys);
+            $this->getImage($facultys);
 
             $responseSentence = implode(' and ', $responseSentence);
-            $responseSentence = 'Your search results for auctions ' . $responseSentence . ':';
+            $responseSentence = 'Your search results for facultys ' . $responseSentence . ':';
         } catch (QueryException $qe) {
             $errors = new MessageBag();
 
-            $errors->add('An error ocurred', "There was a problem searching for auctions. Try Again!");
+            $errors->add('An error ocurred', "There was a problem searching for facultys. Try Again!");
             $this->warn($qe);
             return redirect()
                 ->route('search')
                 ->withErrors($errors);
         }
 
-        return view('pages.search', ['auctions' => $auctions, 'responseSentence' => $responseSentence]);
+        return view('pages.search', ['facultys' => $facultys, 'responseSentence' => $responseSentence]);
     }
 
     /**
-      * Builds all timestamps for an array of auctions
-      * @param $auctions
+      * Builds all timestamps for an array of facultys
+      * @param $facultys
       */
-    private function buildTimestamps($auctions)
+    private function buildTimestamps($facultys)
     {
-        foreach ($auctions as $auction) {
-            $ts = AuctionController::createTimestamp($auction->dateapproved, $auction->duration);
-            $auction->timestamp = $ts;
+        foreach ($facultys as $faculty) {
+            $ts = ProposalController::createTimestamp($faculty->dateapproved, $faculty->duration);
+            $faculty->timestamp = $ts;
         }
     }
 
     /**
-      * sets the max bid on an array of auctions
-      * @param $auctions
+      * sets the max bid on an array of facultys
+      * @param $facultys
       */
-    private function getMaxBids($auctions)
+    private function getMaxBids($facultys)
     {
-        foreach ($auctions as $auction) {
-            $res = DB::select("SELECT max(bidValue) FROM bid WHERE idAuction = ?", [$auction->id]);
+        foreach ($facultys as $faculty) {
+            $res = DB::select("SELECT max(bidValue) FROM bid WHERE idfaculty = ?", [$faculty->id]);
             if ($res[0]->max == null) {
-                $auction->bidValue = "No bids yet";
+                $faculty->bidValue = "No bids yet";
             } else {
-                $auction->bidValue = $res[0]->max . "€";
+                $faculty->bidValue = $res[0]->max . "€";
             }
         }
     }
 
     /**
-      * sets the image on an array of auctions
-      * @param $auctions
+      * sets the image on an array of facultys
+      * @param $facultys
       */
-    private function getImage($auctions)
+    private function getImage($facultys)
     {
-        foreach ($auctions as $auction) {
-            $image = DB::select("SELECT source FROM image WHERE idauction = ? limit 1", [$auction->id]);
+        foreach ($facultys as $faculty) {
+            $image = DB::select("SELECT source FROM image WHERE idfaculty = ? limit 1", [$faculty->id]);
             if (isset($image[0]->source)) {
-                $auction->image = $image[0]->source;
+                $faculty->image = $image[0]->source;
             } else {
-                $auction->image = "book.png";
+                $faculty->image = "book.png";
             }
         }
     }

@@ -91,18 +91,18 @@ function encodeForAjax(data)
     }).join('&');
 }
 
-let album = document.querySelector('#auctionsAlbum');
+let album = document.querySelector('#proposalsAlbum');
 let showmorebutton = document.querySelector('#showmorebutton');
 let i = 0;
-let auctions = [];
+let proposals = [];
 if (showmorebutton != null)
 {
     showmorebutton.addEventListener('click', function(event)
     {
         switch (window.location.pathname)
         {
-            case "/myauctions":
-                album.innerHTML += myauctionsAlbum();
+            case "/myproposals":
+                album.innerHTML += myproposalsAlbum();
                 break;
             case "/history":
                 album.innerHTML += historyAlbum();
@@ -120,23 +120,19 @@ if (showmorebutton != null)
  */
 if (window.location.pathname === "/home")
 {
-    ajaxCallGet("api/search?auctionStatus=approved", auctionAlbumHandler);
+    ajaxCallGet("api/search?proposalStatus=approved", proposalAlbumHandler);
 }
 
-if (window.location.pathname === "/myauctions")
+if (window.location.pathname === "/myproposals")
 {
-    ajaxCallGet("api/search?auctionsOfUser=true", myauctionsAlbumHandler);
+    ajaxCallGet("api/search?proposalsOfUser=true", myproposalsAlbumHandler);
 }
 
-if (window.location.pathname === "/auctions_im_in")
+if (window.location.pathname === "/proposals_im_in")
 {
-    ajaxCallGet("api/search?userBidOn=true", auctionAlbumHandler);
+    ajaxCallGet("api/search?userBidOn=true", proposalAlbumHandler);
 }
 
-if (window.location.pathname === "/wishlist")
-{
-    ajaxCallGet("api/search?wishlistOfUser=true", auctionAlbumHandler);
-}
 
 if (window.location.pathname === "/history")
 {
@@ -145,24 +141,24 @@ if (window.location.pathname === "/history")
 
 function historyAlbumHandler()
 {
-    auctions = JSON.parse(this.responseText);
+    proposals = JSON.parse(this.responseText);
     album.innerHTML = historyAlbum();
 }
 
 function historyAlbum()
 {
-    let htmlAuction = `<div class="row">`;
+    let htmlproposal = `<div class="row">`;
     let max = i + 12;
 
-    for (i; i < max && i < auctions.length; i++)
+    for (i; i < max && i < proposals.length; i++)
     {
-        let element = auctions[i];
+        let element = proposals[i];
         if (i % 4 === 0 && i !== 0)
         {
-            htmlAuction += `</div><div class="row">`;
+            htmlproposal += `</div><div class="row">`;
         }
-        htmlAuction += `<div class="col-md-3 auctionItem"  data-id="${element.id}">
-        <a href="auction/${element.id}" class="list-group-item-action">
+        htmlproposal += `<div class="col-md-3 proposalItem"  data-id="${element.id}">
+        <a href="proposal/${element.id}" class="list-group-item-action">
             <div class="card mb-4 box-shadow">
                 <div class="col-md-6 img-fluid media-object align-self-center ">
                     <!--<img class="width100" src="../img/book.png" alt="cover image">-->
@@ -180,34 +176,34 @@ function historyAlbum()
     </div>`;
     };
 
-    if (i == auctions.length)
+    if (i == proposals.length)
         showmorebutton.parentNode.removeChild(showmorebutton);
-    htmlAuction += `</div>`;
-    return htmlAuction;
+    htmlproposal += `</div>`;
+    return htmlproposal;
 }
 
-function myauctionsAlbumHandler()
+function myproposalsAlbumHandler()
 {
     console.log(this.responseText);
-    auctions = JSON.parse(this.responseText);
-    album.innerHTML = myauctionsAlbum();
+    proposals = JSON.parse(this.responseText);
+    album.innerHTML = myproposalsAlbum();
 }
 
-function myauctionsAlbum()
+function myproposalsAlbum()
 {
-    console.log(auctions);
-    let htmlAuction = `<div class="row">`;
+    console.log(proposals);
+    let htmlproposal = `<div class="row">`;
     let max = i + 12;
 
-    for (i; i < max && i < auctions.length; i++)
+    for (i; i < max && i < proposals.length; i++)
     {
-        let element = auctions[i];
+        let element = proposals[i];
         if (i % 4 === 0 && i !== 0)
         {
-            htmlAuction += `</div><div class="row">`;
+            htmlproposal += `</div><div class="row">`;
         }
-        htmlAuction += `<div class="col-md-3 auctionItem"  data-id="${element.id}">
-        <a href="auction/${element.id}" class="list-group-item-action">
+        htmlproposal += `<div class="col-md-3 proposalItem"  data-id="${element.id}">
+        <a href="proposal/${element.id}" class="list-group-item-action">
             <div class="card mb-4 box-shadow">
                 <div class="col-md-6 img-fluid media-object align-self-center ">
                     <!--<img class="width100" src="../img/book.png" alt="book cover">-->
@@ -226,34 +222,34 @@ function myauctionsAlbum()
         </a>
     </div>`;
     };
-    htmlAuction += `</div>`;
-    if (i == auctions.length)
+    htmlproposal += `</div>`;
+    if (i == proposals.length)
         showmorebutton.parentNode.removeChild(showmorebutton);
-    return htmlAuction;
+    return htmlproposal;
 }
 
-function auctionAlbumHandler()
+function proposalAlbumHandler()
 {
     console.log(this.responseText);
-    auctions = JSON.parse(this.responseText);
+    proposals = JSON.parse(this.responseText);
     album.innerHTML = makeAlbum();
 }
 
 function makeAlbum()
 {
-    console.log(auctions);
-    let htmlAuction = `<div class="row">`;
+    console.log(proposals);
+    let htmlproposal = `<div class="row">`;
     let max = i + 12;
 
-    for (i; i < max && i < auctions.length; i++)
+    for (i; i < max && i < proposals.length; i++)
     {
-        let element = auctions[i];
+        let element = proposals[i];
         if (i % 4 === 0 && i !== 0)
         {
-            htmlAuction += `</div><div class="row">`;
+            htmlproposal += `</div><div class="row">`;
         }
-        htmlAuction += `<div class="col-md-3 auctionItem"  data-id="${element.id}">
-        <a href="auction/${element.id}" class="list-group-item-action">
+        htmlproposal += `<div class="col-md-3 proposalItem"  data-id="${element.id}">
+        <a href="proposal/${element.id}" class="list-group-item-action">
             <div class="card mb-4 box-shadow">
                 <div class="col-md-6 img-fluid media-object align-self-center ">
 
@@ -274,28 +270,28 @@ function makeAlbum()
             </a>
     </div>`;
     };
-    htmlAuction += `</div>`;
-    if (i == auctions.length)
+    htmlproposal += `</div>`;
+    if (i == proposals.length)
     {
         if (showmorebutton != null)
             showmorebutton.parentNode.removeChild(showmorebutton);
     }
-    return htmlAuction;
+    return htmlproposal;
 }
 
-function makeSearchAlbum(auctions)
+function makeSearchAlbum(proposals)
 {
-    console.log(auctions);
-    let htmlAuction = `<div class="row">`;
+    console.log(proposals);
+    let htmlproposal = `<div class="row">`;
     let i = 0;
-    auctions.forEach(element =>
+    proposals.forEach(element =>
     {
         if (i % 4 === 0 && i !== 0)
         {
-            htmlAuction += `</div><div class="row">`;
+            htmlproposal += `</div><div class="row">`;
         }
-        htmlAuction += `<div class="col-md-3 auctionItem"  data-id="${element.id}">
-        <a href="auction/${element.id}" class="list-group-item-action">
+        htmlproposal += `<div class="col-md-3 proposalItem"  data-id="${element.id}">
+        <a href="proposal/${element.id}" class="list-group-item-action">
             <div class="card mb-4 box-shadow">
                 <div class="col-md-6 img-fluid media-object align-self-center ">
                     <!--<img class="width100" src="../img/book.png" alt="the orphan stale">-->
@@ -316,8 +312,8 @@ function makeSearchAlbum(auctions)
     </div>`;
         i++;
     });
-    htmlAuction += `</div>`;
-    return htmlAuction;
+    htmlproposal += `</div>`;
+    return htmlproposal;
 }
 
 /**
@@ -350,7 +346,7 @@ function notificationsHandler(response)
         notifications.forEach(function(element)
         {
             let time_sent = element.datesent.substring(10, 16);
-            html_notification += `<a class="dropdown-item" data-id="${element.id}" href="${element.idauction}">
+            html_notification += `<a class="dropdown-item" data-id="${element.id}" href="${element.idproposal}">
                               <span class="text text-left">
                                 <strong>${element.title}</strong>
                               </span>
@@ -593,8 +589,8 @@ if (window.location.pathname === "/search") //use ajax on advanced search form
     }
 }
 
-let cats = document.querySelectorAll(".category-dropdown");
-let navbarSearches = document.querySelectorAll("input[name='category']");
+let cats = document.querySelectorAll(".faculty-dropdown");
+let navbarSearches = document.querySelectorAll("input[name='faculty']");
 let selectedCat = document.querySelector("#catDropDown");
 
 for (let i = 0; i < cats.length; i++)
@@ -611,9 +607,9 @@ for (let i = 0; i < cats.length; i++)
 /**
  * JS for bidding-related stuff and APIs
  */
-if (window.location.href.includes("auction/"))
+if (window.location.href.includes("proposal/"))
 {
-    let editButton = document.querySelector("#edit-auction");
+    let editButton = document.querySelector("#edit-proposal");
     if (editButton != null)
     {
         editButton.addEventListener("click", function()
@@ -623,7 +619,7 @@ if (window.location.href.includes("auction/"))
     }
 
     let timeLeft = document.querySelector("#timeLeft").innerHTML;
-    if (timeLeft !== "Auction hasn't been approved yet" && timeLeft !== "Auction has ended!")
+    if (timeLeft !== "Proposal hasn't been approved yet" && timeLeft !== "Proposal has ended!")
     {
         let elements = timeLeft.split(" ");
         let days, hours, minutes, seconds;
@@ -680,25 +676,25 @@ if (window.location.href.includes("auction/"))
             if (timer.getTimeValues().seconds > 0)
                 newTime += timer.getTimeValues().seconds + "s";
             if (newTime == "")
-                newTime = "Auction has ended!";
+                newTime = "Proposal has ended!";
 
             document.querySelector("#timeLeft").innerHTML = newTime;
 
             let bidBox = document.querySelector("#bid-box");
-            if (newTime === "Auction has ended!")
+            if (newTime === "Proposal has ended!")
             {
                 bidBox.disabled = true;
-                bidBox.innerHTML = "Auction is unbiddable right now";
+                bidBox.innerHTML = "Proposal is unbiddable right now";
             }
         });
     }
 
     window.setInterval(function()
     {
-        let auctionID = getAuctionID();
-        let requestURL = "/api/bid/?auctionID=" + auctionID;
+        let proposalID = getproposalID();
+        let requestURL = "/api/bid/?proposalID=" + proposalID;
         ajaxCallGet(requestURL, getBidHandler);
-        ajaxCallGet2('/auction',
+        ajaxCallGet2('/proposal',
         {}, null);
     }, 2000);
 
@@ -734,42 +730,25 @@ if (window.location.href.includes("auction/"))
                 return;
             }
 
-            let auctionID = getAuctionID();
+            let proposalID = getproposalID();
 
             let params = {
-                "auctionID": auctionID,
+                "proposalID": proposalID,
                 "value": currVal
             };
             ajaxCallPost("/api/bid", params, postBidHandler);
         });
     }
 
-    let wishlistButton = document.querySelector("#wish-box");
-    if (wishlistButton != null)
-    {
-        let id = getAuctionID();
-        wishlistButton.addEventListener("click", function()
-        {
-            ajaxCallPost("/api/wishlist",
-            {
-                "id": id
-            }, function(data)
-            {
-                if (data.wishlisted)
-                    wishlistButton.innerHTML = "Remove from wishlist";
-                else
-                    wishlistButton.innerHTML = "Add to wishlist";
-            });
-        });
-    }
+
 }
 
-function getAuctionID()
+function getproposalID()
 {
-    let auctionID = window.location.href.split('/').pop();
-    if (auctionID.endsWith('#'))
-        auctionID = auctionID.susbstring(0, auctionID.length - 1);
-    return auctionID;
+    let proposalID = window.location.href.split('/').pop();
+    if (proposalID.endsWith('#'))
+        proposalID = proposalID.susbstring(0, proposalID.length - 1);
+    return proposalID;
 }
 
 function getBidHandler()
@@ -820,7 +799,7 @@ if (window.location.href.includes("search"))
 function advSearchHandler()
 {
     let header = document.querySelector("#responseSentence");
-    let album = document.querySelector("#auctionsAlbum");
+    let album = document.querySelector("#proposalsAlbum");
 
     let answer = JSON.parse(this.responseText);
     console.log(answer);
@@ -892,7 +871,7 @@ if (window.location.pathname === "/contact")
 /**
  * JS for moderation actions
  */
-function moderatorAction(modAction, auctionId, auctionModId = -1)
+function moderatorAction(modAction, proposalId, proposalModId = -1)
 {
     $.ajaxSetup(
     {
@@ -908,8 +887,8 @@ function moderatorAction(modAction, auctionId, auctionModId = -1)
         method: 'post',
         data:
         {
-            ida: auctionId,
-            idm: auctionModId,
+            ida: proposalId,
+            idm: proposalModId,
             action: modAction
         },
 
@@ -920,13 +899,13 @@ function moderatorAction(modAction, auctionId, auctionModId = -1)
             {
                 if (modAction == "approve_creation" || modAction == "remove_creation")
                 {
-                    $(`#cr-${auctionId}`).fadeOut();
+                    $(`#cr-${proposalId}`).fadeOut();
                 }
                 else if (modAction == "get_new_description")
                 {
                     let description = JSON.parse(result);
-                    let action_approve = "moderatorAction('approve_modification'," + auctionId + "," + auctionModId + ")";
-                    let action_remove = "moderatorAction('remove_modification'," + auctionId + "," + auctionModId + ")";
+                    let action_approve = "moderatorAction('approve_modification'," + proposalId + "," + proposalModId + ")";
+                    let action_remove = "moderatorAction('remove_modification'," + proposalId + "," + proposalModId + ")";
                     //put description text in modal
                     $("#bookTitle").text(description.title);
                     $("#oldDescription").text(description.old);
@@ -938,7 +917,7 @@ function moderatorAction(modAction, auctionId, auctionModId = -1)
                 }
                 else
                 {
-                    $(`#mr-${auctionId}`).fadeOut();
+                    $(`#mr-${proposalId}`).fadeOut();
                 }
             }
             else

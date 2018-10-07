@@ -30,23 +30,19 @@ Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('passw
 Route::get('home', 'HomeController@show')->name('home');
 
 
-// Create Auction
-Route::get('create', 'CreateAuctionController@show')->name('create');
-Route::post('create', 'CreateAuctionController@create');
+// Create Proposal
+Route::get('create', 'CreateproposalController@show')->name('create');
+Route::post('create', 'CreateproposalController@create');
 
-// Auction Item Page
-Route::get('auction/{id}', 'AuctionController@show')->name('auction');
-Route::get('/auction', 'AuctionController@updateAuctions');
-Route::get('auction/{id}/edit', 'AuctionController@edit')->name('auction.edit');
-Route::post('auction/{id}/edit', 'AuctionController@submitEdit')->name('auction.edit');
+// Proposal Item Page
+Route::get('proposal/{id}', 'ProposalController@show')->name('proposal');
+Route::get('/proposal', 'ProposalController@updateproposals');
+Route::get('proposal/{id}/edit', 'ProposalController@edit')->name('proposal.edit');
+Route::post('proposal/{id}/edit', 'ProposalController@submitEdit')->name('proposal.edit');
 
 // Profile Page
 Route::get('profile/{id}', 'ProfileController@show')->name('profile');
 Route::post('profile/{id}/edit', 'ProfileController@editUser')->name('profile.edit');
-Route::post('/users/{id}/paypal', 'ProfileController@addPaypal')->name('profile.paypal');;
-Route::delete('/users/{id}/paypal', 'ProfileController@removePaypal')->name('profile.paypal.remove');
-Route::get('/users/{id}/comments', 'API\CommentController@getComments');
-Route::post('/users/{id}', 'API\CommentController@postComment');
 
 //Contact
 Route::get('contact', 'ContactController@show')->name('contact');
@@ -66,7 +62,6 @@ Route::get('api/notifications', 'API\NotificationsController@getNotifications');
 Route::post('/notifications/{id}','API\NotificationsController@markAsSeen');
 Route::post('api/admin','API\AdminController@action')->name('admin');
 Route::post('api/moderator','API\ModeratorController@action')->name('moderator');
-Route::post('api/wishlist','API\WishlistController@wish')->name('wish');
 
 //Search Page
 Route::get('search', 'SearchController@show')->name('search');
@@ -74,9 +69,8 @@ Route::post('search', 'SearchController@simpleSearch')->name('search');
 
 //ListPages
 Route::get('history', 'ListController@history')->name('history');
-Route::get('myauctions', 'ListController@myauctions')->name('myauctions');
-Route::get('auctions_im_in','ListController@auctions_imIn')->name('auctions_im_in');
-Route::get('wishlist','ListController@wishlist')->name('wishlist');
+Route::get('myproposals', 'ListController@myproposals')->name('myproposals');
+Route::get('proposals_im_in','ListController@proposals_imIn')->name('proposals_im_in');
 
 //Moderator
 Route::get('moderator','ModeratorController@show')->name('moderator');

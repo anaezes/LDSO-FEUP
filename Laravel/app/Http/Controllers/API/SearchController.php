@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\API\BidController;
-use App\Http\Controllers\AuctionController;
+use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\Request;
@@ -37,46 +37,43 @@ class SearchController extends Controller
             $queryResults = [];
 
             if ($request->input('title') != null) {
-                $res = DB::select("SELECT id FROM auction WHERE title @@ plainto_tsquery('english',?)", [$request->input('title')]);
+                $res = DB::select("SELECT id FROM proposal WHERE title @@ plainto_tsquery('english',?)", [$request->input('title')]);
                 array_push($queryResults, $res);
             }
             if ($request->input('author') != null) {
-                $res = DB::select("SELECT id FROM auction WHERE author = ?", [$request->input('author')]);
+                $res = DB::select("SELECT id FROM proposal WHERE author = ?", [$request->input('author')]);
                 array_push($queryResults, $res);
             }
             if ($request->input('isbn') != null) {
-                $res = DB::select("SELECT id FROM auction WHERE isbn = ?", [$request->input('isbn')]);
+                $res = DB::select("SELECT id FROM proposal WHERE isbn = ?", [$request->input('isbn')]);
                 array_push($queryResults, $res);
             }
-            if ($request->input('auctionStatus') != null) {
-                $res = DB::select("SELECT id FROM auction WHERE auction_status = ?", [$request->input('auctionStatus')]);
-                array_push($queryResults, $res);
-            }
-            if ($request->input('wishlistOfUser') !== null && Auth::check()) {
-                $res = DB::select("SELECT DISTINCT auction.id FROM auction, whishlist WHERE whishlist.idAuction = auction.id and whishlist.idBuyer = ? AND auction_status=?", [Auth::user()->id, 'approved']);
+            if ($request->input('proposalStatus') != null) {
+                $res = DB::select("SELECT id FROM proposal WHERE proposal_status = ?", [$request->input('proposalStatus')]);
                 array_push($queryResults, $res);
             }
 
+
             if ($request->input('history') !== null && Auth::check()) {
-                $res = DB::select("SELECT DISTINCT auction.id FROM auction, bid WHERE bid.idAuction = auction.id and bid.idBuyer = ? AND auction_status = ?", [Auth::user()->id, 'finished']);
-                $res1 = DB::select("SELECT DISTINCT auction.id FROM auction WHERE idSeller = ? AND auction_status = ?", [Auth::user()->id, 'finished']);
+                $res = DB::select("SELECT DISTINCT proposal.id FROM proposal, bid WHERE bid.idproposal = proposal.id and bid.idBuyer = ? AND proposal_status = ?", [Auth::user()->id, 'finished']);
+                $res1 = DB::select("SELECT DISTINCT proposal.id FROM proposal WHERE idSeller = ? AND proposal_status = ?", [Auth::user()->id, 'finished']);
                 array_push($queryResults, $res);
                 array_push($queryResults, $res1);
             }
-            if ($request->input('auctionsOfUser') !== null && Auth::check()) {
-                $res = DB::select("SELECT DISTINCT auction.id FROM auction WHERE idSeller = ? AND (auction_status = ? OR auction_status=?)", [Auth::user()->id, 'approved', 'waitingApproval']);
+            if ($request->input('proposalsOfUser') !== null && Auth::check()) {
+                $res = DB::select("SELECT DISTINCT proposal.id FROM proposal WHERE idSeller = ? AND (proposal_status = ? OR proposal_status=?)", [Auth::user()->id, 'approved', 'waitingApproval']);
                 array_push($queryResults, $res);
             }
             if ($request->input('userBidOn') !== null && Auth::check()) {
-                $res = DB::select("SELECT DISTINCT auction.id FROM auction, bid WHERE bid.idAuction = auction.id and bid.idBuyer = ? and auction.auction_status = ? ", [Auth::user()->id, 'approved']);
+                $res = DB::select("SELECT DISTINCT proposal.id FROM proposal, bid WHERE bid.idproposal = proposal.id and bid.idBuyer = ? and proposal.proposal_status = ? ", [Auth::user()->id, 'approved']);
                 array_push($queryResults, $res);
             }
             if ($request->input('language') != null) {
-                $res = DB::select("SELECT DISTINCT auction.id FROM auction, language WHERE auction.idLanguage = language.id and language.languageName = ?", [$request->input('language')]);
+                $res = DB::select("SELECT DISTINCT proposal.id FROM proposal, language WHERE proposal.idLanguage = language.id and language.languageName = ?", [$request->input('language')]);
                 array_push($queryResults, $res);
             }
             if ($request->input('publisher') != null) {
-                $res = DB::select("SELECT DISTINCT auction.id FROM auction, publisher WHERE auction.idPublisher = publisher.id and publisher.publisherName = ?", [$request->input('publisher')]);
+                $res = DB::select("SELECT DISTINCT proposal.id FROM proposal, publisher WHERE proposal.idPublisher = publisher.id and publisher.publisherName = ?", [$request->input('publisher')]);
                 array_push($queryResults, $res);
             }
 
@@ -98,42 +95,32 @@ class SearchController extends Controller
             if ($ids === "") {
                 $ids = "-1";
             }
-            $query = "SELECT auction.id, title, author, duration, dateApproved, auction_status FROM auction WHERE auction.id IN (" . $ids . ")";
+            $query = "SELECT proposal.id, title, author, duration, dateApproved, proposal_status FROM proposal WHERE proposal.id IN (" . $ids . ")";
             $response = DB::select($query, []);
 
-            foreach ($response as $auction) {
-                $auction->maxBid = BidController::getMaxBidInternal($auction->id);
-                if ($auction->maxBid == 0) {
-                    $auction->bidMsg = "No bids yet";
+            foreach ($response as $proposal) {
+                $proposal->maxBid = BidController::getMaxBidInternal($proposal->id);
+                if ($proposal->maxBid == 0) {
+                    $proposal->bidMsg = "No bids yet";
                 } else {
-                    $auction->bidMsg = $auction->maxBid . "€";
+                    $proposal->bidMsg = $proposal->maxBid . "€";
                 }
 
-                if ($auction->auction_status == "waitingApproval") {
-                    $auction->time = "Not yet started";
-                } elseif ($auction->auction_status == "approved") {
-                    $auction->time = AuctionController::createTimestamp($auction->dateapproved, $auction->duration);
-                } elseif ($auction->auction_status == "finished") {
-                    $auction->time = "Finished";
+                if ($proposal->proposal_status == "waitingApproval") {
+                    $proposal->time = "Not yet started";
+                } elseif ($proposal->proposal_status == "approved") {
+                    $proposal->time = ProposalController::createTimestamp($proposal->dateapproved, $proposal->duration);
+                } elseif ($proposal->proposal_status == "finished") {
+                    $proposal->time = "Finished";
                 }
 
-                $image = DB::select("SELECT source FROM image WHERE idauction = ? limit 1", [$auction->id]);
+                $image = DB::select("SELECT source FROM image WHERE idproposal = ? limit 1", [$proposal->id]);
                 if (isset($image[0]->source)) {
-                    $auction->image = $image[0]->source;
+                    $proposal->image = $image[0]->source;
                 } else {
-                    $auction->image = "book.png";
+                    $proposal->image = "book.png";
                 }
 
-                if (Auth::check()) {
-                    $wish = DB::select("SELECT * FROM whishlist WHERE idbuyer = ? and idauction = ?", [Auth::user()->id, $auction->id]);
-                    if (sizeof($wish) > 0) {
-                        $auction->wishlisted = '<i class="fas fa-star wishlist btn btn-sm text-primary"></i>';
-                    } else {
-                        $auction->wishlisted = '<i class="far fa-star wishlist btn btn-sm text-primary"></i>';
-                    }
-                } else {
-                    $auction->wishlisted = '<i class="far fa-star wishlist btn btn-sm text-primary"></i>';
-                }
             }
         } catch (Exception $e) {
             $this->error($e);

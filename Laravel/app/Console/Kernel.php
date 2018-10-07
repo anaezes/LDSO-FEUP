@@ -4,7 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use App\Http\Controllers\AuctionController;
+use App\Http\Controllers\ProposalController;
 
 class Kernel extends ConsoleKernel
 {
@@ -26,7 +26,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->call(function () {
-            (new AuctionController)->updateAuctions();
+            (new ProposalController)->updateAuctions();
             echo "Updated auctions";
         })->everyMinute()->appendOutputTo("/tmp/laravel.log");
     }

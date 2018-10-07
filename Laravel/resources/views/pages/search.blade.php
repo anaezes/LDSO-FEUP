@@ -37,8 +37,8 @@
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    <label class="font-weight-bold">Category</label>
-                    <select class="form-control" name="category">
+                    <label class="font-weight-bold">faculty</label>
+                    <select class="form-control" name="faculty">
                         <option value="">&nbsp;</option>
                         <option>Arts&amp;Music</option>
                         <option>Biographies</option>

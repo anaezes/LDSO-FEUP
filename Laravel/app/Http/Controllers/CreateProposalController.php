@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Auction;
-use App\Category;
-use App\CategoryAuction;
+use App\Proposal;
+use App\Faculty;
+use App\FacultyProposal;
 use App\Http\Controllers\Controller;
 use App\Image;
 use App\Language;
@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\MessageBag;
 
-class CreateAuctionController extends Controller
+class CreateproposalController extends Controller
 {
     /*
     |--------------------------------------------------------------------------
@@ -48,16 +48,16 @@ class CreateAuctionController extends Controller
     }
 
     /**
-      * Creates a new auction
+      * Creates a new proposal
       * @param Request $request
-      * @return created auction
+      * @return created proposal
       */
     private function db_create(Request $request)
     {
-        $createdAuction = DB::transaction(function () use ($request) {
-            $saveAuction = new Auction;
-            $saveCategoryAuction = new CategoryAuction;
-            $saveAuction->idseller = Auth::user()->id;
+        $createdproposal = DB::transaction(function () use ($request) {
+            $saveproposal = new Proposal;
+            $savefacultyproposal = new FacultyProposal;
+            $saveproposal->idseller = Auth::user()->id;
 
             $savePublisher = Publisher::where('publishername', $request->input('publisher'))->get()->first();
 
@@ -70,23 +70,23 @@ class CreateAuctionController extends Controller
                 $savePublisher = $savePublisher->id;
             }
 
-            $saveCategory = Category::where('categoryname', $request->input('category'))->get()->first();
+            $savefaculty = Faculty::where('facultyname', $request->input('faculty'))->get()->first();
 
-            $saveAuction->idpublisher = $savePublisher;
-            $saveAuction->idlanguage = Language::where('languagename', $request->input('language'))->get()->first()->id;
+            $saveproposal->idpublisher = $savePublisher;
+            $saveproposal->idlanguage = Language::where('languagename', $request->input('language'))->get()->first()->id;
 
-            $saveAuction->title = $request->input('title');
-            $saveAuction->author = $request->input('author');
-            $saveAuction->description = $request->input('description');
-            $saveAuction->isbn = $request->input('isbn');
-            $saveAuction->duration = $this->buildDuration($request);
+            $saveproposal->title = $request->input('title');
+            $saveproposal->author = $request->input('author');
+            $saveproposal->description = $request->input('description');
+            $saveproposal->isbn = $request->input('isbn');
+            $saveproposal->duration = $this->buildDuration($request);
 
-            $saveAuction->save();
+            $saveproposal->save();
 
-            if ($saveCategory != null) {
-                $saveCategoryAuction->idcategory = $saveCategory->id;
-                $saveCategoryAuction->idauction = $saveAuction->id;
-                $saveCategoryAuction->save();
+            if ($savefaculty != null) {
+                $savefacultyproposal->idfaculty = $savefaculty->id;
+                $savefacultyproposal->idproposal = $saveproposal->id;
+                $savefacultyproposal->save();
             }
 
             $input = $request->all();
@@ -104,18 +104,18 @@ class CreateAuctionController extends Controller
             foreach ($images as $image) {
                 $saveImage = new Image;
                 $saveImage->source = $image;
-                $saveImage->idauction = $saveAuction->id;
+                $saveImage->idproposal = $saveproposal->id;
                 $saveImage->save();
             }
 
-            return $saveAuction;
+            return $saveproposal;
         });
 
-        return $createdAuction;
+        return $createdproposal;
     }
 
     /**
-     * Creates a new auction and redirects to it's page.
+     * Creates a new proposal and redirects to it's page.
      *
      */
     public function create(Request $request)
@@ -125,17 +125,17 @@ class CreateAuctionController extends Controller
         }
 
         try {
-            $createdAuction = $this->db_create($request);
+            $createdproposal = $this->db_create($request);
         } catch (QueryException $qe) {
             $errors = new MessageBag();
 
-            $errors->add('An error ocurred', "There was a problem creating the auction. Try Again!");
+            $errors->add('An error ocurred', "There was a problem creating the proposal. Try Again!");
             $this->warn($qe);
             return redirect()
                 ->route('create')
                 ->withErrors($errors);
         }
-        return redirect()->route('auction', ['id' => $createdAuction->id]);
+        return redirect()->route('proposal', ['id' => $createdproposal->id]);
     }
 
     private function buildDuration(Request $request)

@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'Auction')
+@section('title', 'proposal')
 
 @section('content')
 
-    <!-- Auction Content -->
-            <main  data-id="{{$auction, $categoryName}}">
+    <!-- proposal Content -->
+            <main  data-id="{{$proposal, $facultyName}}">
               <div class="container p-5">
                 @if (Auth::check())
                 @if (Auth::user()->users_status=="moderator" ||Auth::user()->users_status=="admin"  )
@@ -17,34 +17,34 @@
                     </h5>
                     <hr>
                     <ul class="list-group">
-                        <li class="list-group-item bg-secondary text-white"><b>Status:</b> {{$auction->auction_status}}</li>
-                        <li class="list-group-item"><b>Date approved:</b> {{$auction->dateapproved}}</li>
-                        <li class="list-group-item bg-secondary text-white"><b>Date removed:</b> {{$auction->dateremoved}}</li>
+                        <li class="list-group-item bg-secondary text-white"><b>Status:</b> {{$proposal->proposal_status}}</li>
+                        <li class="list-group-item"><b>Date approved:</b> {{$proposal->dateapproved}}</li>
+                        <li class="list-group-item bg-secondary text-white"><b>Date removed:</b> {{$proposal->dateremoved}}</li>
                     </ul>
                 </div>
-                <!-- Moderator remove auction modal pop-up -->
-                <div class="modal fade" id="removeAuctionModal" tabindex="-1" role="dialog" aria-hidden="true">
+                <!-- Moderator remove proposal modal pop-up -->
+                <div class="modal fade" id="removeproposalModal" tabindex="-1" role="dialog" aria-hidden="true">
                   <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h5 class="modal-title" >Auction action</h5>
+                        <h5 class="modal-title" >proposal action</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                         </button>
                       </div>
                       <div class="modal-body">
-                        @if ($auction->auction_status!="removed")
-                        Are you sure you want to mark this auction as removed?
+                        @if ($proposal->proposal_status!="removed")
+                        Are you sure you want to mark this proposal as removed?
                         @else
                         Do you want to undo the remove?
                         @endif
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        @if ($auction->auction_status!="removed")
-                        <button type="button" class="btn btn-danger" id="mod_remove_auction" onclick="moderatorAction('remove_auction',{{$auction->id}})">Yes</button>
+                        @if ($proposal->proposal_status!="removed")
+                        <button type="button" class="btn btn-danger" id="mod_remove_proposal" onclick="moderatorAction('remove_proposal',{{$proposal->id}})">Yes</button>
                         @else
-                        <button type="button" class="btn btn-success" id="mod_restore_auction" onclick="moderatorAction('restore_auction',{{$auction->id}})">Yes</button>
+                        <button type="button" class="btn btn-success" id="mod_restore_proposal" onclick="moderatorAction('restore_proposal',{{$proposal->id}})">Yes</button>
                         @endif
                       </div>
                     </div>
@@ -98,36 +98,30 @@
                                 </div>
                             </td>
                             <td style="width: 16.66%"><strong>Title</strong></td>
-                            <td>{{$auction->title}}</td>
+                            <td>{{$proposal->title}}</td>
                         </tr>
                         <tr>
                             <td><strong>Author</strong></td>
-                            <td> {{$auction->author}} </td>
+                            <td> {{$proposal->author}} </td>
                         </tr>
-                        <tr>
-                            <td><strong>Publisher</strong></td>
-                            <td>{{$auction->publisher->publishername}}</td>
-                        </tr>
+
                         <tr>
                             <td><strong>ISBN</strong></td>
-                            <td>{{$auction->isbn}}</td>
+                            <td>{{$proposal->isbn}}</td>
                         </tr>
+
                         <tr>
-                            <td><strong>Language</strong></td>
-                            <td>{{$auction->language->languagename}}</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Category</strong></td>
-                            <td>{{$categoryName}}</td>
+                            <td><strong>faculty</strong></td>
+                            <td>{{$facultyName}}</td>
                         </tr>
 
                         <tr>
                             <td><strong>Description</strong></td>
-                            <td>{{$auction->description}}</td>
+                            <td>{{$proposal->description}}</td>
                         </tr>
                         <tr>
                             <td><strong>Seller</strong></td>
-                            <td><a class="button btn btn-sm btn-outline-secondary p-2 " href="{{ url("profile/{$auction->user->id}") }}"><b>{{$auction->user->name}}</b></a></td>
+                            <td><a class="button btn btn-sm btn-outline-secondary p-2 " href="{{ url("profile/{$proposal->user->id}") }}"><b>{{$proposal->user->name}}</b></a></td>
                         </tr>
                         <tr>
                             <td><strong>Time left: </strong>
@@ -140,8 +134,8 @@
                                     <div class="form-row">
                                         <div class="form-group col-md-12">
                                             @if (Auth::check())
-                                                @if(Auth::user()->id != $auction->idseller)
-                                                    @if($auction->auction_status == "approved")
+                                                @if(Auth::user()->id != $proposal->idseller)
+                                                    @if($proposal->proposal_status == "approved")
                                                     <input id="currentBid" type="number" min="0.00" placeholder="0.00" step="0.01" class="form-control">
                                                     @else
                                                     <input id="currentBid" type="number" min="0.00" placeholder="0.00" disabled step="0.01" class="form-control">
@@ -158,20 +152,20 @@
                             <td>
                                 @if (Auth::check())
                                     @if (Auth::user()->users_status=="moderator")
-                                        @if(Auth::user()->id != $auction->idseller)
+                                        @if(Auth::user()->id != $proposal->idseller)
                                              <button id="bid-box" type="submit" class="btn btn-primary col-md-6">Bid a new price</button>
                                         @else
-                                        <button id="edit-auction" type="submit" class="btn btn-primary col-md-6">Edit the auction</button>
+                                        <button id="edit-proposal" type="submit" class="btn btn-primary col-md-6">Edit the proposal</button>
                                         @endif
-                                        <!-- Moderator remove auction button -->
-                                        @if($auction->auction_status!="removed")
-                                        <button id="mod_remove_auction" data-toggle="modal" data-target="#removeAuctionModal" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
+                                        <!-- Moderator remove proposal button -->
+                                        @if($proposal->proposal_status!="removed")
+                                        <button id="mod_remove_proposal" data-toggle="modal" data-target="#removeproposalModal" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
                                         @else
-                                        <button id="mod_remove_auction" data-toggle="modal" data-target="#removeAuctionModal" class="btn btn-success"><i class="fas fa-undo"></i></button>
+                                        <button id="mod_remove_proposal" data-toggle="modal" data-target="#removeproposalModal" class="btn btn-success"><i class="fas fa-undo"></i></button>
                                         @endif
-                                    @elseif ($auction->idseller == Auth::user()->id)
-                                    <button id="edit-auction" type="submit" class="btn btn-primary col-md-6" style = "margin-top: 3px;">Edit the auction</button>
-                                    @elseif ($auction->auction_status != "approved")
+                                    @elseif ($proposal->idseller == Auth::user()->id)
+                                    <button id="edit-proposal" type="submit" class="btn btn-primary col-md-6" style = "margin-top: 3px;">Edit the proposal</button>
+                                    @elseif ($proposal->proposal_status != "approved")
                                     <button id="unbiddable" type="submit" disabled class="btn btn-outline-secondary col-md-6">Unable to bid</button>
                                     @else
                                     <button id="bid-box" type="submit" class="btn btn-primary col-md-6">Bid a new price</button>
@@ -180,8 +174,8 @@
                                 <button id="bid-box" type="submit" disabled class="btn btn-outline-secondary col-md-10">Login to bid</button>
                                 @endif
 
-                                @if (Auth::check()&&$auction->idseller != Auth::user()->id)
-                                @if ($auction->wishlisted == true)
+                                @if (Auth::check()&&$proposal->idseller != Auth::user()->id)
+                                @if ($proposal->wishlisted == true)
                                 <button id="wish-box" type="submit" class="btn btn-primary col-md-6" style = "margin-top: 3px;">Remove from wishlist</button>
                                 @else
                                 <button id="wish-box" type="submit" class="btn btn-primary col-md-6" style = "margin-top: 3px;">Add to wishlist</button>

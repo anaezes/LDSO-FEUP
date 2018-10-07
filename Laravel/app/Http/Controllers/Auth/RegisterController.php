@@ -53,9 +53,7 @@ class RegisterController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'username' => 'required|string|max:255|unique:users',
-            'age' => 'required|min:18|integer',
-            'address' => 'required|string|max:255',
-            'idcountry' => 'required|integer',
+            'idfaculty' => 'required|integer',
             'password' => 'required|string|min:6|confirmed',
         ]);
     }
@@ -70,15 +68,12 @@ class RegisterController extends Controller
     {
         $saveUser = new User;
         $saveUser->create([
-            'address' => $data['address'],
-            'age' => $data['age'],
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
             'phone' => $data['phone'],
-            'postalcode' => $data['postalcode'],
             'username' => $data['username'],
-            'idcountry' => $data['idcountry'],
+            'idfaculty' => $data['idfaculty'],
         ]);
 
         return $saveUser;

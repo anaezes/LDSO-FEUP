@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Auction;
+use App\Proposal;
 use App\Http\Controllers\Controller;
 
 class HomeController extends Controller
@@ -24,8 +24,8 @@ class HomeController extends Controller
       */
     public function show()
     {
-        $auctions = Auction::all();
-        return view('pages.home', ['auctions' => $auctions]);
+        $proposals = Proposal::all();
+        return view('pages.home', ['proposals' => $proposals]);
 
     }
 }

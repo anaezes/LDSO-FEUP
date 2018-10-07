@@ -25,8 +25,8 @@ class Bid extends Model
         return $this->belongsTo('App\User', 'idbuyer', 'id');
     }
 
-    public function auction()
+    public function proposal()
     {
-        return $this->belongsTo('App\Auction', 'idauction', 'id');
+        return $this->belongsTo('App\Proposal', 'idproposal', 'id');
     }
 }

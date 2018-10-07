@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class NotificationAuction extends Model
+class FacultyProposal extends Model
 {
 
     /**
@@ -19,5 +19,7 @@ class NotificationAuction extends Model
      *
      * @var string
      */
-    protected $table = 'notification_auction';
+    protected $table = 'faculty_proposal';
+
+    protected $primaryKey = 'idproposal';
 }

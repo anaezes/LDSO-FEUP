@@ -8,116 +8,86 @@
     <nav class="sidebar bg-dark hidden-p-md-up pb-4">
         <ul class="list-unstyled mt-4">
             <li>
-                <h5 class="text-white pl-3 pb-2 ">Categories</h5>
+                <h5 class="text-white pl-3 pb-2 ">Faculties</h5>
             </li>
             <li>
                 <a href="#" class="sidebar-toggle">
-                    Arts&amp;Music</a>
+                    Faculty of Architecture</a>
             </li>
             <li>
                 <a href="#" class="sidebar-toggle">
-                    Biographies</a>
+                    Faculty of Fine Arts</a>
             </li>
             <li>
                 <a href="#" class="sidebar-toggle">
-                    Business</a>
+                    Faculty of Science</a>
             </li>
             <li>
                 <a href="#" class="sidebar-toggle">
-                    Kids</a>
+                    Faculty of Nutrition and Food Science</a>
             </li>
             <li>
                 <a href="#" class="sidebar-toggle">
-                    Comics</a>
+                    Faculty of Sports</a>
             </li>
             <li>
                 <a href="#" class="sidebar-toggle">
-                    Cooking</a>
+                    Faculty of Law</a>
             </li>
             <li>
                 <a href="#" class="sidebar-toggle">
-                    Computation&amp;Tech</a>
+                    Faculty of Economics</a>
             </li>
             <li>
                 <a href="#" class="sidebar-toggle">
-                    Education</a>
+                    Faculty of Engineering </a>
             </li>
             <li>
                 <a href="#" class="sidebar-toggle">
-                    Health&amp;Fitness</a>
+                    Faculty of Pharmacy</a>
             </li>
             <li>
                 <a href="#" class="sidebar-toggle">
-                    History</a>
+                    Faculty of Arts</a>
             </li>
             <li>
                 <a href="#" class="sidebar-toggle">
-                    Horror</a>
-            </li>
-            <li>
-                <a href="#submenu1" data-toggle="collapse">
-                    Literature</a>
-                <ul id="submenu1" class="list-unstyled collapse">
-                    <li>
-                        <a href="#" class="sidebar-toggle">All</a>
-                    </li>
-                    <li>
-                        <a href="#" class="sidebar-toggle">Anthologies</a>
-                    </li>
-                    <li>
-                        <a href="#" class="sidebar-toggle">Classics</a>
-                    </li>
-                    <li>
-                        <a href="#" class="sidebar-toggle">Contemporary</a>
-                    </li>
-                    <li>
-                        <a href="#" class="sidebar-toggle">Sci-Fi&amp;Fantasy</a>
-                    </li>
-                    <li>
-                        <a href="#" class="sidebar-toggle">Romance</a>
-                    </li>
-                    <li>
-                        <a href="#" class="sidebar-toggle">Crime</a>
-                    </li>
-                </ul>
+                    Faculty of Medicine</a>
             </li>
             <li>
                 <a href="#" class="sidebar-toggle">
-                    Religion</a>
+                    Faculty of Dental Medicine</a>
             </li>
             <li>
                 <a href="#" class="sidebar-toggle">
-                    Science</a>
+                    Faculty of Psychology and Education Science</a>
             </li>
             <li>
                 <a href="#" class="sidebar-toggle">
-                    Self-Help</a>
+                    Abel Salazar Institute of Biomedical Science</a>
             </li>
             <li>
                 <a href="#" class="sidebar-toggle">
-                    Travel</a>
+                    Porto Business School</a>
             </li>
-            <li>
-                <a href="#" class="sidebar-toggle">
-                    Other</a>
-            </li>
+
         </ul>
     </nav>
     <div class="content p-4 mt-3">
         <section class="jumbotron text-center">
             <div class="container">
-                <h1 class="jumbotron-heading"><b>Welcome to Bookhub!</b></h1>
-                <h4 class="text-dark hidden-p-md-down">Introduced in May of 2018, BookHub is a web platform that allows EU residents to participate in online book auctions.</h4>
+                <h1 class="jumbotron-heading"><b>Welcome to U.OPENLAB!</b></h1>
+                <h4 class="text-dark hidden-p-md-down">Introduced in December of 2018, U.OPENLAB is a web platform that allows students from University of Porto to share their works as bids to proposals made by other users.</h4>
                 @if (Auth::check())
                 <span id="buttonsWelcome">
-                    <a href="{{ url('myauctions/')}}" class="btn btn-primary btn-lg my-2 mx-3 jumbotron-buttons">My Auctions</a>
-                    <a href="{{ url('auctions_im_in/')}}" class="btn btn-secondary btn-lg my-2 mx-3 jumbotron-buttons">Auctions I'm in</a>
+                    <a href="{{ url('myproposals/')}}" class="btn btn-primary btn-lg my-2 mx-3 jumbotron-buttons">My proposals</a>
+                    <a href="{{ url('proposals_im_in/')}}" class="btn btn-secondary btn-lg my-2 mx-3 jumbotron-buttons">proposals I'm in</a>
                 </span>
                 @endif
             </div>
         </section>
-        <!---  Active auctions grid -->
-        <div id="auctionsAlbum" class="album py-2">
+        <!---  Active proposals grid -->
+        <div id="proposalsAlbum" class="album py-2">
         </div>
         <a href="#" id="showmorebutton" class="btn btn-outline-primary my-2 btn-block">Show More</a>
     </div>

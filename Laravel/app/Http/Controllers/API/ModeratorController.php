@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Auction;
-use App\AuctionModification;
+use App\Proposal;
+use App\ProposalModification;
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\Request;
@@ -76,8 +76,8 @@ class ModeratorController extends Controller
     private function db_approve_modification($ida, $idm)
     {
         DB::transaction(function () use ($ida, $idm) {
-            $auction = Auction::find($ida);
-            $auction_modified = AuctionModification::find($idm);
+            $auction = Proposal::find($ida);
+            $auction_modified = ProposalModification::find($idm);
 
             $auction_modified->dateapproved = DB::raw('now()');
             $auction_modified->is_approved = true;
@@ -94,7 +94,7 @@ class ModeratorController extends Controller
       */
     private function db_remove_modification($idm)
     {
-        $auction_modified = AuctionModification::find($idm);
+        $auction_modified = ProposalModification::find($idm);
 
         $auction_modified->dateapproved = DB::raw('now()');
         $auction_modified->is_approved = false;
@@ -109,15 +109,15 @@ class ModeratorController extends Controller
       */
     private function db_get_new_description($ida, $idm)
     {
-        $auction = Auction::find($ida);
+        $auction = Proposal::find($ida);
 
         $description = array(
-            "new" => AuctionModification::find($idm)->newdescription,
+            "new" => ProposalModification::find($idm)->newdescription,
             "old" => $auction->description,
             "title" => $auction->title,
         );
 
-        $auction_modified = AuctionModification::find($idm);
+        $auction_modified = ProposalModification::find($idm);
         $newdescription = $auction_modified->newdescription;
         return json_encode($description);
     }
@@ -130,7 +130,7 @@ class ModeratorController extends Controller
     private function approve_creation($request)
     {
         $this->db_approve_creation($request->ida);
-        return response()->json(['success' => 'Auction creation was successfully approved.', 'action' => $request->action, 'requestId' => $request->ida, 'did' => '1']);
+        return response()->json(['success' => 'Proposal creation was successfully approved.', 'action' => $request->action, 'requestId' => $request->ida, 'did' => '1']);
     }
 
     /**
@@ -141,7 +141,7 @@ class ModeratorController extends Controller
     private function remove_creation($request)
     {
         $this->db_remove_creation($request->ida);
-        return response()->json(['success' => 'Auction creation was successfully removed.', 'action' => $request->action, 'requestId' => $request->ida, 'did' => '2']);
+        return response()->json(['success' => 'Proposal creation was successfully removed.', 'action' => $request->action, 'requestId' => $request->ida, 'did' => '2']);
     }
 
     /**
@@ -152,7 +152,7 @@ class ModeratorController extends Controller
     private function approve_modification($request)
     {
         $this->db_approve_modification($request->ida, $request->idm);
-        return response()->json(['success' => 'Auction modification was successfully approved.', 'action' => $request->action, 'requestIdModification' => $request->idm, 'did' => '3']);
+        return response()->json(['success' => 'Proposal modification was successfully approved.', 'action' => $request->action, 'requestIdModification' => $request->idm, 'did' => '3']);
     }
 
     /**
@@ -163,7 +163,7 @@ class ModeratorController extends Controller
     private function remove_modification($request)
     {
         $this->db_remove_modification($request->idm);
-        return response()->json(['success' => 'Auction modification was successfully removed.', 'action' => $request->action, 'requestIdModification' => $request->idm, 'did' => '4']);
+        return response()->json(['success' => 'Proposal modification was successfully removed.', 'action' => $request->action, 'requestIdModification' => $request->idm, 'did' => '4']);
     }
 
     /**
@@ -174,7 +174,7 @@ class ModeratorController extends Controller
     private function restore_auction($request)
     {
         $this->db_restore_auction($request->ida);
-        return response()->json(['success' => 'Auction was successfully restored.', 'action' => $request->action, 'requestIdModification' => $request->idm, 'did' => '6']);
+        return response()->json(['success' => 'Proposal was successfully restored.', 'action' => $request->action, 'requestIdModification' => $request->idm, 'did' => '6']);
     }
 
     /**
@@ -185,7 +185,7 @@ class ModeratorController extends Controller
     private function remove_auction($request)
     {
         $this->db_remove_auction($request->ida);
-        return response()->json(['success' => 'Auction was successfully removed.', 'action' => $request->action, 'requestIdModification' => $request->idm, 'did' => '5']);
+        return response()->json(['success' => 'Proposal was successfully removed.', 'action' => $request->action, 'requestIdModification' => $request->idm, 'did' => '5']);
     }
 
     /**
