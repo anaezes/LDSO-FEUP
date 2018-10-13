@@ -28,26 +28,9 @@ class Proposal extends Model
      */
     public function user()
     {
-        return $this->belongsTo('App\User', 'idseller', 'id');
+        return $this->belongsTo('App\User', 'idProponent', 'id');
     }
 
-    /**
-     *
-     * This proposal's language
-     *
-     */
-    public function language()
-    {
-        return $this->hasOne('App\Language', 'id', 'idlanguage');
-    }
 
-    /**
-     *
-     * This proposal's publisher
-     *
-     */
-    public function publisher()
-    {
-        return $this->hasOne('App\Publisher', 'id', 'idpublisher');
-    }
+
 }

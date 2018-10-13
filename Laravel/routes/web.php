@@ -32,7 +32,7 @@ Route::get('home', 'HomeController@show')->name('home');
 
 // Create Proposal
 Route::get('create', 'CreateproposalController@show')->name('create');
-Route::post('create', 'CreateproposalController@create');
+Route::post('create', 'CreateProposalController@create');
 
 // Proposal Item Page
 Route::get('proposal/{id}', 'ProposalController@show')->name('proposal');

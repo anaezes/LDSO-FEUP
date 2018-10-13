@@ -42,9 +42,9 @@
                       <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         @if ($proposal->proposal_status!="removed")
-                        <button type="button" class="btn btn-danger" id="mod_remove_proposal" onclick="moderatorAction('remove_proposal',{{$proposal->id}})">Yes</button>
+                        <button type="button" class="btn btn-danger" id="mod_remove_proposal" onclick="moderatorAction('remove_proposal',{{$proposal=>id}})">Yes</button>
                         @else
-                        <button type="button" class="btn btn-success" id="mod_restore_proposal" onclick="moderatorAction('restore_proposal',{{$proposal->id}})">Yes</button>
+                        <button type="button" class="btn btn-success" id="mod_restore_proposal" onclick="moderatorAction('restore_proposal',{{$proposal=>id}})">Yes</button>
                         @endif
                       </div>
                     </div>

@@ -24,7 +24,7 @@
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="language">Skills</label>
-                    <select id="language" name="language" class="form-control" value="{{ old('language') }}" required>
+                    <select id="skill" name="skill" class="form-control" value="{{ old('skill') }}" required>
                         <option value="">&nbsp;</option>
                         <option>English</option>
                         <option>Afar</option>
@@ -51,7 +51,7 @@
                 </div>
                 <div class="form-group col-md-6">
                     <label for="faculty">Faculty</label>
-                    <select id="faculty" name="faculty"  class="form-control" required>
+                    <select id="faculty" name="faculty"  class="form-control" value="{{ old('faculty') }}" required>
                         <option selected>Faculty of Architecture</option>
                         <option>Faculty of Fine Arts</option>
                         <option>Faculty of Science</option>
@@ -79,7 +79,7 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label for="description">Description</label>
-                    <textarea id="description" name="description" rows="3" cols="30" class="form-control" placeholder="Describe the book, its condition, or any other things you may consider important" value="{{ old('description') }}" required></textarea>
+                    <textarea id="description" name="description" rows="3" cols="30" class="form-control" placeholder="Describe this proposal: things you may consider important." value="{{ old('description') }}" required></textarea>
                     @if ($errors->has('description'))
                       <span class="error">
                         {{ $errors->first('description') }}
@@ -88,105 +88,105 @@
                 </div>
             </div>
             <div class="form-row">
-
-            </div>
-
-            <label><i class="fa fa-clock"></i> Duration</label>
-            <div class="form-row">
-                <div class="form-group col-md-1.5">
-                    <label for="days">Days</label>
-                    <select id="days" name="days" class="form-control" required>
-                        <option value="">&nbsp;</option>
-                        <option>0</option>
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                        <option>6</option>
-                    </select>
-                    @if ($errors->has('images'))
-                      <span class="error">
-                        {{ $errors->first('images') }}
-                      </span>
-                    @endif
+                <div class="form-group col-md-6">
+                    <label><i class="fa fa-clock"></i> Duration</label>
+                    <div class="form-row">
+                        <div class="form-group col-md-2">
+                            <label for="days">Days</label>
+                            <select id="days" name="days" class="form-control" required>
+                                <option value="">&nbsp;</option>
+                                <option>0</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                            </select>
+                            @if ($errors->has('images'))
+                            <span class="error">
+                            {{ $errors->first('images') }}
+                          </span>
+                            @endif
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="hours">Hours</label>
+                            <select id="hours" name="hours" class="form-control" required>
+                                <option value="">&nbsp;</option>
+                                <option>0</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                                <option>13</option>
+                                <option>14</option>
+                                <option>15</option>
+                                <option>16</option>
+                                <option>17</option>
+                                <option>18</option>
+                                <option>19</option>
+                                <option>20</option>
+                                <option>21</option>
+                                <option>22</option>
+                                <option>23</option>
+                                <option>24</option>
+                            </select>
+                            @if ($errors->has('hours'))
+                            <span class="error">
+                            {{ $errors->first('hours') }}
+                          </span>
+                            @endif
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="minutes">Minutes</label>
+                            <input id="minutes" class="form-control" type="number" name="minutes" min="0" max="59" required value="0">
+                            @if ($errors->has('minutes'))
+                            <span class="error">
+                            {{ $errors->first('minutes') }}
+                          </span>
+                            @endif
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group col-md-1.5">
-                    <label for="hours">Hours</label>
-                    <select id="hours" name="hours" class="form-control" required>
-                        <option value="">&nbsp;</option>
-                        <option>0</option>
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                        <option>6</option>
-                        <option>7</option>
-                        <option>8</option>
-                        <option>9</option>
-                        <option>10</option>
-                        <option>11</option>
-                        <option>12</option>
-                        <option>13</option>
-                        <option>14</option>
-                        <option>15</option>
-                        <option>16</option>
-                        <option>17</option>
-                        <option>18</option>
-                        <option>19</option>
-                        <option>20</option>
-                        <option>21</option>
-                        <option>22</option>
-                        <option>23</option>
-                        <option>24</option>
-                    </select>
-                    @if ($errors->has('hours'))
-                      <span class="error">
-                        {{ $errors->first('hours') }}
-                      </span>
-                    @endif
+                <div class="form-group col-md-6">
+                    <label><i class="fa fa-stop-circle"></i> Privacy</label>
+                    <div class="form-row">
+                        <div class="checkbox col-md-6">
+                            <label for="agree">
+                                <input id="public_prop" name="agree" type="checkbox" value="{{ old('agree') }}" required>
+                                @if ($errors->has('isbn'))
+                                <span class="error">
+                              {{ $errors->first('isbn') }}
+                            </span>
+                                @endif
+                                Public Proposal</label>
+                        </div>
+                        <div class="checkbox col-md-6">
+                            <label for="agree">
+                                <input id="public_bid" name="agree" type="checkbox" value="{{ old('agree') }}" required>
+                                @if ($errors->has('isbn'))
+                                <span class="error">
+                              {{ $errors->first('isbn') }}
+                            </span>
+                                @endif
+                                Public Bid</label>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group col-md-1">
-                    <label for="minutes">Minutes</label>
-                    <input id="minutes" class="form-control" type="number" name="minutes" min="0" max="59" required value="0">
-                    @if ($errors->has('minutes'))
-                      <span class="error">
-                        {{ $errors->first('minutes') }}
-                      </span>
-                    @endif
-                </div>
-            </div>
 
 
-            <div class="form-row">
-                <div class="checkbox col-md-6">
-                    <label for="agree">
-                        <input id="agree" name="agree" type="checkbox" value="{{ old('agree') }}" required>
-                        @if ($errors->has('isbn'))
-                        <span class="error">
-                          {{ $errors->first('isbn') }}
-                        </span>
-                        @endif
-                        Public Proposal</label>
-                </div>
-                <div class="checkbox col-md-6">
-                    <label for="agree">
-                        <input id="agree" name="agree" type="checkbox" value="{{ old('agree') }}" required>
-                        @if ($errors->has('isbn'))
-                        <span class="error">
-                          {{ $errors->first('isbn') }}
-                        </span>
-                        @endif
-                        Public Bid</label>
-                </div>
-            </div>
-
-            <div class="form-row">
                 <div class="form-group col-md-12">
                     <button type="submit" class="btn btn-primary col-md-12">Create proposal</button>
                 </div>
-            </div>
+
         </form>
 
     </main>

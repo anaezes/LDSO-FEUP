@@ -57,56 +57,34 @@ class CreateproposalController extends Controller
         $createdproposal = DB::transaction(function () use ($request) {
             $saveproposal = new Proposal;
             $savefacultyproposal = new FacultyProposal;
-            $saveproposal->idseller = Auth::user()->id;
+            $
+            $saveproposal->idProponent = Auth::user()->id;
 
-            $savePublisher = Publisher::where('publishername', $request->input('publisher'))->get()->first();
 
-            if ($savePublisher == null) {
-                $savePublisher = new Publisher;
-                $savePublisher->publishername = $request->input('publisher');
-                $savePublisher->save();
-                $savePublisher = $savePublisher->id;
-            } else {
-                $savePublisher = $savePublisher->id;
-            }
+            $savefaculty = Faculty::where('facultyName', $request->input('faculty'))->get()->first();
 
-            $savefaculty = Faculty::where('facultyname', $request->input('faculty'))->get()->first();
 
-            $saveproposal->idpublisher = $savePublisher;
-            $saveproposal->idlanguage = Language::where('languagename', $request->input('language'))->get()->first()->id;
+            $saveskill = Skill::where('skillName', $request->input('skill'))->get()->first()->id;
 
             $saveproposal->title = $request->input('title');
-            $saveproposal->author = $request->input('author');
             $saveproposal->description = $request->input('description');
-            $saveproposal->isbn = $request->input('isbn');
             $saveproposal->duration = $this->buildDuration($request);
 
             $saveproposal->save();
 
             if ($savefaculty != null) {
-                $savefacultyproposal->idfaculty = $savefaculty->id;
-                $savefacultyproposal->idproposal = $saveproposal->id;
+                $savefacultyproposal->idFaculty = $savefaculty->id;
+                $savefacultyproposal->idProposal = $saveproposal->id;
                 $savefacultyproposal->save();
             }
 
-            $input = $request->all();
-            $images = array();
-            if ($files = $request->file('images')) {
-                $integer = 0;
-                foreach ($files as $file) {
-                    $name = time() . (string) $integer . $file->getClientOriginalName();
-                    $file->move('img', $name);
-                    $images[] = $name;
-                    $integer += 1;
-                }
+            if($saveskill != null){
+                $save
             }
 
-            foreach ($images as $image) {
-                $saveImage = new Image;
-                $saveImage->source = $image;
-                $saveImage->idproposal = $saveproposal->id;
-                $saveImage->save();
-            }
+            $input = $request->all();
+
+
 
             return $saveproposal;
         });

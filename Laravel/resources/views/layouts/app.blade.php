@@ -125,6 +125,9 @@
 
                 </li>
                 @if (Auth::check())
+                <a class="nav-link" id="create_proposal" href="{{ url("create/") }}" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-fw fa-plus" title="Add a new Proposal"></i>
+                </a>
                 <li class="nav-item dropdown"  id = "dropdown_noti">
                     <a class="nav-link dropdown-toggle container" id="alertsDropdown" href="#" data-toggle="dropdown"  onclick="notificationsClick()" aria-haspopup="true" aria-expanded="false">
                         <i class="label label-pill label-light count" id = "counter" style="border-radius:10px;"></i>
@@ -151,9 +154,9 @@
                         @if(Auth::user()->users_status=="admin")
                         <a class="dropdown-item" href="{{ url("admin") }}">Admin Panel</a>
                         @endif
-                        <a class="dropdown-item" href="{{ url("create/") }}">Create proposal</a>
-                        <a class="dropdown-item" href="{{ url("myproposals") }}">My proposals</a>
-                        <a class="dropdown-item" href="{{ url("proposals_im_in") }}">proposals I'm in</a>
+                        <a class="dropdown-item" href="{{ url("create/") }}">Create Proposal</a>
+                        <a class="dropdown-item" href="{{ url("myproposals") }}">My Proposals</a>
+                        <a class="dropdown-item" href="{{ url("proposals_im_in") }}">Proposals I'm in</a>
                         <a class="dropdown-item" href="{{ url("history") }}">History</a>
                         <a class="dropdown-item" href="{{ url("wishlist") }}">WishList</a>
                         <!--<a class="dropdown-item" href="messages.html">Messages</a>-->

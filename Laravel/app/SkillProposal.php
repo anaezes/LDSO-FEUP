@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class FacultyProposal extends Model
+class SkillProposal extends Model
 {
 
     /**
@@ -19,7 +19,7 @@ class FacultyProposal extends Model
      *
      * @var string
      */
-    protected $table = 'faculty_proposal';
+    protected $table = 'skill_proposal';
 
     protected $primaryKey = 'idProposal';
 }

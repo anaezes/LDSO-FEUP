@@ -80,8 +80,8 @@
                 <h4 class="text-dark hidden-p-md-down">Introduced in December of 2018, U.OPENLAB is a web platform that allows students from University of Porto to share their works as bids to proposals made by other users.</h4>
                 @if (Auth::check())
                 <span id="buttonsWelcome">
-                    <a href="{{ url('myproposals/')}}" class="btn btn-primary btn-lg my-2 mx-3 jumbotron-buttons">My proposals</a>
-                    <a href="{{ url('proposals_im_in/')}}" class="btn btn-secondary btn-lg my-2 mx-3 jumbotron-buttons">proposals I'm in</a>
+                    <a href="{{ url('myproposals/')}}" class="btn btn-primary btn-lg my-2 mx-3 jumbotron-buttons">My Proposals</a>
+                    <a href="{{ url('proposals_im_in/')}}" class="btn btn-secondary btn-lg my-2 mx-3 jumbotron-buttons">Proposals I'm in</a>
                 </span>
                 @endif
             </div>

@@ -10,6 +10,7 @@ DROP TABLE IF EXISTS proposal;
 DROP TABLE IF EXISTS requested_termination;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS faculty;
+DROP TABLE IF EXISTS skill;
 
 --Tables
 
@@ -66,6 +67,17 @@ CREATE TABLE proposal (
     CONSTRAINT proposal_status_ck CHECK ((proposal_status = ANY (ARRAY['approved'::text, 'removed'::text, 'waitingApproval'::text, 'finished'::text]))),
     CONSTRAINT proposal_type_ck CHECK ((proposal_status = ANY (ARRAY['private'::text, 'public'::text]))),
     CONSTRAINT duration_ck CHECK (duration >= 300)
+);
+
+CREATE TABLE skill (
+  id SERIAL PRIMARY KEY,
+  skillName TEXT NOT NULL UNIQUE
+);
+
+CREATE TABLE skill_proposal(
+  idSkill INTEGER NOT NULL REFERENCES skill(id),
+  idProposal INTEGER NOT NULL REFERENCES proposal(id),
+  CONSTRAINT skill_proposal_pk PRIMARY KEY (idSkill,idProposal)
 );
 
 --9
@@ -310,6 +322,12 @@ INSERT INTO "faculty" (facultyName) VALUES ('Faculty of Dental Medicine');
 INSERT INTO "faculty" (facultyName) VALUES ('Faculty of Psychology and Education Science');
 INSERT INTO "faculty" (facultyName) VALUES ('Abel Salazar Institute of Biomedical Science');
 INSERT INTO "faculty" (facultyName) VALUES ('Porto Business School');
+
+INSERT INTO "skill" (skillName) VALUES ('Skill1');
+INSERT INTO "skill" (skillName) VALUES ('Skill2');
+INSERT INTO "skill" (skillName) VALUES ('Skill3');
+INSERT INTO "skill" (skillName) VALUES ('Skill4');
+
 
 ----admin
 --INSERT INTO "users" (email, name, password, phone, username, users_status, idfaculty) VALUES ('admin@fe.up.pt', 'admin', '$2y$10$c1H9bNvOoNdOtoDAJDfrNOooEt7UPWTW6eeD9XTnfOL7BUGzjSpW6', '111111111','admin', 'admin', 8);
