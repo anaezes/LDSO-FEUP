@@ -1,16 +1,37 @@
 
-DROP TABLE IF EXISTS public.password_resets;
-DROP TABLE IF EXISTS image;
-DROP TABLE IF EXISTS notification_proposal;
-DROP TABLE IF EXISTS notification;
-DROP TABLE IF EXISTS proposal_modification;
-DROP TABLE IF EXISTS bid;
-DROP TABLE IF EXISTS faculty_proposal;
-DROP TABLE IF EXISTS proposal;
-DROP TABLE IF EXISTS requested_termination;
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS faculty;
-DROP TABLE IF EXISTS skill;
+DROP TRIGGER IF EXISTS  tr_check_number_off_row_admin ON users CASCADE;
+DROP TRIGGER IF EXISTS  tr_change_users_status ON users CASCADE;
+DROP TRIGGER IF EXISTS  tr_change_proposal_status ON proposal CASCADE;
+DROP TRIGGER IF EXISTS  tr_image_proposal ON image CASCADE;
+DROP TRIGGER IF EXISTS  tr_change_proposal_modification_is_approved ON proposal_modification CASCADE;
+DROP TRIGGER IF EXISTS  tr_check_approved_proposal ON proposal_modification CASCADE;
+
+
+
+DROP FUNCTION IF EXISTS check_number_of_row_admin() CASCADE;
+DROP FUNCTION IF EXISTS  change_users_status() CASCADE;
+DROP FUNCTION IF EXISTS  change_proposal_status() CASCADE;
+DROP FUNCTION IF EXISTS  check_approved_proposal() CASCADE;
+DROP FUNCTION IF EXISTS  change_proposal_modification_is_approved() CASCADE;
+DROP FUNCTION IF EXISTS image_proposal_or_users() CASCADE;
+
+DROP TABLE IF EXISTS public.password_resets CASCADE;
+DROP TABLE IF EXISTS image CASCADE;
+DROP TABLE IF EXISTS notification_proposal CASCADE;
+DROP TABLE IF EXISTS notification CASCADE;
+DROP TABLE IF EXISTS proposal_modification CASCADE;
+DROP TABLE IF EXISTS bid CASCADE;
+DROP TABLE IF EXISTS team CASCADE;
+DROP TABLE IF EXISTS faculty_proposal CASCADE;
+DROP TABLE IF EXISTS skill_proposal CASCADE;
+DROP TABLE IF EXISTS skill CASCADE;
+DROP TABLE IF EXISTS proposal CASCADE;
+DROP TABLE IF EXISTS requested_termination CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS faculty CASCADE;
+
+
+
 
 --Tables
 
@@ -88,15 +109,24 @@ CREATE TABLE faculty_proposal (
     CONSTRAINT faculty_proposal_pk PRIMARY KEY (idFaculty, idProposal)
 );
 
+--10
+
+CREATE TABLE team (
+     id SERIAL PRIMARY KEY
+);
+
 
 --11
 CREATE TABLE bid (
-    idBuyer INTEGER NOT NULL REFERENCES users(id),
     idproposal INTEGER NOT NULL REFERENCES proposal(id),
+    idteam INTEGER NOT NULL REFERENCES team(id),
     bidDate TIMESTAMP WITH TIME zone DEFAULT now() NOT NULL,
-    bidValue REAL,
-    CONSTRAINT bid_value_ck CHECK (bidValue > 0.0),
-    CONSTRAINT bid_pk PRIMARY KEY (idBuyer, idproposal)
+    description text NOT NULL,
+    winner boolean DEFAULT FALSE,
+   -- bidValue REAL,
+    --CONSTRAINT bid_value_ck CHECK (bidValue > 0.0),
+    --CONSTRAINT bid_pk PRIMARY KEY (idBuyer, idproposal)
+    CONSTRAINT bid_pk PRIMARY KEY (idproposal,idteam)
 );
 
 --12
@@ -156,7 +186,7 @@ CREATE INDEX proposal_id ON proposal USING hash (id);
 
 CREATE INDEX notification_id ON notification USING hash (id) WHERE is_seen = false;
 
-CREATE INDEX bid_index ON bid USING btree (idBuyer, idproposal);
+--CREATE INDEX bid_index ON bid USING btree (idBuyer, idproposal);
 
 CREATE INDEX image_index ON image USING hash (id);
 
@@ -430,6 +460,7 @@ INSERT INTO "skill" (skillName) VALUES ('Skill4');
 --INSERT INTO "faculty_proposal" (idfaculty,idproposal) VALUES(11,11);
 --INSERT INTO "faculty_proposal" (idfaculty,idproposal) VALUES(12,12);
 
+--10
 
 
 
