@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Image;
 use App\Language;
 use App\Publisher;
+use App\SkillProposal;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -57,7 +58,7 @@ class CreateproposalController extends Controller
         $createdproposal = DB::transaction(function () use ($request) {
             $saveproposal = new Proposal;
             $savefacultyproposal = new FacultyProposal;
-            $
+            $saveskillproposal = new SkillProposal;
             $saveproposal->idProponent = Auth::user()->id;
 
 
@@ -79,7 +80,8 @@ class CreateproposalController extends Controller
             }
 
             if($saveskill != null){
-                $save
+                $saveskillproposal->idSkill = $saveskill->id;
+                $saveskillproposal->idProposal = $saveproposal->id;
             }
 
             $input = $request->all();
