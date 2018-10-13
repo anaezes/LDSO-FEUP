@@ -1,4 +1,16 @@
-------------------------------------------
+
+DROP TABLE IF EXISTS public.password_resets;
+DROP TABLE IF EXISTS image;
+DROP TABLE IF EXISTS notification_proposal;
+DROP TABLE IF EXISTS notification;
+DROP TABLE IF EXISTS proposal_modification;
+DROP TABLE IF EXISTS bid;
+DROP TABLE IF EXISTS faculty_proposal;
+DROP TABLE IF EXISTS proposal;
+DROP TABLE IF EXISTS requested_termination;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS faculty;
+
 --Tables
 
 --2
@@ -136,11 +148,11 @@ CREATE INDEX bid_index ON bid USING btree (idBuyer, idproposal);
 
 CREATE INDEX image_index ON image USING hash (id);
 
-CREATE INDEX isbn_index ON proposal USING hash (ISBN);
+--CREATE INDEX isbn_index ON proposal USING hash (ISBN);
 
 CREATE INDEX title_index ON proposal USING GIST (to_tsvector('english', title));
 
-CREATE INDEX author_index ON proposal USING GIST (to_tsvector('english', author));
+--CREATE INDEX author_index ON proposal USING GIST (to_tsvector('english', author));
 
 
 -----------------------------------------------------
@@ -299,157 +311,155 @@ INSERT INTO "faculty" (facultyName) VALUES ('Faculty of Psychology and Education
 INSERT INTO "faculty" (facultyName) VALUES ('Abel Salazar Institute of Biomedical Science');
 INSERT INTO "faculty" (facultyName) VALUES ('Porto Business School');
 
-
---admin
-INSERT INTO "users" (email, name, password, phone, username, users_status, idfaculty) VALUES ('admin@fe.up.pt', 'admin', '$2y$10$c1H9bNvOoNdOtoDAJDfrNOooEt7UPWTW6eeD9XTnfOL7BUGzjSpW6', '111111111','admin', 'admin', 8);
---others
-INSERT INTO "users" (email, name, password, phone, username, users_status, idfaculty) VALUES ('up201503616@fe.up.pt', 'Daniela João', '$2y$10$SoTxF0cqJ1La2BLl8otde.Ff97YYJfuFC3ouNBY8JGUnQf4vqacjq', '351961843043','danielajoao', 'normal', 1);
-INSERT INTO "users" (email, name, password, phone, username, users_status, idfaculty) VALUES ('up201405612@fe.up.pt', 'Nelson Costa', '$2y$10$SoTxF0cqJ1La2BLl8otde.Ff97YYJfuFC3ouNBY8JGUnQf4vqacjq','351961843043','nelsoncosta', 'normal', 2);
-
-INSERT INTO "image" (source, idusers) VALUES ('1.jpeg',1);
-INSERT INTO "image" (source, idusers) VALUES ('2.jpeg',2);
-
---4
-INSERT INTO "requested_termination"  (idusers) VALUES (1);
-INSERT INTO "requested_termination"  (idusers) VALUES (2);
-
---5
---proposal data from https://www.goodreads.com/shelf/show/nobel-prize
---Real data, approved
-INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_type,bid_type, idProponent, dateApproved)
-VALUES ('Very good condition', '600000', 'One Hundred Years of Solitude', 'approved', TRUE, TRUE, 2, now());
-INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_type,bid_type, idProponent, dateApproved)
-VALUES ('Very good condition', '600000', 'A', 'approved', TRUE, TRUE, 2, now());
-INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_type,bid_type, idProponent, dateApproved)
-VALUES ('Very good condition', '600000', 'B', 'approved', TRUE, TRUE, 1, now());
-INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_type,bid_type, idProponent, dateApproved)
-VALUES ('Very good condition', '600000', 'C', 'approved', TRUE, TRUE, 3, now());
-INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_type,bid_type, idProponent, dateApproved)
-VALUES ('Very good condition', '600000', 'D', 'approved', TRUE, TRUE, 1, now());
-INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_type,bid_type, idProponent, dateApproved)
-VALUES ('Very good condition', '600000', 'E', 'approved', TRUE, TRUE, 3, now());
-INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_type,bid_type, idProponent, dateApproved)
-VALUES ('Very good condition', '600000', 'F', 'approved', TRUE, TRUE, 2, now());
-INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_type,bid_type, idProponent, dateApproved)
-VALUES ('Very good condition', '600000', 'G', 'approved', TRUE, TRUE, 2, now());
-INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_type,bid_type, idProponent, dateApproved)
-VALUES ('Very good condition', '600000', 'I', 'approved', TRUE, TRUE, 1, now());
-
-
---Real data to match the first proposals
-INSERT INTO "image" (source, idProposal) VALUES ('years.jpg',1);
-INSERT INTO "image" (source, idProposal) VALUES ('years-1.jpg',1);
-INSERT INTO "image" (source, idProposal) VALUES ('the-stranger.jpg',2);
-INSERT INTO "image" (source, idProposal) VALUES ('old-man.jpg',3);
-INSERT INTO "image" (source, idProposal) VALUES ('flies.jpg',4);
-INSERT INTO "image" (source, idProposal) VALUES ('disgrace.jpg',5);
-INSERT INTO "image" (source, idProposal) VALUES ('mice.jpg',6);
-INSERT INTO "image" (source, idProposal) VALUES ('sid.jpg',7);
-INSERT INTO "image" (source, idProposal) VALUES ('beloved.jpg',8);
-INSERT INTO "image" (source, idProposal) VALUES ('red.jpg',9);
-INSERT INTO "image" (source, idProposal) VALUES ('grapes.jpg',10);
-INSERT INTO "image" (source, idProposal) VALUES ('snow.jpg',11);
-INSERT INTO "image" (source, idProposal) VALUES ('one-day.jpg',12);
-
---unapproved proposals
-INSERT INTO "proposal" (description, duration, title, proposal_status, idProponent, dateApproved)
-VALUES ('Very good condition', '600000', 'The Golden Notebook', 'waitingApproval',TRUE,TRUE, 2, now());
-INSERT INTO "proposal" (description, duration, title, proposal_status, idProponent, dateApproved)
-VALUES ('Very good condition', '600000', 'B', 'waitingApproval',TRUE,TRUE, 1, now());
-INSERT INTO "proposal" (description, duration, title, proposal_status, idProponent, dateApproved)
-VALUES ('Very good condition', '600000', 'C', 'waitingApproval',TRUE,TRUE, 3, now());
-INSERT INTO "proposal" (description, duration, title, proposal_status, idProponent, dateApproved)
-VALUES ('Very good condition', '600000', 'D', 'waitingApproval',TRUE,TRUE, 2, now());
-INSERT INTO "proposal" (description, duration, title, proposal_status, idProponent, dateApproved)
-VALUES ('Very good condition', '600000', 'E', 'waitingApproval',TRUE,TRUE, 1, now());
+----admin
+--INSERT INTO "users" (email, name, password, phone, username, users_status, idfaculty) VALUES ('admin@fe.up.pt', 'admin', '$2y$10$c1H9bNvOoNdOtoDAJDfrNOooEt7UPWTW6eeD9XTnfOL7BUGzjSpW6', '111111111','admin', 'admin', 8);
+----others
+--INSERT INTO "users" (email, name, password, phone, username, users_status, idfaculty) VALUES ('up201503616@fe.up.pt', 'Daniela João', '$2y$10$SoTxF0cqJ1La2BLl8otde.Ff97YYJfuFC3ouNBY8JGUnQf4vqacjq', '351961843043','danielajoao', 'normal', 1);
+--INSERT INTO "users" (email, name, password, phone, username, users_status, idfaculty) VALUES ('up201405612@fe.up.pt', 'Nelson Costa', '$2y$10$SoTxF0cqJ1La2BLl8otde.Ff97YYJfuFC3ouNBY8JGUnQf4vqacjq','351961843043','nelsoncosta', 'normal', 2);
+--
+--INSERT INTO "image" (source, idusers) VALUES ('1.jpeg',1);
+--INSERT INTO "image" (source, idusers) VALUES ('2.jpeg',2);
+--
+----4
+--INSERT INTO "requested_termination"  (idusers) VALUES (1);
+--INSERT INTO "requested_termination"  (idusers) VALUES (2);
+--
+----5
+----proposal data from https://www.goodreads.com/shelf/show/nobel-prize
+----Real data, approved
+--INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_type,bid_type, idProponent, dateApproved)
+--VALUES ('Very good condition', '600000', 'One Hundred Years of Solitude', 'approved', TRUE, TRUE, 2, now());
+--INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_type,bid_type, idProponent, dateApproved)
+--VALUES ('Very good condition', '600000', 'A', 'approved', TRUE, TRUE, 2, now());
+--INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_type,bid_type, idProponent, dateApproved)
+--VALUES ('Very good condition', '600000', 'B', 'approved', TRUE, TRUE, 1, now());
+--INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_type,bid_type, idProponent, dateApproved)
+--VALUES ('Very good condition', '600000', 'C', 'approved', TRUE, TRUE, 3, now());
+--INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_type,bid_type, idProponent, dateApproved)
+--VALUES ('Very good condition', '600000', 'D', 'approved', TRUE, TRUE, 1, now());
+--INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_type,bid_type, idProponent, dateApproved)
+--VALUES ('Very good condition', '600000', 'E', 'approved', TRUE, TRUE, 3, now());
+--INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_type,bid_type, idProponent, dateApproved)
+--VALUES ('Very good condition', '600000', 'F', 'approved', TRUE, TRUE, 2, now());
+--INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_type,bid_type, idProponent, dateApproved)
+--VALUES ('Very good condition', '600000', 'G', 'approved', TRUE, TRUE, 2, now());
+--INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_type,bid_type, idProponent, dateApproved)
+--VALUES ('Very good condition', '600000', 'I', 'approved', TRUE, TRUE, 1, now());
 
 
+----Real data to match the first proposals
+--INSERT INTO "image" (source, idProposal) VALUES ('years.jpg',1);
+--INSERT INTO "image" (source, idProposal) VALUES ('years-1.jpg',1);
+--INSERT INTO "image" (source, idProposal) VALUES ('the-stranger.jpg',2);
+--INSERT INTO "image" (source, idProposal) VALUES ('old-man.jpg',3);
+--INSERT INTO "image" (source, idProposal) VALUES ('flies.jpg',4);
+--INSERT INTO "image" (source, idProposal) VALUES ('disgrace.jpg',5);
+--INSERT INTO "image" (source, idProposal) VALUES ('mice.jpg',6);
+--INSERT INTO "image" (source, idProposal) VALUES ('sid.jpg',7);
+--INSERT INTO "image" (source, idProposal) VALUES ('beloved.jpg',8);
+--INSERT INTO "image" (source, idProposal) VALUES ('red.jpg',9);
+--INSERT INTO "image" (source, idProposal) VALUES ('grapes.jpg',10);
+--INSERT INTO "image" (source, idProposal) VALUES ('snow.jpg',11);
+--INSERT INTO "image" (source, idProposal) VALUES ('one-day.jpg',12);
+--
+----unapproved proposals
+--INSERT INTO "proposal" (description, duration, title, proposal_status, idProponent, dateApproved)
+--VALUES ('Very good condition', '600000', 'The Golden Notebook', 'waitingApproval',TRUE,TRUE, 2, now());
+--INSERT INTO "proposal" (description, duration, title, proposal_status, idProponent, dateApproved)
+--VALUES ('Very good condition', '600000', 'B', 'waitingApproval',TRUE,TRUE, 1, now());
+--INSERT INTO "proposal" (description, duration, title, proposal_status, idProponent, dateApproved)
+--VALUES ('Very good condition', '600000', 'C', 'waitingApproval',TRUE,TRUE, 3, now());
+--INSERT INTO "proposal" (description, duration, title, proposal_status, idProponent, dateApproved)
+--VALUES ('Very good condition', '600000', 'D', 'waitingApproval',TRUE,TRUE, 2, now());
+--INSERT INTO "proposal" (description, duration, title, proposal_status, idProponent, dateApproved)
+--VALUES ('Very good condition', '600000', 'E', 'waitingApproval',TRUE,TRUE, 1, now());
+--
+--
+--
+--INSERT INTO "image" (source, idProposal) VALUES ('golden.jpg',1);
+--INSERT INTO "image" (source, idProposal) VALUES ('plague.jpg',2);
+--INSERT INTO "image" (source, idProposal) VALUES ('earth.jpg',3);
+--INSERT INTO "image" (source, idProposal) VALUES ('sound.jpg',4);
+--INSERT INTO "image" (source, idProposal) VALUES ('arms.jpg',5);
+--INSERT INTO "image" (source, idProposal) VALUES ('death.jpg',6);
+--INSERT INTO "image" (source, idProposal) VALUES ('piano.jpg',7);
+--INSERT INTO "image" (source, idProposal) VALUES ('dear.jpg',3);
+--INSERT INTO "image" (source, idProposal) VALUES ('doctor.jpg',2);
+--
+--
+--INSERT INTO "image" (source, idProposal) VALUES ('drum.jpg',2);
+--INSERT INTO "image" (source, idProposal) VALUES ('steppen.jpg',1);
+--INSERT INTO "image" (source, idProposal) VALUES ('magic.jpg',1);
+--INSERT INTO "image" (source, idProposal) VALUES ('hunger.jpg',2);
+--INSERT INTO "image" (source, idProposal) VALUES ('voices.jpg',3);
+--INSERT INTO "image" (source, idProposal) VALUES ('eden.jpg',5);
+--INSERT INTO "image" (source, idProposal) VALUES ('sun.jpg',9);
+--INSERT INTO "image" (source, idProposal) VALUES ('godot.jpg',7);
+--INSERT INTO "image" (source, idProposal) VALUES ('dying.jpg',10);
+--
+----9
+--
+--INSERT INTO "faculty_proposal" (idfaculty,idproposal) VALUES(1,1);
+--INSERT INTO "faculty_proposal" (idfaculty,idproposal) VALUES(2,2);
+--INSERT INTO "faculty_proposal" (idfaculty,idproposal) VALUES(3,3);
+--INSERT INTO "faculty_proposal" (idfaculty,idproposal) VALUES(4,4);
+--INSERT INTO "faculty_proposal" (idfaculty,idproposal) VALUES(5,5);
+--INSERT INTO "faculty_proposal" (idfaculty,idproposal) VALUES(6,6);
+--INSERT INTO "faculty_proposal" (idfaculty,idproposal) VALUES(7,7);
+--INSERT INTO "faculty_proposal" (idfaculty,idproposal) VALUES(8,8);
+--INSERT INTO "faculty_proposal" (idfaculty,idproposal) VALUES(9,9);
+--INSERT INTO "faculty_proposal" (idfaculty,idproposal) VALUES(10,10);
+--INSERT INTO "faculty_proposal" (idfaculty,idproposal) VALUES(11,11);
+--INSERT INTO "faculty_proposal" (idfaculty,idproposal) VALUES(12,12);
 
-INSERT INTO "image" (source, idProposal) VALUES ('golden.jpg',1);
-INSERT INTO "image" (source, idProposal) VALUES ('plague.jpg',2);
-INSERT INTO "image" (source, idProposal) VALUES ('earth.jpg',3);
-INSERT INTO "image" (source, idProposal) VALUES ('sound.jpg',4);
-INSERT INTO "image" (source, idProposal) VALUES ('arms.jpg',5);
-INSERT INTO "image" (source, idProposal) VALUES ('death.jpg',6);
-INSERT INTO "image" (source, idProposal) VALUES ('piano.jpg',7);
-INSERT INTO "image" (source, idProposal) VALUES ('dear.jpg',3);
-INSERT INTO "image" (source, idProposal) VALUES ('doctor.jpg',2);
-
---finished proposals
-INSERT INTO "proposal" (author, description, duration, ISBN, title, proposal_status, idProponent, dateApproved, dateFinished)
-VALUES ('Günter Grass', 'Very good condition', '600000', '878551550-7', 'The Tin Drum', 'finished', 3, now(), now());
-
-INSERT INTO "image" (source, idProposal) VALUES ('drum.jpg',2);
-INSERT INTO "image" (source, idProposal) VALUES ('steppen.jpg',1);
-INSERT INTO "image" (source, idProposal) VALUES ('magic.jpg',1);
-INSERT INTO "image" (source, idProposal) VALUES ('hunger.jpg',2);
-INSERT INTO "image" (source, idProposal) VALUES ('voices.jpg',3);
-INSERT INTO "image" (source, idProposal) VALUES ('eden.jpg',5);
-INSERT INTO "image" (source, idProposal) VALUES ('sun.jpg',9);
-INSERT INTO "image" (source, idProposal) VALUES ('godot.jpg',7);
-INSERT INTO "image" (source, idProposal) VALUES ('dying.jpg',10);
-
---9
-INSERT INTO "faculty_proposal" (idfaculty,idproposal) VALUES(1,1);
-INSERT INTO "faculty_proposal" (idfaculty,idproposal) VALUES(2,2);
-INSERT INTO "faculty_proposal" (idfaculty,idproposal) VALUES(3,3);
-INSERT INTO "faculty_proposal" (idfaculty,idproposal) VALUES(4,4);
-INSERT INTO "faculty_proposal" (idfaculty,idproposal) VALUES(5,5);
-INSERT INTO "faculty_proposal" (idfaculty,idproposal) VALUES(6,6);
-INSERT INTO "faculty_proposal" (idfaculty,idproposal) VALUES(7,7);
-INSERT INTO "faculty_proposal" (idfaculty,idproposal) VALUES(8,8);
-INSERT INTO "faculty_proposal" (idfaculty,idproposal) VALUES(9,9);
-INSERT INTO "faculty_proposal" (idfaculty,idproposal) VALUES(10,10);
-INSERT INTO "faculty_proposal" (idfaculty,idproposal) VALUES(11,11);
-INSERT INTO "faculty_proposal" (idfaculty,idproposal) VALUES(12,12);
 
 
 
 --11
-INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (1, 11, 87.61);
-INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (2, 8, 77.29);
-INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (3, 3, 64.57);
-INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (1, 10, 35.96);
-INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (3, 11, 92.11);
-INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (2, 10, 23.92);
-INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (2, 11, 41.46);
-INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (1, 8, 1.02);
-INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (1, 6, 19.26);
-INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (1, 7, 39.37);
-INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (3, 4, 77.13);
-INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (1, 5, 46.32);
-INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (2, 4, 48.03);
-INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (1, 2, 58.62);
-INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (3, 5, 95.52);
-INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (1, 9, 85.09);
-INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (3, 10, 60.05);
-INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (2, 5, 8.21);
-INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (2, 9, 53.92);
-INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (2, 7, 73.97);
+--INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (1, 11, 87.61);
+--INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (2, 8, 77.29);
+--INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (3, 3, 64.57);
+--INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (1, 10, 35.96);
+--INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (3, 11, 92.11);
+--INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (2, 10, 23.92);
+--INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (2, 11, 41.46);
+--INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (1, 8, 1.02);
+--INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (1, 6, 19.26);
+--INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (1, 7, 39.37);
+--INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (3, 4, 77.13);
+--INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (1, 5, 46.32);
+--INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (2, 4, 48.03);
+--INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (1, 2, 58.62);
+--INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (3, 5, 95.52);
+--INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (1, 9, 85.09);
+--INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (3, 10, 60.05);
+--INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (2, 5, 8.21);
+--INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (2, 9, 53.92);
+--INSERT INTO "bid" (idBuyer, idproposal, bidValue) VALUES (2, 7, 73.97);
 
---12
-INSERT INTO "proposal_modification" (newDescription, is_approved, idApprovedproposal) VALUES ('In excellent contition except for a slight wrinkling on one edge', 'false', 1);
-INSERT INTO "proposal_modification" (newDescription, is_approved, idApprovedproposal) VALUES ('In excellent contition except for a slight wrinkling on one edge', 'false', 2);
-INSERT INTO "proposal_modification" (newDescription, is_approved, idApprovedproposal) VALUES ('In excellent contition except for a slight wrinkling on one edge', 'false', 3);
-INSERT INTO "proposal_modification" (newDescription, is_approved, idApprovedproposal) VALUES ('In excellent contition except for a slight wrinkling on one edge', 'false', 4);
-INSERT INTO "proposal_modification" (newDescription, is_approved, idApprovedproposal) VALUES ('In excellent contition except for a slight wrinkling on one edge', 'false', 6);
-INSERT INTO "proposal_modification" (newDescription, is_approved, idApprovedproposal) VALUES ('In excellent contition except for a slight wrinkling on one edge', 'false',5);
-INSERT INTO "proposal_modification" (newDescription, is_approved, idApprovedproposal) VALUES ('In excellent contition except for a slight wrinkling on one edge', 'false',7);
-INSERT INTO "proposal_modification" (newDescription, is_approved, idApprovedproposal) VALUES ('In excellent contition except for a slight wrinkling on one edge', 'false',8);
-INSERT INTO "proposal_modification" (newDescription, is_approved, idApprovedproposal) VALUES ('In excellent contition except for a slight wrinkling on one edge', 'false',9);
-INSERT INTO "proposal_modification" (newDescription, is_approved, idApprovedproposal) VALUES ('In excellent contition except for a slight wrinkling on one edge', 'false',10);
-
---13
-INSERT INTO "notification" (information, idusers) VALUES ('neque duis bibendum morbi non quam nec dui luctus rutrum', 1);
-INSERT INTO "notification" (information, idusers) VALUES ('eleifend donec ut dolor morbi vel lectus in quam fringilla rhoncus mauris enim leo rhoncus sed vestibulum sit amet', 2);
-INSERT INTO "notification" (information, idusers) VALUES ('augue quam sollicitudin vitae consectetuer eget rutrum at lorem integer tincidunt ante vel ipsum praesent blandit lacinia', 2);
-INSERT INTO "notification" (information, idusers) VALUES ('ultricies eu nibh quisque id justo sit amet sapien dignissim vestibulum', 1);
-
---14
-INSERT INTO notification_proposal (idProposal, idNotification) VALUES (1, 1);
-INSERT INTO notification_proposal (idProposal, idNotification) VALUES (1, 2);
-INSERT INTO notification_proposal (idProposal, idNotification) VALUES (2, 3);
-INSERT INTO notification_proposal (idProposal, idNotification) VALUES (7, 1);
-INSERT INTO notification_proposal (idProposal, idNotification) VALUES (1, 3);
-INSERT INTO notification_proposal (idProposal, idNotification) VALUES (4, 2);
+----12
+--INSERT INTO "proposal_modification" (newDescription, is_approved, idApprovedproposal) VALUES ('In excellent contition except for a slight wrinkling on one edge', 'false', 1);
+--INSERT INTO "proposal_modification" (newDescription, is_approved, idApprovedproposal) VALUES ('In excellent contition except for a slight wrinkling on one edge', 'false', 2);
+--INSERT INTO "proposal_modification" (newDescription, is_approved, idApprovedproposal) VALUES ('In excellent contition except for a slight wrinkling on one edge', 'false', 3);
+--INSERT INTO "proposal_modification" (newDescription, is_approved, idApprovedproposal) VALUES ('In excellent contition except for a slight wrinkling on one edge', 'false', 4);
+--INSERT INTO "proposal_modification" (newDescription, is_approved, idApprovedproposal) VALUES ('In excellent contition except for a slight wrinkling on one edge', 'false', 6);
+--INSERT INTO "proposal_modification" (newDescription, is_approved, idApprovedproposal) VALUES ('In excellent contition except for a slight wrinkling on one edge', 'false',5);
+--INSERT INTO "proposal_modification" (newDescription, is_approved, idApprovedproposal) VALUES ('In excellent contition except for a slight wrinkling on one edge', 'false',7);
+--INSERT INTO "proposal_modification" (newDescription, is_approved, idApprovedproposal) VALUES ('In excellent contition except for a slight wrinkling on one edge', 'false',8);
+--INSERT INTO "proposal_modification" (newDescription, is_approved, idApprovedproposal) VALUES ('In excellent contition except for a slight wrinkling on one edge', 'false',9);
+--INSERT INTO "proposal_modification" (newDescription, is_approved, idApprovedproposal) VALUES ('In excellent contition except for a slight wrinkling on one edge', 'false',10);
+--
+----13
+--INSERT INTO "notification" (information, idusers) VALUES ('neque duis bibendum morbi non quam nec dui luctus rutrum', 1);
+--INSERT INTO "notification" (information, idusers) VALUES ('eleifend donec ut dolor morbi vel lectus in quam fringilla rhoncus mauris enim leo rhoncus sed vestibulum sit amet', 2);
+--INSERT INTO "notification" (information, idusers) VALUES ('augue quam sollicitudin vitae consectetuer eget rutrum at lorem integer tincidunt ante vel ipsum praesent blandit lacinia', 2);
+--INSERT INTO "notification" (information, idusers) VALUES ('ultricies eu nibh quisque id justo sit amet sapien dignissim vestibulum', 1);
+--
+----14
+--INSERT INTO notification_proposal (idProposal, idNotification) VALUES (1, 1);
+--INSERT INTO notification_proposal (idProposal, idNotification) VALUES (1, 2);
+--INSERT INTO notification_proposal (idProposal, idNotification) VALUES (2, 3);
+--INSERT INTO notification_proposal (idProposal, idNotification) VALUES (7, 1);
+--INSERT INTO notification_proposal (idProposal, idNotification) VALUES (1, 3);
+--INSERT INTO notification_proposal (idProposal, idNotification) VALUES (4, 2);
 
