@@ -16,7 +16,6 @@
       @endif
       <a class="text-white nav-item nav-link" href="#">Repository</a>
       <a class="text-white nav-item nav-link" href="#">Proposals</a>
-      <a class="text-white nav-item nav-link" href="#">Projects</a>
       <a class="text-white nav-item nav-link" href="#">People</a>
       <br>
       <h5 class="text-white pl-3 pb-2 font-weight-bold">Search</h5>

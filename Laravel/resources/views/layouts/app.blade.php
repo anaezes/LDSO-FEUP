@@ -35,7 +35,6 @@
       <div class="navbar-nav">
         <a class="nav-item nav-link" href="#">Repository</a>
         <a class="nav-item nav-link" href="#">Proposals</a>
-        <a class="nav-item nav-link" href="#">Projects</a>
         <a class="nav-item nav-link" href="#">People</a>
       </div>
       <ul class="navbar-nav ml-auto" id="navbarList">
