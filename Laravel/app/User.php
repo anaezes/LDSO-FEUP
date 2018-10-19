@@ -38,7 +38,7 @@ class User extends Authenticatable
      *
      */
     public function faculty(){
-        return $this->hasOne('App\faculty','id','idfaculty');
+        return $this->hasOne('App\Faculty','id','idfaculty');
     }
 
     /**
@@ -47,18 +47,19 @@ class User extends Authenticatable
      *
      */
     public function proposals(){
-       return $this->hasMany('App\Proposal','id','idseller');
+       return $this->hasMany('App\Proposal','id','idproponent');
     }
 
-
+/*
     /**
      *
      * This user's bids
      *
-     */
+
     public function bids(){
        return $this->hasMany('App\Bid','id','idbuyer');
     }
+    */
 
     /**
      *

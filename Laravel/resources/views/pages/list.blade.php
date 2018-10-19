@@ -14,7 +14,7 @@
                     <i class="fa fa-gavel"></i> My proposals
                 @endif
                 @if($action=="proposalS_IN")
-                    <i class="fa fa-clock"></i> proposals I'm in
+                    <i class="fa fa-clock"></i> Proposals I'm in
                 @endif
                 @if($action=="HISTORY")
                     <i class="fa fa-history"></i> History 

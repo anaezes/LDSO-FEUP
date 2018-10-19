@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Proposal;
+use App\Skill;
+use App\SkillProposal;
 use App\Faculty;
 use App\FacultyProposal;
 use App\Http\Controllers\Controller;
 use App\Image;
 use App\Language;
 use App\Publisher;
-use App\SkillProposal;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -55,34 +57,49 @@ class CreateproposalController extends Controller
       */
     private function db_create(Request $request)
     {
-        $createdproposal = DB::transaction(function () use ($request) {
+            $createdproposal = DB::transaction(function () use ($request) {
             $saveproposal = new Proposal;
-            $savefacultyproposal = new FacultyProposal;
-            $saveskillproposal = new SkillProposal;
-            $saveproposal->idProponent = Auth::user()->id;
-
-
-            $savefaculty = Faculty::where('facultyName', $request->input('faculty'))->get()->first();
-
-
-            $saveskill = Skill::where('skillName', $request->input('skill'))->get()->first()->id;
+            $saveproposal->idproponent = Auth::user()->id;
 
             $saveproposal->title = $request->input('title');
             $saveproposal->description = $request->input('description');
             $saveproposal->duration = $this->buildDuration($request);
 
+
+            $public_prop = $request->input('public_prop');
+            if ($public_prop == 'on'){
+                $saveproposal->proposal_type = true;
+            }
+            else {
+                $saveproposal->proposal_type = false;
+            }
+
+
+            $public_bid = $request->input('public_bid');
+            if ($public_bid == 'on'){
+                $saveproposal->bid_type = true;
+            }
+            else {
+                $saveproposal->bid_type = false;
+            }
+
+
             $saveproposal->save();
 
-            if ($savefaculty != null) {
-                $savefacultyproposal->idFaculty = $savefaculty->id;
-                $savefacultyproposal->idProposal = $saveproposal->id;
-                $savefacultyproposal->save();
+            $faculties = $request->input('faculty');
+            foreach($faculties as $faculty){
+                $saveFaculty = Faculty::where('facultyname', $faculty)->get()->first();
+                $saveproposal->faculty()->attach($saveFaculty->id);
             }
 
-            if($saveskill != null){
-                $saveskillproposal->idSkill = $saveskill->id;
-                $saveskillproposal->idProposal = $saveproposal->id;
+
+            $skills = $request->input('skill');
+            foreach($skills as $skill) {
+                $saveSkill = Skill::where('skillname', $skill)->get()->first();
+                $saveproposal->skill()->attach($saveSkill->id);
+                //DB::insert("INSERT INTO skill_proposal (idskill, idproposal) VALUES (?, ?)", [$saveSkill->id, $saveproposal->id]);
             }
+
 
             $input = $request->all();
 
@@ -95,7 +112,7 @@ class CreateproposalController extends Controller
     }
 
     /**
-     * Creates a new proposal and redirects to it's page.
+     * Creates a new proposal and redirects to its page.
      *
      */
     public function create(Request $request)
@@ -106,7 +123,7 @@ class CreateproposalController extends Controller
 
         try {
             $createdproposal = $this->db_create($request);
-        } catch (QueryException $qe) {
+        } catch (Exception $qe) {
             $errors = new MessageBag();
 
             $errors->add('An error ocurred', "There was a problem creating the proposal. Try Again!");

@@ -31,12 +31,12 @@ Route::get('home', 'HomeController@show')->name('home');
 
 
 // Create Proposal
-Route::get('create', 'CreateproposalController@show')->name('create');
+Route::get('create', 'CreateProposalController@show')->name('create');
 Route::post('create', 'CreateProposalController@create');
 
 // Proposal Item Page
 Route::get('proposal/{id}', 'ProposalController@show')->name('proposal');
-Route::get('/proposal', 'ProposalController@updateproposals');
+Route::get('/proposal', 'ProposalController@updateProposals');
 Route::get('proposal/{id}/edit', 'ProposalController@edit')->name('proposal.edit');
 Route::post('proposal/{id}/edit', 'ProposalController@submitEdit')->name('proposal.edit');
 

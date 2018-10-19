@@ -23,36 +23,23 @@
 
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    <label for="language">Skills</label>
-                    <select id="skill" name="skill" class="form-control" value="{{ old('skill') }}" required>
-                        <option value="">&nbsp;</option>
-                        <option>English</option>
-                        <option>Afar</option>
-                        <option>Abkhazian</option>
-                        <option>Afrikaans</option>
-                        <option>Amharic</option>
-                        <option>Arabic</option>
-                        <option>Assamese</option>
-                        <option>Aymara</option>
-                        <option>Azerbaijani</option>
-                        <option>Bashkir</option>
-                        <option>Belarusian</option>
-                        <option>Bulgarian</option>
-                        <option>Bihari</option>
-                        <option>Bislama</option>
-                        <option>Bengali/Bangla</option>
-                        <option>Tibetan</option>
-                        <option>Breton</option>
-                        <option>Catalan</option>
-                        <option>Corsican</option>
-                        <option>Czech</option>
-                        <option>Welsh</option>
+                    <label for="skill">Skill</label>
+                    <select id="skill" name="skill[]" class="form-control" value="{{ old('skill') }}" multiple required>
+                        <option>Skill1</option>
+                        <option>Skill2</option>
+                        <option>Skill3</option>
+                        <option>Skill4</option>
                     </select>
+                    @if ($errors->has('skill'))
+                    <span class="error">
+                        {{ $errors->first('skill') }}
+                      </span>
+                    @endif
                 </div>
                 <div class="form-group col-md-6">
                     <label for="faculty">Faculty</label>
-                    <select id="faculty" name="faculty"  class="form-control" value="{{ old('faculty') }}" required>
-                        <option selected>Faculty of Architecture</option>
+                    <select id="faculty" name="faculty[]" class="form-control" value="{{ old('faculty') }}" multiple required>
+                        <option>Faculty of Architecture</option>
                         <option>Faculty of Fine Arts</option>
                         <option>Faculty of Science</option>
                         <option>Faculty of Sport</option>
@@ -67,9 +54,9 @@
                         <option>Abel Salazar Institute of Biomedical Science</option>
                         <option>Porto Business School</option>
                     </select>
-                    @if ($errors->has('lang'))
+                    @if ($errors->has('faculty'))
                       <span class="error">
-                        {{ $errors->first('lang') }}
+                        {{ $errors->first('faculty') }}
                       </span>
                     @endif
                 </div>
@@ -161,22 +148,12 @@
                     <div class="form-row">
                         <div class="checkbox col-md-6">
                             <label for="agree">
-                                <input id="public_prop" name="agree" type="checkbox" value="{{ old('agree') }}" required>
-                                @if ($errors->has('isbn'))
-                                <span class="error">
-                              {{ $errors->first('isbn') }}
-                            </span>
-                                @endif
+                                <input id="public_prop[]" name="public_prop" type="checkbox">
                                 Public Proposal</label>
                         </div>
                         <div class="checkbox col-md-6">
                             <label for="agree">
-                                <input id="public_bid" name="agree" type="checkbox" value="{{ old('agree') }}" required>
-                                @if ($errors->has('isbn'))
-                                <span class="error">
-                              {{ $errors->first('isbn') }}
-                            </span>
-                                @endif
+                                <input id="public_bid[]" name="public_bid" type="checkbox">
                                 Public Bid</label>
                         </div>
                     </div>

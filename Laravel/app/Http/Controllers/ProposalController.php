@@ -56,10 +56,6 @@ class ProposalController extends Controller
             $timestamp = "Proposal hasn't been approved yet";
         }
 
-        $images = DB::table('image')->where('idproposal', $id)->pluck('source');
-        if (sizeof($images) == 0) {
-            $images = ["default_no_img.png"];
-        }
 
         $query = "SELECT max(bidValue) FROM bid WHERE idproposal = ?";
         $maxBid = DB::select($query, [$id]);
@@ -71,7 +67,6 @@ class ProposalController extends Controller
 
         return view('pages.proposal', ['proposal' => $proposal,
             'facultyName' => $facultyName,
-            'images' => $images,
             'maxBid' => $maxBid[0]->max,
             'timestamp' => $timestamp]);
     }
@@ -85,7 +80,7 @@ class ProposalController extends Controller
     {
         $proposal = Proposal::find($id);
 
-        if ($proposal->idseller != Auth::user()->id) {
+        if ($proposal->idproponent != Auth::user()->id) {
             return redirect('/proposal/' . $id);
         }
 
@@ -101,7 +96,7 @@ class ProposalController extends Controller
     public function submitEdit(Request $request, $id)
     {
         $proposal = Proposal::find($id);
-        if ($proposal->idseller != Auth::user()->id) {
+        if ($proposal->idproponent != Auth::user()->id) {
             return redirect('/proposal/' . $id);
         }
         try {
@@ -154,9 +149,9 @@ class ProposalController extends Controller
     /**
       * Updates all proposals, setting them to finished if their time is up and sending out notifications
       */
-    public function updateproposals()
+    public function updateProposals()
     {
-        $proposals = DB::select("SELECT id, duration, dateApproved, idSeller FROM proposal WHERE proposal_status = ?", ["approved"]);
+        $proposals = DB::select("SELECT id, duration, dateApproved, idproponent FROM proposal WHERE proposal_status = ?", ["approved"]);
         $over = [];
 
         foreach ($proposals as $proposal) {
@@ -189,9 +184,9 @@ class ProposalController extends Controller
     public function notifyOwner($id)
     {
         try {
-            $res = DB::select("SELECT id, idseller, title FROM proposal WHERE id = ?", [$id]);
+            $res = DB::select("SELECT id, idproponent, title FROM proposal WHERE id = ?", [$id]);
             $text = "Your proposal of " . $res[0]->title . " has finished!";
-            $notifID = DB::table('notification')->insertGetId(['information' => $text, 'idusers' => $res[0]->idseller]);
+            $notifID = DB::table('notification')->insertGetId(['information' => $text, 'idusers' => $res[0]->idproponent]);
             DB::insert("INSERT INTO notification_proposal (idproposal, idNotification) VALUES (?, ?)", [$res[0]->id, $notifID]);
 
             $res1 = DB::select("SELECT bid.idbuyer

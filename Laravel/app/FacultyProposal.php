@@ -21,5 +21,5 @@ class FacultyProposal extends Model
      */
     protected $table = 'faculty_proposal';
 
-    protected $primaryKey = 'idProposal';
+
 }

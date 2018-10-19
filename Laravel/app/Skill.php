@@ -21,4 +21,10 @@ class Skill extends Model
      */
     protected $table = 'skill';
 
+    protected $primaryKey = "id";
+
+    public function proposal(){
+        return $this->belongsToMany('App\Proposal', 'skill_proposal', 'idskill', 'idproposal');
+    }
+
 }
