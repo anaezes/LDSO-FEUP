@@ -1,3 +1,33 @@
+DROP TRIGGER IF EXISTS  tr_check_number_off_row_admin ON users CASCADE;
+DROP TRIGGER IF EXISTS  tr_change_users_status ON users CASCADE;
+DROP TRIGGER IF EXISTS  tr_change_proposal_status ON proposal CASCADE;
+DROP TRIGGER IF EXISTS  tr_image_proposal ON image CASCADE;
+DROP TRIGGER IF EXISTS  tr_change_proposal_modification_is_approved ON proposal_modification CASCADE;
+DROP TRIGGER IF EXISTS  tr_check_approved_proposal ON proposal_modification CASCADE;
+
+
+
+DROP FUNCTION IF EXISTS check_number_of_row_admin() CASCADE;
+DROP FUNCTION IF EXISTS  change_users_status() CASCADE;
+DROP FUNCTION IF EXISTS  change_proposal_status() CASCADE;
+DROP FUNCTION IF EXISTS  check_approved_proposal() CASCADE;
+DROP FUNCTION IF EXISTS  change_proposal_modification_is_approved() CASCADE;
+DROP FUNCTION IF EXISTS image_proposal_or_users() CASCADE;
+
+DROP TABLE IF EXISTS public.password_resets CASCADE;
+DROP TABLE IF EXISTS image CASCADE;
+DROP TABLE IF EXISTS notification_proposal CASCADE;
+DROP TABLE IF EXISTS notification CASCADE;
+DROP TABLE IF EXISTS proposal_modification CASCADE;
+DROP TABLE IF EXISTS bid CASCADE;
+DROP TABLE IF EXISTS team CASCADE;
+DROP TABLE IF EXISTS faculty_proposal CASCADE;
+DROP TABLE IF EXISTS skill_proposal CASCADE;
+DROP TABLE IF EXISTS skill CASCADE;
+DROP TABLE IF EXISTS proposal CASCADE;
+DROP TABLE IF EXISTS requested_termination CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS faculty CASCADE;
 
 DROP TRIGGER IF EXISTS  tr_check_number_off_row_admin ON users CASCADE;
 DROP TRIGGER IF EXISTS  tr_change_users_status ON users CASCADE;
@@ -79,14 +109,13 @@ CREATE TABLE proposal (
     title  text NOT NULL,
     dateCreated TIMESTAMP WITH TIME zone DEFAULT now() NOT NULL,
     proposal_status text NOT NULL DEFAULT 'waitingApproval'::text,
-    proposal_type boolean NOT NULL DEFAULT TRUE,
-    bid_type boolean NOT NULL DEFAULT TRUE,
+    proposal_type boolean NOT NULL DEFAULT FALSE,
+    bid_type boolean NOT NULL DEFAULT FALSE,
     dateApproved TIMESTAMP WITH TIME zone DEFAULT NULL,
     dateRemoved TIMESTAMP WITH TIME zone DEFAULT NULL,
     dateFinished TIMESTAMP WITH TIME zone DEFAULT NULL,
     idProponent INTEGER NOT NULL REFERENCES users(id),
     CONSTRAINT proposal_status_ck CHECK ((proposal_status = ANY (ARRAY['approved'::text, 'removed'::text, 'waitingApproval'::text, 'finished'::text]))),
-    CONSTRAINT proposal_type_ck CHECK ((proposal_status = ANY (ARRAY['private'::text, 'public'::text]))),
     CONSTRAINT duration_ck CHECK (duration >= 300)
 );
 
@@ -96,17 +125,15 @@ CREATE TABLE skill (
 );
 
 CREATE TABLE skill_proposal(
-  idSkill INTEGER NOT NULL REFERENCES skill(id),
-  idProposal INTEGER NOT NULL REFERENCES proposal(id),
-  CONSTRAINT skill_proposal_pk PRIMARY KEY (idSkill,idProposal)
+  idSkill INTEGER NOT NULL,
+  idProposal INTEGER NOT NULL
 );
 
 --9
 
 CREATE TABLE faculty_proposal (
-    idFaculty INTEGER NOT NULL REFERENCES faculty(id),
-    idProposal INTEGER NOT NULL REFERENCES proposal(id),
-    CONSTRAINT faculty_proposal_pk PRIMARY KEY (idFaculty, idProposal)
+    idFaculty INTEGER NOT NULL,
+    idProposal INTEGER NOT NULL
 );
 
 --10

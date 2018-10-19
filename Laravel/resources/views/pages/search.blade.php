@@ -20,24 +20,16 @@
                     <label class="font-weight-bold">Title</label>
                     <input type="text" name="title" class="form-control">
                 </div>
+            </div>
+            <div class="form-row">
                 <div class="form-group col-md-6">
-                    <label class="font-weight-bold">ISBN</label>
-                    <input type="text" name="isbn" class="form-control">
+                    <label class="font-weight-bold">Skills</label>
+                    <input type="text" name="skill" class="form-control">
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    <label class="font-weight-bold">Publisher</label>
-                    <input type="text" name="publisher" class="form-control">
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="search" class="font-weight-bold">Author</label>
-                    <input type="text" name="author" class="form-control">
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label class="font-weight-bold">faculty</label>
+                    <label class="font-weight-bold">Faculty</label>
                     <select class="form-control" name="faculty">
                         <option value="">&nbsp;</option>
                         <option>Arts&amp;Music</option>

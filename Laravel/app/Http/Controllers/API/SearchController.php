@@ -40,14 +40,8 @@ class SearchController extends Controller
                 $res = DB::select("SELECT id FROM proposal WHERE title @@ plainto_tsquery('english',?)", [$request->input('title')]);
                 array_push($queryResults, $res);
             }
-            if ($request->input('author') != null) {
-                $res = DB::select("SELECT id FROM proposal WHERE author = ?", [$request->input('author')]);
-                array_push($queryResults, $res);
-            }
-            if ($request->input('isbn') != null) {
-                $res = DB::select("SELECT id FROM proposal WHERE isbn = ?", [$request->input('isbn')]);
-                array_push($queryResults, $res);
-            }
+
+
             if ($request->input('proposalStatus') != null) {
                 $res = DB::select("SELECT id FROM proposal WHERE proposal_status = ?", [$request->input('proposalStatus')]);
                 array_push($queryResults, $res);
@@ -56,26 +50,26 @@ class SearchController extends Controller
 
             if ($request->input('history') !== null && Auth::check()) {
                 $res = DB::select("SELECT DISTINCT proposal.id FROM proposal, bid WHERE bid.idproposal = proposal.id and bid.idBuyer = ? AND proposal_status = ?", [Auth::user()->id, 'finished']);
-                $res1 = DB::select("SELECT DISTINCT proposal.id FROM proposal WHERE idSeller = ? AND proposal_status = ?", [Auth::user()->id, 'finished']);
+                $res1 = DB::select("SELECT DISTINCT proposal.id FROM proposal WHERE idproponent = ? AND proposal_status = ?", [Auth::user()->id, 'finished']);
                 array_push($queryResults, $res);
                 array_push($queryResults, $res1);
             }
             if ($request->input('proposalsOfUser') !== null && Auth::check()) {
-                $res = DB::select("SELECT DISTINCT proposal.id FROM proposal WHERE idSeller = ? AND (proposal_status = ? OR proposal_status=?)", [Auth::user()->id, 'approved', 'waitingApproval']);
+                $res = DB::select("SELECT DISTINCT proposal.id FROM proposal WHERE idproponent = ? AND (proposal_status = ? OR proposal_status=?)", [Auth::user()->id, 'approved', 'waitingApproval']);
                 array_push($queryResults, $res);
             }
             if ($request->input('userBidOn') !== null && Auth::check()) {
                 $res = DB::select("SELECT DISTINCT proposal.id FROM proposal, bid WHERE bid.idproposal = proposal.id and bid.idBuyer = ? and proposal.proposal_status = ? ", [Auth::user()->id, 'approved']);
                 array_push($queryResults, $res);
             }
-            if ($request->input('language') != null) {
+            /*if ($request->input('language') != null) {
                 $res = DB::select("SELECT DISTINCT proposal.id FROM proposal, language WHERE proposal.idLanguage = language.id and language.languageName = ?", [$request->input('language')]);
                 array_push($queryResults, $res);
             }
             if ($request->input('publisher') != null) {
                 $res = DB::select("SELECT DISTINCT proposal.id FROM proposal, publisher WHERE proposal.idPublisher = publisher.id and publisher.publisherName = ?", [$request->input('publisher')]);
                 array_push($queryResults, $res);
-            }
+            }*/
 
             $counts = [];
             foreach ($queryResults as $res) {
@@ -95,7 +89,7 @@ class SearchController extends Controller
             if ($ids === "") {
                 $ids = "-1";
             }
-            $query = "SELECT proposal.id, title, author, duration, dateApproved, proposal_status FROM proposal WHERE proposal.id IN (" . $ids . ")";
+            $query = "SELECT proposal.id, title, duration, dateApproved, proposal_status FROM proposal WHERE proposal.id IN (" . $ids . ")";
             $response = DB::select($query, []);
 
             foreach ($response as $proposal) {
@@ -114,12 +108,6 @@ class SearchController extends Controller
                     $proposal->time = "Finished";
                 }
 
-                $image = DB::select("SELECT source FROM image WHERE idproposal = ? limit 1", [$proposal->id]);
-                if (isset($image[0]->source)) {
-                    $proposal->image = $image[0]->source;
-                } else {
-                    $proposal->image = "book.png";
-                }
 
             }
         } catch (Exception $e) {

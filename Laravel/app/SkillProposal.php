@@ -21,5 +21,4 @@ class SkillProposal extends Model
      */
     protected $table = 'skill_proposal';
 
-    protected $primaryKey = 'idProposal';
 }

@@ -20,4 +20,10 @@ class Faculty extends Model
      * @var string
      */
     protected $table = 'faculty';
+
+    protected $primaryKey = "id";
+
+    public function proposal(){
+        return $this->belongsToMany('App\Proposal', 'faculty_proposal', 'idfaculty', 'idproposal');
+    }
 }

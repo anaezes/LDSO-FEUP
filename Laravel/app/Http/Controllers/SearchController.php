@@ -28,10 +28,10 @@ class SearchController extends Controller
       */
     public function show()
     {
-        $facultys = [];
-        $responseSentence = "Use the advanced search options above to find facultys";
+        $proposals = [];
+        $responseSentence = "Use the advanced search options above to find proposals";
 
-        return view('pages.search', ['facultys' => $facultys, 'responseSentence' => $responseSentence]);
+        return view('pages.search', ['proposals' => $proposals, 'responseSentence' => $responseSentence]);
     }
 
     /**
@@ -43,7 +43,7 @@ class SearchController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'searchTerm' => 'nullable|string',
-            'faculty' => 'nullable|string',
+            'proposal' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
@@ -55,105 +55,90 @@ class SearchController extends Controller
 
         $input = $request->all();
         $searchTerm = $input['searchTerm'];
-        $faculty = $input['faculty'];
+        $proposal = $input['proposal'];
         $approved = "approved";
         $responseSentence = [];
         $ids = [];
-        $facultys = [];
 
         try {
             if ($searchTerm != null) {
-                $res = DB::select("SELECT faculty.id FROM faculty WHERE title @@ plainto_tsquery('english',?) and faculty_status = ?", [$searchTerm, $approved]);
+                $res = DB::select("SELECT proposal.id FROM proposal WHERE title @@ plainto_tsquery('english',?) and proposal_status = ?", [$searchTerm, $approved]);
                 foreach ($res as $entry) {
                     array_push($ids, $entry->id);
                 }
 
                 array_push($responseSentence, ' with title "' . $searchTerm . '"');
             }
-            if ($faculty !== 'All') {
-                $res = DB::select('SELECT faculty.id FROM faculty, faculty_faculty, faculty WHERE faculty_faculty.idfaculty = faculty.id and faculty_faculty.idfaculty = faculty.id and facultyName = ? and faculty_status = ?', [$faculty, $approved]);
+            if ($proposal !== 'All') {
+                $res = DB::select('SELECT proposal.id FROM proposal, proposal_proposal, proposal WHERE proposal_proposal.idproposal = proposal.id and proposal_proposal.idproposal = proposal.id and proposalName = ? and proposal_status = ?', [$proposal, $approved]);
                 foreach ($res as $entry) {
                     array_push($ids, $entry->id);
                 }
 
-                array_push($responseSentence, 'in faculty ' . $faculty);
+                array_push($responseSentence, 'in proposal ' . $proposal);
             } else {
-                $res = DB::select("SELECT id FROM faculty WHERE faculty_status = ?", [$approved]);
+                $res = DB::select("SELECT id FROM proposal WHERE proposal_status = ?", [$approved]);
                 foreach ($res as $entry) {
                     array_push($ids, $entry->id);
                 }
 
-                array_push($responseSentence, 'in any faculty');
+                array_push($responseSentence, 'in any proposal');
             }
 
             if (sizeof($ids) == 0) {
-                return view('pages.search', ['facultys' => [], 'responseSentence' => "No results were found"]);
+                return view('pages.search', ['proposals' => [], 'responseSentence' => "No results were found"]);
             }
             $parameters = implode(",", $ids);
 
-            $query = "SELECT faculty.id, title, author, duration, dateApproved FROM faculty WHERE faculty.id IN (" . $parameters . ")";
-            $facultys = DB::select($query, []);
 
-            $this->buildTimestamps($facultys);
-            $this->getMaxBids($facultys);
-            $this->getImage($facultys);
+
+            $query = "SELECT proposal.id, title, duration, dateApproved FROM proposal WHERE proposal.id IN (" . $parameters . ")";
+            $proposals = DB::select($query, []);
+
+            $this->buildTimestamps($proposals);
+            $this->getMaxBids($proposals);
 
             $responseSentence = implode(' and ', $responseSentence);
-            $responseSentence = 'Your search results for facultys ' . $responseSentence . ':';
+            $responseSentence = 'Your search results for proposals ' . $responseSentence . ':';
         } catch (QueryException $qe) {
             $errors = new MessageBag();
 
-            $errors->add('An error ocurred', "There was a problem searching for facultys. Try Again!");
+            $errors->add('An error ocurred', "There was a problem searching for proposals. Try Again!");
             $this->warn($qe);
             return redirect()
                 ->route('search')
                 ->withErrors($errors);
         }
 
-        return view('pages.search', ['facultys' => $facultys, 'responseSentence' => $responseSentence]);
+        return view('pages.search', ['proposals' => $proposals, 'responseSentence' => $responseSentence]);
     }
 
     /**
-      * Builds all timestamps for an array of facultys
-      * @param $facultys
+      * Builds all timestamps for an array of proposals
+      * @param $proposals
       */
-    private function buildTimestamps($facultys)
+    private function buildTimestamps($proposals)
     {
-        foreach ($facultys as $faculty) {
-            $ts = ProposalController::createTimestamp($faculty->dateapproved, $faculty->duration);
-            $faculty->timestamp = $ts;
+        foreach ($proposals as $proposal) {
+            $ts = ProposalController::createTimestamp($proposal->dateapproved, $proposal->duration);
+            $proposal->timestamp = $ts;
         }
     }
 
     /**
-      * sets the max bid on an array of facultys
-      * @param $facultys
+      * sets the max bid on an array of proposals
+      * @param $proposals
       */
-    private function getMaxBids($facultys)
+    private function getMaxBids($proposals)
     {
-        foreach ($facultys as $faculty) {
-            $res = DB::select("SELECT max(bidValue) FROM bid WHERE idfaculty = ?", [$faculty->id]);
+        foreach ($proposals as $proposal) {
+            $res = DB::select("SELECT max(bidValue) FROM bid WHERE idproposal = ?", [$proposal->id]);
             if ($res[0]->max == null) {
-                $faculty->bidValue = "No bids yet";
+                $proposal->bidValue = "No bids yet";
             } else {
-                $faculty->bidValue = $res[0]->max . "€";
+                $proposal->bidValue = $res[0]->max . "€";
             }
         }
     }
 
-    /**
-      * sets the image on an array of facultys
-      * @param $facultys
-      */
-    private function getImage($facultys)
-    {
-        foreach ($facultys as $faculty) {
-            $image = DB::select("SELECT source FROM image WHERE idfaculty = ? limit 1", [$faculty->id]);
-            if (isset($image[0]->source)) {
-                $faculty->image = $image[0]->source;
-            } else {
-                $faculty->image = "book.png";
-            }
-        }
-    }
 }
