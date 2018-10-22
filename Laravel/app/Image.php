@@ -25,13 +25,13 @@ class Image extends Model
         return $this->belongsTo('App\User', 'idusers', 'id');
     }
 
-    public function auction()
+    public function proposal()
     {
-        return $this->belongsTo('App\Auction', 'idAuction', 'id');
+        return $this->belongsTo('App\Proposal', 'idproposal', 'id');
     }
 
-    public function auction_modification()
+    public function proposal_modification()
     {
-        return $this->belongsTo('App\AuctionModification', 'idAuctionModification', 'id');
+        return $this->belongsTo('App\ProposalModification', 'idproposalModification', 'id');
     }
 }

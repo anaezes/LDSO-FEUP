@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Language extends Model
+class NotificationProposal extends Model
 {
 
     /**
@@ -19,5 +19,5 @@ class Language extends Model
      *
      * @var string
      */
-    protected $table = 'language';
+    protected $table = 'notification_proposal';
 }

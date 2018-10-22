@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Auction;
-use App\Category;
-use App\CategoryAuction;
+use App\Proposal;
+use App\Faculty;
+use App\FacultyProposal;
 use App\Http\Controllers\Controller;
 use App\Image;
 use Illuminate\Database\QueryException;
@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Mailgun\Mailgun;
 use GuzzleHttp\Client;
 
-class AuctionController extends Controller
+class ProposalController extends Controller
 {
     private static $lastUpdate = 0;
 
@@ -29,94 +29,80 @@ class AuctionController extends Controller
     }
 
     /**
-     * Shows the auction for a given id.
+     * Shows the proposal for a given id.
      *
      * @param  int  $id
      * @return Response
      */
     public function show($id)
     {
-        $auction = Auction::find($id);
+        $proposal = Proposal::find($id);
 
-        $categoryNumber = CategoryAuction::where('idauction', $auction->id)->get()->first();
-        if ($categoryNumber != null) {
-            $categoryName = Category::where('id', $categoryNumber->idcategory)->get()->first();
-            if ($categoryName != null) {
-                $categoryName = $categoryName->categoryname;
+        $facultyNumber = FacultyProposal::where('idproposal', $proposal->id)->get()->first();
+        if ($facultyNumber != null) {
+            $facultyName = Faculty::where('id', $facultyNumber->idfaculty)->get()->first();
+            if ($facultyName != null) {
+                $facultyName = $facultyName->facultyname;
             } else {
-                $categoryName = "No category";
+                $facultyName = "No faculty";
             }
         } else {
-            $categoryName = "No category";
+            $facultyName = "No faculty";
         }
 
-        if ($auction->dateapproved != null) {
-            $timestamp = $this->createTimestamp($auction->dateapproved, $auction->duration);
+        if ($proposal->dateapproved != null) {
+            $timestamp = $this->createTimestamp($proposal->dateapproved, $proposal->duration);
         } else {
-            $timestamp = "Auction hasn't been approved yet";
+            $timestamp = "Proposal hasn't been approved yet";
         }
 
-        $images = DB::table('image')->where('idauction', $id)->pluck('source');
-        if (sizeof($images) == 0) {
-            $images = ["default_no_img.png"];
-        }
 
-        $query = "SELECT max(bidValue) FROM bid WHERE idAuction = ?";
+        $query = "SELECT max(bidValue) FROM bid WHERE idproposal = ?";
         $maxBid = DB::select($query, [$id]);
         if ($maxBid[0]->max == null) {
             $maxBid[0]->max = 0.00;
         }
 
-        if (Auth::check()) {
-            $wish = DB::select("SELECT * FROM whishlist WHERE idbuyer = ? and idauction = ?", [Auth::user()->id, $auction->id]);
-            if (sizeof($wish) > 0) {
-                $auction->wishlisted = true;
-            } else {
-                $auction->wishlisted = false;
-            }
-        } else {
-            $auction->wishlisted = false;
-        }
 
-        return view('pages.auction', ['auction' => $auction,
-            'categoryName' => $categoryName,
-            'images' => $images,
+
+        return view('pages.proposal', ['proposal' => $proposal,
+            'facultyName' => $facultyName,
             'maxBid' => $maxBid[0]->max,
             'timestamp' => $timestamp]);
     }
 
     /**
-      * Gets the edit auction page
+      * Gets the edit proposal page
       * @param int $id
       * @return page
       */
     public function edit($id)
     {
-        $auction = Auction::find($id);
+        $proposal = Proposal::find($id);
 
-        if ($auction->idseller != Auth::user()->id) {
-            return redirect('/auction/' . $id);
+        if ($proposal->idproponent != Auth::user()->id) {
+            return redirect('/proposal/' . $id);
         }
 
-        return view('pages.auctionEdit', ['desc' => $auction->description, 'id' => $id]);
+        return view('pages.proposalEdit', ['desc' => $proposal->description, 'id' => $id]);
     }
 
     /**
-      * Submits an auction edit request
+      * Submits an proposal edit request
       * @param Request $request
       * @param int $id
       * @return redirect
       */
     public function submitEdit(Request $request, $id)
     {
-        $auction = Auction::find($id);
-        if ($auction->idseller != Auth::user()->id) {
-            return redirect('/auction/' . $id);
+        $proposal = Proposal::find($id);
+        if ($proposal->idproponent != Auth::user()->id) {
+            return redirect('/proposal/' . $id);
         }
         try {
             DB::beginTransaction();
-            if (sizeof(DB::select('select * FROM auction_modification WHERE auction_modification.idapprovedauction = ? AND auction_modification.is_approved is NULL', [$id])) == "0") {
-                $modID = DB::table('auction_modification')->insertGetId(['newdescription' => $request->input('description'), 'idapprovedauction' => $id]);
+            if (sizeof(DB::select('select * FROM proposal_modification WHERE proposal_modification.idapprovedproposal = ? AND proposal_modification.is_approved is NULL', [$id])) == "0") {
+                $modID = DB::table('proposal_modification')->insertGetId(['newdescription' => $request->input('description'), 'idapprovedproposal' => $id]);
 
                 $input = $request->all();
                 $images = array();
@@ -133,7 +119,7 @@ class AuctionController extends Controller
                 foreach ($images as $image) {
                     $saveImage = new Image;
                     $saveImage->source = $image;
-                    $saveImage->idauctionmodification = $modID;
+                    $saveImage->idproposalmodification = $modID;
                     $saveImage->save();
                 }
                 DB::commit();
@@ -142,36 +128,36 @@ class AuctionController extends Controller
                 DB::rollback();
                 $errors = new MessageBag();
 
-                $errors->add('An error ocurred', "There is already a request to edit this auction's information");
-                return redirect('/auction/' . $id)
+                $errors->add('An error ocurred', "There is already a request to edit this proposal's information");
+                return redirect('/proposal/' . $id)
                     ->withErrors($errors);
             }
         } catch (QueryException $qe) {
             DB::rollback();
             $errors = new MessageBag();
 
-            $errors->add('An error ocurred', "There was a problem editing auction information. Try Again!");
+            $errors->add('An error ocurred', "There was a problem editing proposal information. Try Again!");
 
             $this->warn($qe);
-            return redirect('/auction/' . $id)
+            return redirect('/proposal/' . $id)
                 ->withErrors($errors);
         }
 
-        return redirect('/auction/' . $id);
+        return redirect('/proposal/' . $id);
     }
 
     /**
-      * Updates all auctions, setting them to finished if their time is up and sending out notifications
+      * Updates all proposals, setting them to finished if their time is up and sending out notifications
       */
-    public function updateAuctions()
+    public function updateProposals()
     {
-        $auctions = DB::select("SELECT id, duration, dateApproved, idSeller FROM auction WHERE auction_status = ?", ["approved"]);
+        $proposals = DB::select("SELECT id, duration, dateApproved, idproponent FROM proposal WHERE proposal_status = ?", ["approved"]);
         $over = [];
 
-        foreach ($auctions as $auction) {
-            $timestamp = AuctionController::createTimestamp($auction->dateapproved, $auction->duration);
-            if ($timestamp === "Auction has ended!") {
-                array_push($over, $auction->id);
+        foreach ($proposals as $proposal) {
+            $timestamp = ProposalController::createTimestamp($proposal->dateapproved, $proposal->duration);
+            if ($timestamp === "Proposal has ended!") {
+                array_push($over, $proposal->id);
             }
         }
 
@@ -180,7 +166,7 @@ class AuctionController extends Controller
         }
 
         $parameters = implode(',', $over);
-        $query = "UPDATE auction SET auction_status = ?, dateFinished = ? WHERE id IN (" . $parameters . ")";
+        $query = "UPDATE proposal SET proposal_status = ?, dateFinished = ? WHERE id IN (" . $parameters . ")";
         DB::update($query, ["finished", "now()"]);
 
         foreach ($over as $id) {
@@ -191,21 +177,21 @@ class AuctionController extends Controller
     }
 
     /**
-      * Notifies the owner of an auction if it is finished
+      * Notifies the owner of an proposal if it is finished
       * @param int $id
       * @return 404 if error
       */
     public function notifyOwner($id)
     {
         try {
-            $res = DB::select("SELECT id, idseller, title FROM auction WHERE id = ?", [$id]);
-            $text = "Your auction of " . $res[0]->title . " has finished!";
-            $notifID = DB::table('notification')->insertGetId(['information' => $text, 'idusers' => $res[0]->idseller]);
-            DB::insert("INSERT INTO notification_auction (idAuction, idNotification) VALUES (?, ?)", [$res[0]->id, $notifID]);
+            $res = DB::select("SELECT id, idproponent, title FROM proposal WHERE id = ?", [$id]);
+            $text = "Your proposal of " . $res[0]->title . " has finished!";
+            $notifID = DB::table('notification')->insertGetId(['information' => $text, 'idusers' => $res[0]->idproponent]);
+            DB::insert("INSERT INTO notification_proposal (idproposal, idNotification) VALUES (?, ?)", [$res[0]->id, $notifID]);
 
             $res1 = DB::select("SELECT bid.idbuyer
                                FROM bid
-                               WHERE bid.idauction  = ?
+                               WHERE bid.idproposal  = ?
                                ORDER BY bid.bidvalue DESC",[$id]);
 
             $user = DB::select("SELECT * FROM users WHERE id = ?", [$res1[0]->bidbuyer]);
@@ -257,16 +243,16 @@ class AuctionController extends Controller
         try{
             $res = DB::select("SELECT bid.idbuyer
                                FROM bid
-                               WHERE bid.idauction  = ?
+                               WHERE bid.idproposal  = ?
                                ORDER BY bid.bidvalue DESC",[$id]);
 
-            $auction = DB::select("SELECT title
-                                    FROM auction
+            $proposal = DB::select("SELECT title
+                                    FROM proposal
                                     WHERE id = ?", [$id]);
-            $text = "You won the auction for " . $auction[0]->title . ".";
+            $text = "You won the proposal for " . $proposal[0]->title . ".";
 
             $notifID = DB::table('notification')->insertGetId(['information' => $text, 'idusers' => $res[0]->idbuyer]);
-            DB::insert("INSERT INTO notification_auction (idAuction, idNotification) VALUES (?, ?)", [$id, $notifID]);
+            DB::insert("INSERT INTO notification_proposal (idproposal, idNotification) VALUES (?, ?)", [$id, $notifID]);
 
 
         }catch(QueryException $qe){
@@ -276,7 +262,7 @@ class AuctionController extends Controller
     }
 
     /**
-      * Notifies all bidders if auction is finished
+      * Notifies all bidders if proposal is finished
       * @param int $id
       * @return 200 if ok, 404 if not
       */
@@ -284,21 +270,21 @@ class AuctionController extends Controller
     {
         try{
             $res = DB::select("SELECT DISTINCT bid.idBuyer FROM bid
-                               WHERE bid.idauction = ?",[$id]);
+                               WHERE bid.idproposal = ?",[$id]);
 
             $buyer = DB::select("SELECT bid.idbuyer
                                FROM bid
-                               WHERE bid.idauction  = ?
+                               WHERE bid.idproposal  = ?
                                ORDER BY bid.bidvalue DESC",[$id]);
             foreach ($res as $bidder){
                 if($bidder->idbuyer != $buyer[0]->idbuyer){
-                    $auction = DB::select("SELECT title
-                                    FROM auction
+                    $proposal = DB::select("SELECT title
+                                    FROM proposal
                                     WHERE id = ?", [$id]);
-                    $text = "You lost the auction for " . $auction[0]->title . ".";
+                    $text = "You lost the proposal for " . $proposal[0]->title . ".";
 
                     $notifID = DB::table('notification')->insertGetId(['information' => $text, 'idusers' => $bidder->idbuyer]);
-                    DB::insert("INSERT INTO notification_auction (idAuction, idNotification) VALUES (?, ?)", [$id, $notifID]);
+                    DB::insert("INSERT INTO notification_proposal (idproposal, idNotification) VALUES (?, ?)", [$id, $notifID]);
                 }
             }
         }catch(QueryException $qe) {
@@ -322,7 +308,7 @@ class AuctionController extends Controller
         $time = $end - $current;
 
         if ($time <= 0) {
-            return "Auction has ended!";
+            return "Proposal has ended!";
         }
 
         $ts = "";
@@ -340,7 +326,7 @@ class AuctionController extends Controller
                 if (strpos($ts, "0m ") !== false) {
                     $ts = str_replace("0m ", "", $ts);
                     if (strpos($ts, "0s") !== false) {
-                        $ts = "Auction has ended!";
+                        $ts = "Proposal has ended!";
                     }
                 }
             }

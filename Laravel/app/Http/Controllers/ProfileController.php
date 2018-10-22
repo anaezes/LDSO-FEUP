@@ -44,14 +44,8 @@ class ProfileController extends Controller
             $images = ["default.png"];
         }
 
-        $paypalMsg = "";
-        if ($user->paypalemail != null) {
-            $paypalMsg = "You already linked your IBAN";
-        } else {
-            $paypalMsg = "You aren't linked to your IBAN";
-        }
 
-        return view('pages.profile', ['user' => $user, 'image' => $images[0], 'paypalMsg' => $paypalMsg]);
+        return view('pages.profile', ['user' => $user, 'image' => $images[0]]);
     }
 
     /**
@@ -69,9 +63,7 @@ class ProfileController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'nullable|string|max:255',
             'email' => 'nullable|string|email|max:255|unique:users',
-            'age' => 'nullable|min:18|integer',
-            'address' => 'nullable|string|max:255',
-            'idcountry' => 'nullable|integer',
+            'idfaculty' => 'nullable|integer',
         ]);
 
         if ($validator->fails()) {
@@ -88,24 +80,12 @@ class ProfileController extends Controller
                 DB::update('update users set name = ? where id = ?', [$input['name'], $id]);
             }
 
-            if ($input['age'] !== null) {
-                DB::update('update users set age = ? where id = ?', [$input['age'], $id]);
-            }
-
             if ($input['email'] !== null) {
                 DB::update('update users set email = ? where id = ?', [$input['email'], $id]);
             }
 
-            if ($input['address'] !== null) {
-                DB::update('update users set address = ? where id = ?', [$input['address'], $id]);
-            }
-
-            if ($input['postalcode'] !== null) {
-                DB::update('update users set postalCode = ? where id = ?', [$input['postalcode'], $id]);
-            }
-
-            if ($input['idcountry'] !== null) {
-                DB::update('update users set idCountry = ? where id = ?', [$input['idcountry'], $id]);
+            if ($input['idfaculty'] !== null) {
+                DB::update('update users set idfaculty = ? where id = ?', [$input['idfaculty'], $id]);
             }
 
             if ($input['phone'] !== null) {
@@ -135,70 +115,5 @@ class ProfileController extends Controller
         return redirect()->route('profile', ['id' => Auth::user()->id]);
     }
 
-    /**
-      * adds a paypal email to the user
-      * @param Request $request
-      * @param int $id
-      * @return redirect to page
-      */
-    public function addPaypal(Request $request, $id)
-    {
-        if (Auth::user()->id != $id) {
-            return redirect('/home');
-        }
 
-        $validator = Validator::make($request->all(), [
-            'paypalEmail' => 'nullable|string|email',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()
-                ->route('profile', ['id' => Auth::user()->id])
-                ->withErrors($validator)
-                ->withInput();
-        }
-
-        try {
-            $input = $request->all();
-            $email = $input['paypalEmail'];
-
-            DB::update('UPDATE users SET paypalEmail = ? WHERE id = ?', [$email, Auth::user()->id]);
-        } catch (QueryException $qe) {
-            $errors = new MessageBag();
-
-            $errors->add('An error ocurred', "There was a problem adding your paypal. Try Again!");
-            $this->warn($qe);
-            return redirect()
-                ->route('profile', ['id' => Auth::user()->id])
-                ->withErrors($errors);
-        }
-        return redirect()->route('profile', ['id' => $id]);
-    }
-
-    /**
-      * removes a paypal email of the user
-      * @param Request $request
-      * @param int $id
-      * @return redirect to page
-      */
-    public function removePaypal(Request $request, $id)
-    {
-        if (Auth::user()->id != $id) {
-            return redirect('/home');
-        }
-        try {
-            $paypalEmail = "NULL";
-
-            DB::update('UPDATE user SET paypalEmail = ? WHERE id = ?', [$paypalEmail, $id]);
-        } catch (QueryException $qe) {
-            $errors = new MessageBag();
-
-            $errors->add('An error ocurred', "There was a problem removing your paypal information. Try Again!");
-            $this->warn($qe);
-            return redirect()
-                ->route('profile', ['id' => Auth::user()->id])
-                ->withErrors($errors);
-        }
-        return redirect()->route('profile', ['id' => $id]);
-    }
 }

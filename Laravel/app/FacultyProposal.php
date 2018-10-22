@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Publisher extends Model
+class FacultyProposal extends Model
 {
 
     /**
@@ -19,5 +19,7 @@ class Publisher extends Model
      *
      * @var string
      */
-    protected $table = 'publisher';
+    protected $table = 'faculty_proposal';
+
+
 }

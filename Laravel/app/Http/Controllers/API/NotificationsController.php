@@ -33,12 +33,12 @@ class NotificationsController extends Controller
                 return response('Forbidden.', 403);
             }
 
-            $response = DB::select('SELECT notification.id, notification.information,notification.dateSent, notification_auction.idAuction, auction.title
-                                FROM notification, notification_auction, auction
+            $response = DB::select('SELECT notification.id, notification.information,notification.dateSent, notification_proposal.idproposal, proposal.title
+                                FROM notification, notification_proposal, proposal
                                 WHERE notification.is_seen=FALSE
                                 AND notification.idusers=?
-                                AND notification_auction.idNotification=notification.id
-                                AND notification_auction.idAuction=auction.id', [Auth::user()->id]);
+                                AND notification_proposal.idNotification=notification.id
+                                AND notification_proposal.idproposal=proposal.id', [Auth::user()->id]);
         } catch (Exception $e) {
             $this->error($e);
             return response('Internal Error', 500);

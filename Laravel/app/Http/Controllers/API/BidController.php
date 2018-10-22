@@ -21,7 +21,7 @@ class BidController extends Controller
     }
 
     /**
-      * Gets the max bid of an auction
+      * Gets the max bid of an proposal
       * @param Request $request
       * @return JSON if success, 403 or 500 if errors
       */
@@ -32,9 +32,9 @@ class BidController extends Controller
                 return response('Forbidden.', 403);
             }
 
-            $auctionID = $request->input('auctionID');
-            $query = "SELECT max(bidValue) FROM bid WHERE idAuction = ?";
-            $response = DB::select($query, [$auctionID]);
+            $proposalID = $request->input('proposalID');
+            $query = "SELECT max(bidValue) FROM bid WHERE idproposal = ?";
+            $response = DB::select($query, [$proposalID]);
             if ($response[0]->max == null) {
                 $response[0]->max = 0.00;
             }
@@ -47,13 +47,13 @@ class BidController extends Controller
     }
 
     /**
-      * Gets the max bid of an auction (for internal use)
+      * Gets the max bid of an proposal (for internal use)
       * @param Request $request
       * @return JSON if success, 403 or 500 if errors
       */
     public static function getMaxBidInternal($id)
     {
-        $query = "SELECT max(bidValue) FROM bid WHERE idAuction = ?";
+        $query = "SELECT max(bidValue) FROM bid WHERE idproposal = ?";
         $response = DB::select($query, [$id]);
         if ($response[0]->max == null) {
             $response[0]->max = 0.00;
@@ -74,7 +74,7 @@ class BidController extends Controller
                 return response('Forbidden.', 403);
             }
 
-            $auctionID = $request->input('auctionID');
+            $proposalID = $request->input('proposalID');
             $userID = Auth::user()->id;
             $bidValue = $request->input('value');
 
@@ -82,32 +82,32 @@ class BidController extends Controller
             if ($hasPayment[0]->paypalemail == null)
                 return response()->json(['success' => false, 'message' => "You cannot bid without having a payment method attached to your account"]);
 
-            $auction = DB::select("SELECT auction_status FROM auction WHERE id = ?", [$auctionID]);
-            if ($auction[0]->auction_status != "approved") {
-                return response()->json(['success' => false, 'message' => "You cannot bid on an auction that isn't going on."]);
+            $proposal = DB::select("SELECT proposal_status FROM proposal WHERE id = ?", [$proposalID]);
+            if ($proposal[0]->proposal_status != "approved") {
+                return response()->json(['success' => false, 'message' => "You cannot bid on an proposal that isn't going on."]);
             }
 
             $success = true;
             $info = "Your bid has been beaten.";
 
-            $exists = DB::select("SELECT * FROM bid WHERE idBuyer = ? and idAuction = ?", [$userID, $auctionID]);
+            $exists = DB::select("SELECT * FROM bid WHERE idBuyer = ? and idproposal = ?", [$userID, $proposalID]);
             if (sizeof($exists) > 0) {
-                $lastbidder = DB::select('SELECT bid.idBuyer FROM bid WHERE idAuction = ? ORDER BY bidValue DESC', [$auctionID]);
+                $lastbidder = DB::select('SELECT bid.idBuyer FROM bid WHERE idproposal = ? ORDER BY bidValue DESC', [$proposalID]);
 
-                DB::update("UPDATE bid SET bidValue = ?, bidDate = now() WHERE idBuyer = ? AND idAuction = ?", [$bidValue, $userID, $auctionID]);
-                $message = "Successfully updated your bid. You are now leading the auction!";
+                DB::update("UPDATE bid SET bidValue = ?, bidDate = now() WHERE idBuyer = ? AND idproposal = ?", [$bidValue, $userID, $proposalID]);
+                $message = "Successfully updated your bid. You are now leading the proposal!";
 
                 $notifID = DB::table('notification')->insertGetId(['information' => $info, 'idusers' => $lastbidder[0]->idbuyer]);
-                DB::insert("INSERT INTO notification_auction (idAuction, idNotification) VALUES (?, ?)", [$auctionID, $notifID]);
+                DB::insert("INSERT INTO notification_proposal (idproposal, idNotification) VALUES (?, ?)", [$proposalID, $notifID]);
 
             } else {
-                $lastbidder = DB::select('SELECT bid.idBuyer FROM bid WHERE idAuction = ? ORDER BY bidValue DESC', [$auctionID]);
+                $lastbidder = DB::select('SELECT bid.idBuyer FROM bid WHERE idproposal = ? ORDER BY bidValue DESC', [$proposalID]);
 
-                DB::insert("INSERT INTO bid (idBuyer, idAuction, bidValue) VALUES (?, ?, ?)", [$userID, $auctionID, $bidValue]);
-                $message = "Successfully registered your bid. You are now leading the auction!";
+                DB::insert("INSERT INTO bid (idBuyer, idproposal, bidValue) VALUES (?, ?, ?)", [$userID, $proposalID, $bidValue]);
+                $message = "Successfully registered your bid. You are now leading the proposal!";
 
                 $notifID = DB::table('notification')->insertGetId(['information' => $info, 'idusers' => $lastbidder[0]->idbuyer]);
-                DB::insert("INSERT INTO notification_auction (idAuction, idNotification) VALUES (?, ?)", [$auctionID, $notifID]);
+                DB::insert("INSERT INTO notification_proposal (idproposal, idNotification) VALUES (?, ?)", [$proposalID, $notifID]);
             }
         } catch (Exception $e) {
             $this->error($e);

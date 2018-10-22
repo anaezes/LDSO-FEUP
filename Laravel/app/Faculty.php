@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class Faculty extends Model
 {
 
     /**
@@ -19,5 +19,11 @@ class Category extends Model
      *
      * @var string
      */
-    protected $table = 'category';
+    protected $table = 'faculty';
+
+    protected $primaryKey = "id";
+
+    public function proposal(){
+        return $this->belongsToMany('App\Proposal', 'faculty_proposal', 'idfaculty', 'idproposal');
+    }
 }

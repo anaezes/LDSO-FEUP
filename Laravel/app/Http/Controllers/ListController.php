@@ -18,36 +18,36 @@ class ListController extends Controller
     }
 
     /**
-      * Gets the user's auctions list page
+      * Gets the user's proposals list page
       * @return page
       */
-    public function myauctions()
+    public function myproposals()
     {
         if (!Auth::check()) {
             return redirect('/home');
         }
 
-        $action = "MY_AUCTIONS";
+        $action = "MY_proposalS";
 
         return view('pages.list', ['action' => $action]);
     }
 
     /**
-      * Gets the list with the auctions the user is in
+      * Gets the list with the proposals the user is in
       * @return page
       */
-    public function auctions_imIn()
+    public function proposals_imIn()
     {
         if (!Auth::check()) {
             return redirect('/home');
         }
-        $action = "AUCTIONS_IN";
+        $action = "proposalS_IN";
 
         return view('pages.list', ['action' => $action]);
     }
 
     /**
-      * Gets the auction history of user
+      * Gets the proposal history of user
       * @return page
       */
     public function history()
@@ -60,17 +60,5 @@ class ListController extends Controller
         return view('pages.list', ['action' => $action]);
     }
 
-    /**
-      * Gets the user's wishlist page
-      * @return page
-      */
-    public function wishlist()
-    {
-        if (!Auth::check()) {
-            return redirect('/home');
-        }
-        $action = "WISHLIST";
 
-        return view('pages.list', ['action' => $action]);
-    }
 }

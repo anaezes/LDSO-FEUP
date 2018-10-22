@@ -58,14 +58,7 @@
                      @endif
                   </td>
                </tr>
-               <tr>
-                  <td>
-                     <strong>Paypal e-mail</strong>
-                  </td>
-                  <td>
-                     {{$user->paypalemail}}
-                  </td>
-               </tr>               
+
                <tr>
                   <td>
                      <strong>Phone Number</strong>
@@ -76,10 +69,10 @@
                </tr>
                <tr>
                   <td>
-                     <strong>Country</strong>
+                     <strong>faculty</strong>
                   </td>
                   <td>
-                     {{$user->country->countryname}}
+                     {{$user->faculty->facultyname}}
                   </td>
                </tr>
             </tbody>
@@ -103,34 +96,7 @@
          </div>
       </div>
       @endif
-      <!--feedback-->
-      <div class = "container-fluid bg-white">
-         <div class="bg-white mb-0 mt-3 mb-3 panel">
-            <h5><i class="fa fa-comments"></i> Feedback</h5>
-         </div>
-         @if(Auth::User()->id !== $user->id)
-         <form id="feedbackform">
-            <div class="btn-group mb-3" role="group" aria-label="Basic example">
-               <button type="button" onclick="setLike()" class="btn btn-success">
-               <i class="fa fa-thumbs-up btn btn-success"></i>
-               </button>
-               <button type="button" onclick="setUnlike()" class="btn btn-danger">
-               <i class="fa fa-thumbs-down btn btn-danger"></i>
-               </button>
-            </div>
-            <div class="form-group">
-               <textarea rows="3" cols="30" class="form-control" id = "left-feedback" placeholder="Your feedback" required></textarea>
-            </div>
-            <div class="form-row">
-               <div class="form-group col-md-12">
-                  <span onclick="postFeedback({{Auth::user()->id}})" class="btn btn-primary col-md-12">Post your feedback</span>
-               </div>
-            </div>
-         </form>
-         @endif
-         <div class = "list-group panel" id="myfeedback"  style = "margin-bottom: 20px;">
-         </div>
-      </div>
+
       <div class="modal fade" id="myModalEdit" tabindex="-1" role="dialog" aria-labelledby="myModalEditLabel" aria-hidden="true">
          <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -147,57 +113,47 @@
                         <label for="InputName">Name</label>
                         <input class="form-control" type="text" id="InputName" name="name" placeholder="{{$user->username}}" value="{{ old('name') }}">
                      </div>
-                     <div class="form-group">
-                        <label for="InputAge">Age</label>
-                        <input class="form-control" id="InputAge" name="age" type="number" placeholder="{{$user->age}}" value="{{ old('age') }}">
-                     </div>
+
                      <div class="form-group">
                         <label for="InputEmail1">Email address</label>
                         <input class="form-control" type="email" name="email" placeholder="{{$user->email}}" value="{{ old('email') }}">
                      </div>
-                     <div class="form-group">
-                        <label for="address1">Address</label>
-                        <input class="form-control" id="address1" name="address" type="text" placeholder="{{$user->address}}" value="{{ old('address') }}">
-                     </div>
-                     <div class="form-group">
-                        <label for="postalcode1">Postal Code</label>
-                        <input class="form-control" id="postalcode1" name="postalcode" type="text" placeholder="{{$user->postalcode}}" value="{{ old('postalcode') }}">
-                     </div>
-                     <div class="form-group">
-                        <label for="Inputidcountry">Country</label>
-                        <select class="form-control" id="Inputidcountry" name="idcountry">
+
+                 <!--    <div class="form-group">
+                        <label for="Inputidfaculty">faculty</label>
+                        <select class="form-control" id="Inputidfaculty" name="idfaculty">
                            <option selected value> -- select an option -- </option>
-                           <option value="1" {{ old('idcountry') == 1 ? 'selected' : '' }}>Austria</option>
-                           <option value="2" {{ old('idcountry') == 2 ? 'selected' : '' }}>Italy</option>
-                           <option value="3" {{ old('idcountry') == 3 ? 'selected' : '' }}>Belgium</option>
-                           <option value="4" {{ old('idcountry') == 4 ? 'selected' : '' }}>Latvia</option>
-                           <option value="5" {{ old('idcountry') == 5 ? 'selected' : '' }}>Bulgaria</option>
-                           <option value="6" {{ old('idcountry') == 6 ? 'selected' : '' }}>Lithuania</option>
-                           <option value="7" {{ old('idcountry') == 7 ? 'selected' : '' }}>Croatia</option>
-                           <option value="8" {{ old('idcountry') == 8 ? 'selected' : '' }}>Luxembourg</option>
-                           <option value="9" {{ old('idcountry') == 9 ? 'selected' : '' }}>Cyprus</option>
-                           <option value="10" {{ old('idcountry') == 10 ? 'selected' : '' }}>Malta</option>
-                           <option value="11" {{ old('idcountry') == 11 ? 'selected' : '' }}>Czech Republic</option>
-                           <option value="12" {{ old('idcountry') == 12 ? 'selected' : '' }}>Netherlands</option>
-                           <option value="13" {{ old('idcountry') == 13 ? 'selected' : '' }}>Denmark</option>
-                           <option value="14" {{ old('idcountry') == 14 ? 'selected' : '' }}>Indonesia</option>
-                           <option value="15" {{ old('idcountry') == 15 ? 'selected' : '' }}>Poland</option>
-                           <option value="16" {{ old('idcountry') == 16 ? 'selected' : '' }}>Estonia</option>
-                           <option value="17" {{ old('idcountry') == 17 ? 'selected' : '' }}>Portugal</option>
-                           <option value="18" {{ old('idcountry') == 18 ? 'selected' : '' }}>Finland</option>
-                           <option value="19" {{ old('idcountry') == 19 ? 'selected' : '' }}>Romania</option>
-                           <option value="20" {{ old('idcountry') == 20 ? 'selected' : '' }}>France</option>
-                           <option value="21" {{ old('idcountry') == 21 ? 'selected' : '' }}>Slovakia</option>
-                           <option value="22" {{ old('idcountry') == 22 ? 'selected' : '' }}>Germany</option>
-                           <option value="23" {{ old('idcountry') == 23 ? 'selected' : '' }}>Slovenia</option>
-                           <option value="24" {{ old('idcountry') == 24 ? 'selected' : '' }}>Greece</option>
-                           <option value="25" {{ old('idcountry') == 25 ? 'selected' : '' }}>Spain</option>
-                           <option value="26" {{ old('idcountry') == 26 ? 'selected' : '' }}>Hungary</option>
-                           <option value="27" {{ old('idcountry') == 27 ? 'selected' : '' }}>Sweden</option>
-                           <option value="28" {{ old('idcountry') == 28 ? 'selected' : '' }}>Ireland</option>
-                           <option value="29" {{ old('idcountry') == 29 ? 'selected' : '' }}>United Kingdom</option>
+                           <option value="1" {{ old('idfaculty') == 1 ? 'selected' : '' }}>Austria</option>
+                           <option value="2" {{ old('idfaculty') == 2 ? 'selected' : '' }}>Italy</option>
+                           <option value="3" {{ old('idfaculty') == 3 ? 'selected' : '' }}>Belgium</option>
+                           <option value="4" {{ old('idfaculty') == 4 ? 'selected' : '' }}>Latvia</option>
+                           <option value="5" {{ old('idfaculty') == 5 ? 'selected' : '' }}>Bulgaria</option>
+                           <option value="6" {{ old('idfaculty') == 6 ? 'selected' : '' }}>Lithuania</option>
+                           <option value="7" {{ old('idfaculty') == 7 ? 'selected' : '' }}>Croatia</option>
+                           <option value="8" {{ old('idfaculty') == 8 ? 'selected' : '' }}>Luxembourg</option>
+                           <option value="9" {{ old('idfaculty') == 9 ? 'selected' : '' }}>Cyprus</option>
+                           <option value="10" {{ old('idfaculty') == 10 ? 'selected' : '' }}>Malta</option>
+                           <option value="11" {{ old('idfaculty') == 11 ? 'selected' : '' }}>Czech Republic</option>
+                           <option value="12" {{ old('idfaculty') == 12 ? 'selected' : '' }}>Netherlands</option>
+                           <option value="13" {{ old('idfaculty') == 13 ? 'selected' : '' }}>Denmark</option>
+                           <option value="14" {{ old('idfaculty') == 14 ? 'selected' : '' }}>Indonesia</option>
+                           <option value="15" {{ old('idfaculty') == 15 ? 'selected' : '' }}>Poland</option>
+                           <option value="16" {{ old('idfaculty') == 16 ? 'selected' : '' }}>Estonia</option>
+                           <option value="17" {{ old('idfaculty') == 17 ? 'selected' : '' }}>Portugal</option>
+                           <option value="18" {{ old('idfaculty') == 18 ? 'selected' : '' }}>Finland</option>
+                           <option value="19" {{ old('idfaculty') == 19 ? 'selected' : '' }}>Romania</option>
+                           <option value="20" {{ old('idfaculty') == 20 ? 'selected' : '' }}>France</option>
+                           <option value="21" {{ old('idfaculty') == 21 ? 'selected' : '' }}>Slovakia</option>
+                           <option value="22" {{ old('idfaculty') == 22 ? 'selected' : '' }}>Germany</option>
+                           <option value="23" {{ old('idfaculty') == 23 ? 'selected' : '' }}>Slovenia</option>
+                           <option value="24" {{ old('idfaculty') == 24 ? 'selected' : '' }}>Greece</option>
+                           <option value="25" {{ old('idfaculty') == 25 ? 'selected' : '' }}>Spain</option>
+                           <option value="26" {{ old('idfaculty') == 26 ? 'selected' : '' }}>Hungary</option>
+                           <option value="27" {{ old('idfaculty') == 27 ? 'selected' : '' }}>Sweden</option>
+                           <option value="28" {{ old('idfaculty') == 28 ? 'selected' : '' }}>Ireland</option>
+                           <option value="29" {{ old('idfaculty') == 29 ? 'selected' : '' }}>United Kingdom</option>
                         </select>
-                     </div>
+                     </div>-->
                      <div class="form-group">
                         <label for="phone1">Phone Number</label>
                         <input class="form-control" id="phone1" name="phone" type="tel" placeholder="{{$user->phone}}" value="{{ old('phone') }}">
@@ -303,54 +259,6 @@
                </div>
             </div>
          </div>
-     </div>
-     @if(Auth::User()->id == $user->id)
-     <div class="container-fluid bg-white">
-        <div class="bg-white mb-0 mt-3 mb-3 panel">
-           <h5><i class="fab fa-paypal"></i> Payments and Transfers</h5>
-        </div>
-        <p>BookHub requires you to have an IBAN associated to your account in order to bid and/or create auctions. Be mindful of these points:</p>
-        <ul>
-           <li>If you win an auction, you will be contacted by the seller in order to proceed with the payment. You pay within 5 days after receiving the payment instructions;</li>
-           <li>You can neither create nor bid on auctions until you associate a valid IBAN to your BookHub account;</li>
-           <li>You cannot unlink your IBAN if you have bid on an ongoing auction or if you have any auction of your own still active;</li>
-           <li>Your shipping information must be valid and up to date. Neither we nor the seller will take responsibility if your shipment is lost due to inaccurate information.</li>
-        </ul>
-        <p><strong>{{$paypalMsg}}</strong></p>
-        <div class="list-group" style = "margin-bottom: 30px;">
-           <div class="container">
-              <div class="row">
-                 <div class="col-lg-12">
-                    <a class="btn btn-outline-primary btn-block" data-toggle="modal" data-target="#paypalUpdateModal">
-                    <i class="fa fa-link"></i> Associate an IBAN
-                    </a>
-                 </div>
-              </div>
-           </div>
-        </div>
-     </div>
-     @endif
-     <div class="modal fade" id="paypalUpdateModal" tabindex="-1" role="dialog" aria-labelledby="myModalPasswordLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-           <div class="modal-content">
-              <div class="modal-header">
-                 <h5 class="modal-title" id="myModalPasswordLabel">Add an IBAN to your account</h5>
-                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                 <span aria-hidden="true">&times;</span>
-                 </button>
-              </div>
-              <div class="modal-body">
-                 <form method="POST" action="{{ route('profile.paypal',$user->id) }}">
-                    <div class="form-group">
-                       <label for="exampleInputPassword1">Your new IBAN</label>
-                       <input class="form-control" name="paypalEmail" type="email" placeholder="example@example.com" value = "{{$user->paypalEmail}}" required>
-                       <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                    </div>
-                    <button class="btn btn-primary btn-block mb-4">Add an IBAN to your account</button>
-                 </form>
-              </div>
-           </div>
-        </div>
      </div>
    </div>
 </main>

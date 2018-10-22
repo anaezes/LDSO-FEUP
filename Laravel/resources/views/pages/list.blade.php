@@ -10,11 +10,11 @@
     <main>
         <div class="bg-white mb-0 mt-5 panel p-1">
             <h4> 
-                @if($action=="MY_AUCTIONS")
-                    <i class="fa fa-gavel"></i> My Auctions
+                @if($action=="MY_proposalS")
+                    <i class="fa fa-gavel"></i> My proposals
                 @endif
-                @if($action=="AUCTIONS_IN")
-                    <i class="fa fa-clock"></i> Auctions I'm in
+                @if($action=="proposalS_IN")
+                    <i class="fa fa-clock"></i> Proposals I'm in
                 @endif
                 @if($action=="HISTORY")
                     <i class="fa fa-history"></i> History 
@@ -26,9 +26,9 @@
         </div>
         <hr id="hr_space" class="mt-2">
         @if($action!="WISHLIST")
-        <div id="auctionsAlbum" class="album p-2">
+        <div id="proposalsAlbum" class="album p-2">
         @else
-        <div id="auctionsAlbum" class="list-group panel">
+        <div id="proposalsAlbum" class="list-group panel">
         @endif
           
 

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Auction;
-use App\AuctionModification;
+use App\Proposal;
+use App\ProposalModification;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -42,11 +42,11 @@ class ModeratorController extends Controller
             return redirect('home')->withErrors($erorIsnotAModerator);
         }
 
-        $auctions = Auction::where('auction_status', "waitingApproval")->get();
-        $auction_modifications = AuctionModification::where('dateapproved', null)->get();
-        $auction_modifications_ids = AuctionModification::where('dateapproved', null)->get()->pluck('idapprovedauction');
-        $auctions_to_mod = Auction::whereIn('id', $auction_modifications_ids)->get();
+        $proposals = Proposal::where('proposal_status', "waitingApproval")->get();
+        $proposal_modifications = ProposalModification::where('dateapproved', null)->get();
+        $proposal_modifications_ids = ProposalModification::where('dateapproved', null)->get()->pluck('idapprovedproposal');
+        $proposals_to_mod = Proposal::whereIn('id', $proposal_modifications_ids)->get();
 
-        return view('pages.moderator', ['auctions' => $auctions, 'auction_modifications' => $auction_modifications, 'auctions_to_mod' => $auctions_to_mod]);
+        return view('pages.moderator', ['proposals' => $proposals, 'proposal_modifications' => $proposal_modifications, 'proposals_to_mod' => $proposals_to_mod]);
     }
 }

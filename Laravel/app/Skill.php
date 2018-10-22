@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Country extends Model
+class Skill extends Model
 {
 
     /**
@@ -19,5 +19,12 @@ class Country extends Model
      *
      * @var string
      */
-    protected $table = 'country';
+    protected $table = 'skill';
+
+    protected $primaryKey = "id";
+
+    public function proposal(){
+        return $this->belongsToMany('App\Proposal', 'skill_proposal', 'idskill', 'idproposal');
+    }
+
 }

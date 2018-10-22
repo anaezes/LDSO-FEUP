@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AuctionModification extends Model
+class ProposalModification extends Model
 {
 
   /**
@@ -19,10 +19,10 @@ class AuctionModification extends Model
      *
      * @var string
      */
-    protected $table = 'auction_modification';
+    protected $table = 'proposal_modification';
 
-    public function auction()
+    public function proposal()
     {
-        return $this->belongsTo('App\Auction', 'idapprovedauction', 'id');
+        return $this->belongsTo('App\Proposal', 'idapprovedproposal', 'id');
     }
 }
