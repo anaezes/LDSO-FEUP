@@ -34,7 +34,7 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
         <a class="nav-item nav-link" href="#">Repository</a>
-        <a class="nav-item nav-link" href="#">Proposals</a>
+        <a class="nav-item nav-link" href={{ url("allproposals") }}>Proposals</a>
         <a class="nav-item nav-link" href="#">People</a>
       </div>
       <ul class="navbar-nav ml-auto" id="navbarList">

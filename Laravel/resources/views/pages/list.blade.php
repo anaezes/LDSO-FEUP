@@ -13,6 +13,9 @@
                 @if($action=="MY_proposalS")
                     <i class="fa fa-gavel"></i> My proposals
                 @endif
+                @if($action=="ALL_proposalS")
+                <i class="fa fa-gavel"></i> Proposals
+                @endif
                 @if($action=="proposalS_IN")
                     <i class="fa fa-clock"></i> Proposals I'm in
                 @endif

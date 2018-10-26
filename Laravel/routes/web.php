@@ -71,6 +71,7 @@ Route::post('search', 'SearchController@simpleSearch')->name('search');
 Route::get('history', 'ListController@history')->name('history');
 Route::get('myproposals', 'ListController@myproposals')->name('myproposals');
 Route::get('proposals_im_in','ListController@proposals_imIn')->name('proposals_im_in');
+Route::get('allproposals', 'ListController@allproposals')->name('allproposals');
 
 //Moderator
 Route::get('moderator','ModeratorController@show')->name('moderator');

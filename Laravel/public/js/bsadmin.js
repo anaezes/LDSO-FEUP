@@ -104,6 +104,9 @@ if (showmorebutton != null)
             case "/myproposals":
                 album.innerHTML += myproposalsAlbum();
                 break;
+            case "/allproposals":
+                album.innerHTML += allproposalsAlbum();
+                break;
             case "/history":
                 album.innerHTML += historyAlbum();
                 break;
@@ -126,6 +129,11 @@ if (window.location.pathname === "/home")
 if (window.location.pathname === "/myproposals")
 {
     ajaxCallGet("api/search?proposalsOfUser=true", myproposalsAlbumHandler);
+}
+
+if (window.location.pathname === "/allproposals")
+{
+    ajaxCallGet("api/search?proposalsAvailableToUser=true", allproposalsAlbumHandler);
 }
 
 if (window.location.pathname === "/proposals_im_in")
@@ -190,6 +198,47 @@ function myproposalsAlbumHandler()
 }
 
 function myproposalsAlbum()
+{
+    console.log(proposals);
+    let htmlproposal = `<div class="row">`;
+    let max = i + 12;
+
+    for (i; i < max && i < proposals.length; i++)
+    {
+        let element = proposals[i];
+        if (i % 4 === 0 && i !== 0)
+        {
+            htmlproposal += `</div><div class="row">`;
+        }
+        htmlproposal += `<div class="col-md-3 proposalItem"  data-id="${element.id}">
+        <a href="proposal/${element.id}" class="list-group-item-action">
+            <div class="card mb-4 box-shadow">
+                <div class="card-body">
+                    <p class="card-text text-center hidden-p-sm-down font-weight-bold" style="font-size: larger"> ${element.title} </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-success">${element.bidMsg} </small>
+                        <small class="text-danger">
+                                ${element.time}</small>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>`;
+    };
+    htmlproposal += `</div>`;
+    if (i == proposals.length)
+        showmorebutton.parentNode.removeChild(showmorebutton);
+    return htmlproposal;
+}
+
+function allproposalsAlbumHandler()
+{
+    console.log(this.responseText);
+    proposals = JSON.parse(this.responseText);
+    album.innerHTML = allproposalsAlbum();
+}
+
+function allproposalsAlbum()
 {
     console.log(proposals);
     let htmlproposal = `<div class="row">`;
