@@ -38,7 +38,7 @@ class ProposalController extends Controller
     {
         $proposal = Proposal::find($id);
 
-        $facultyNumber = FacultyProposal::where('idproposal', $proposal->id)->get()->first();
+      /*  $facultyNumber = FacultyProposal::where('idproposal', $proposal->id)->get()->first();
         if ($facultyNumber != null) {
             $facultyName = Faculty::where('id', $facultyNumber->idfaculty)->get()->first();
             if ($facultyName != null) {
@@ -63,12 +63,12 @@ class ProposalController extends Controller
             $maxBid[0]->max = 0.00;
         }
 
-
+*/
 
         return view('pages.proposal', ['proposal' => $proposal,
-            'facultyName' => $facultyName,
-            'maxBid' => $maxBid[0]->max,
-            'timestamp' => $timestamp]);
+            'facultyName' => "No faculty",
+            'maxBid' => 0,
+            'timestamp' => "Proposal hasn't been approved yet"]);
     }
 
     /**

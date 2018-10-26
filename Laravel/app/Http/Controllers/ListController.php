@@ -33,6 +33,17 @@ class ListController extends Controller
     }
 
     /**
+     * Gets the user's proposals list page
+     * @return page
+     */
+    public function allproposals()
+    {
+        $action = "ALL_proposalS";
+
+        return view('pages.list', ['action' => $action]);
+    }
+
+    /**
       * Gets the list with the proposals the user is in
       * @return page
       */
