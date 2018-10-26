@@ -62,9 +62,15 @@ class SearchController extends Controller
                 $res = DB::select("SELECT DISTINCT proposal.id FROM proposal, bid WHERE bid.idproposal = proposal.id and bid.idBuyer = ? and proposal.proposal_status = ? ", [Auth::user()->id, 'approved']);
                 array_push($queryResults, $res);
             }
-            if ($request->input('proposalsAvailableToUser') !== null && Auth::check()) { // todo proposal_status fix later
-                $res = DB::select("SELECT DISTINCT proposal.id FROM proposal, faculty_proposal, faculty WHERE (proposal_type = ? OR (faculty.id = faculty_proposal.idfaculty AND faculty_proposal.idfaculty = ?)) AND (proposal_status = ? OR proposal_status=?)", [true, Auth::user()->idfaculty , 'approved', 'waitingApproval']);
-                array_push($queryResults, $res);
+            if ($request->input('proposalsAvailableToUser') !== null) { // todo proposal_status fix later
+                if(Auth::check()) {
+                    $res = DB::select("SELECT DISTINCT proposal.id FROM proposal, faculty_proposal, faculty WHERE (proposal_type = ? OR (faculty.id = faculty_proposal.idfaculty AND faculty_proposal.idfaculty = ?)) AND (proposal_status = ? OR proposal_status=?)", [true, Auth::user()->idfaculty, 'approved', 'waitingApproval']);
+                    array_push($queryResults, $res);
+                }
+                else {
+                    $res = DB::select("SELECT DISTINCT proposal.id FROM proposal WHERE proposal_type = ? AND (proposal_status = ? OR proposal_status=?)", [true, 'approved', 'waitingApproval']);
+                    array_push($queryResults, $res);
+                }
             }
             /*if ($request->input('language') != null) {
                 $res = DB::select("SELECT DISTINCT proposal.id FROM proposal, language WHERE proposal.idLanguage = language.id and language.languageName = ?", [$request->input('language')]);

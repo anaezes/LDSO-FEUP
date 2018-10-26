@@ -38,10 +38,6 @@ class ListController extends Controller
      */
     public function allproposals()
     {
-        if (!Auth::check()) {
-            return redirect('/home');
-        }
-
         $action = "ALL_proposalS";
 
         return view('pages.list', ['action' => $action]);
