@@ -132,12 +132,12 @@ class SearchController extends Controller
     private function getMaxBids($proposals)
     {
         foreach ($proposals as $proposal) {
-            $res = DB::select("SELECT max(bidValue) FROM bid WHERE idproposal = ?", [$proposal->id]);
-            if ($res[0]->max == null) {
-                $proposal->bidValue = "No bids yet";
-            } else {
+            /*$res = DB::select("SELECT max(bidValue) FROM bid WHERE idproposal = ?", [$proposal->id]);
+            if ($res[0]->max == null) {*/
+                //$proposal->bidValue = "No bids yet";
+           /* } else {
                 $proposal->bidValue = $res[0]->max . "€";
-            }
+            }*/
         }
     }
 
