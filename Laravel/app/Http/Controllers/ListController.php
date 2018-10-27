@@ -71,5 +71,19 @@ class ListController extends Controller
         return view('pages.list', ['action' => $action]);
     }
 
+    /**
+     * Gets the teams of the user
+     * @return page
+     */
+    public function teams()
+    {
+        if (!Auth::check()) {
+            return redirect('/home');
+        }
+        $action = "TEAMS";
+
+        return view('pages.list', ['action' => $action]);
+    }
+
 
 }

@@ -72,14 +72,12 @@ class SearchController extends Controller
                     array_push($queryResults, $res);
                 }
             }
-            /*if ($request->input('language') != null) {
-                $res = DB::select("SELECT DISTINCT proposal.id FROM proposal, language WHERE proposal.idLanguage = language.id and language.languageName = ?", [$request->input('language')]);
+
+            if ($request->input('teamsOfUser') !== null && Auth::check()) {
+                $res = DB::select("SELECT team_member.idteam FROM team_member WHERE iduser = ?", [Auth::user()->id]);
                 array_push($queryResults, $res);
             }
-            if ($request->input('publisher') != null) {
-                $res = DB::select("SELECT DISTINCT proposal.id FROM proposal, publisher WHERE proposal.idPublisher = publisher.id and publisher.publisherName = ?", [$request->input('publisher')]);
-                array_push($queryResults, $res);
-            }*/
+
 
             $counts = [];
             foreach ($queryResults as $res) {

@@ -59,34 +59,7 @@
                         <option>Other </option>
                     </select>
                 </div>
-                <div class="form-group col-md-6">
-                    <label class="font-weight-bold">Language</label>
-                    <select class="form-control" name="language">
-                            <option value="">&nbsp;</option>
-                            <option>English</option>
-                            <option>Bulgarian</option>
-                            <option>Croatian</option>
-                            <option>Danish</option>
-                            <option>Dutch</option>
-                            <option>Estonian</option>
-                            <option>Finnish</option>
-                            <option>French</option>
-                            <option>German</option>
-                            <option>Greek</option>
-                            <option>Hungarian</option>
-                            <option>Irish</option>
-                            <option>Italian</option>
-                            <option>Latvian</option>
-                            <option>Lithuanian</option>
-                            <option>Polish</option>
-                            <option>Hungarian</option>
-                            <option>Romanian</option>
-                            <option>Slovak</option>
-                            <option>Slovenian</option>
-                            <option>Spanish</option>
-                            <option>Swedish</option>
-                        </select>
-                </div>
+
             </div>
             <div class="form-row">
                 <div class="form-group col-md-12">

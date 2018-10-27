@@ -22,18 +22,20 @@
                 @if($action=="HISTORY")
                     <i class="fa fa-history"></i> History 
                 @endif
-                @if($action=="WISHLIST")
-                        <i class="fa fa-star"></i> Wish List 
+                @if($action=="TEAMS")
+                        <i class="fa fa-object-group"></i> My Teams
                 @endif
             </h4>
         </div>
         <hr id="hr_space" class="mt-2">
-        @if($action!="WISHLIST")
+        @if($action!="TEAMS")
         <div id="proposalsAlbum" class="album p-2">
         @else
         <div id="proposalsAlbum" class="list-group panel">
+            <a class="nav-link" id="create_proposal" href="{{ url("create/") }}" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-fw fa-plus" title="Add a new Proposal"></i> NEW TEAM
+            </a>
         @endif
-          
 
         </div>
         <a href="#" id="showmorebutton" class="btn btn-outline-primary my-2 btn-block">Show More</a>

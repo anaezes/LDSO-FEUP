@@ -28,6 +28,7 @@ DROP TABLE IF EXISTS proposal CASCADE;
 DROP TABLE IF EXISTS requested_termination CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS faculty CASCADE;
+DROP TABLE IF EXISTS team_member CASCADE;
 
 DROP TRIGGER IF EXISTS  tr_check_number_off_row_admin ON users CASCADE;
 DROP TRIGGER IF EXISTS  tr_change_users_status ON users CASCADE;
@@ -59,6 +60,7 @@ DROP TABLE IF EXISTS proposal CASCADE;
 DROP TABLE IF EXISTS requested_termination CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS faculty CASCADE;
+DROP TABLE IF EXISTS team_member CASCADE;
 
 
 
@@ -139,7 +141,14 @@ CREATE TABLE faculty_proposal (
 --10
 
 CREATE TABLE team (
-     id SERIAL PRIMARY KEY
+     id SERIAL PRIMARY KEY,
+     teamName TEXT NOT NULL,
+     idLeader INTEGER NOT NULL REFERENCES users(id)
+);
+
+CREATE TABLE team_member(
+      idTeam INTEGER NOT NULL,
+      idUser INTEGER NOT NULL
 );
 
 

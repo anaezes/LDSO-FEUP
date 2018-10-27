@@ -110,6 +110,9 @@ if (showmorebutton != null)
             case "/history":
                 album.innerHTML += historyAlbum();
                 break;
+            case "/teams":
+                album.innerHTML += teamsAlbum();
+                break;
             default:
                 album.innerHTML += makeAlbum();
         }
@@ -145,6 +148,84 @@ if (window.location.pathname === "/proposals_im_in")
 if (window.location.pathname === "/history")
 {
     ajaxCallGet("api/search?history=true", historyAlbumHandler);
+}
+if (window.location.pathname === "/teams")
+{
+    ajaxCallGet("api/search?teamsOfUser=true", teamsAlbumHandler);
+}
+
+function teamsAlbumHandler()
+{
+    teams = JSON.parse(this.responseText);
+    album.innerHTML = teamsAlbum();
+}
+
+function teamsAlbum()
+{
+    console.log(teams);
+    let htmlproposal = `<div class="row">`;
+    let max = i + 12;
+
+    if (teams.length == 0){
+        htmlproposal += `
+            <div class="col-md-12 proposalItem">
+                <a class="btn btn-outline-primary btn-block" data-toggle="modal" href="#" data-target="#myModalTeam">
+                    <i class="fa fa-plus"></i> It looks like you have no teams yet. Create a team!
+                </a>
+    
+                <div class="modal fade" id="myModalTeam" tabindex="-1" role="dialog" aria-labelledby="myModalTeamLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="myModalTeamLabel">Create Team</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form method="POST" action="ajax" enctype="multipart/form-data">
+                                {{ csrf_field() }}
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="name">Team Name</label>
+                                        <input class="form-control" id="name" name="name" type="text" placeholder="Your Team Name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="usernameR">Members</label>
+                                        <input class="form-control" id="members" name="members[]" type="text" placeholder="Search for members to add to your new team">
+                                    </div>
+                            
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary btn-block" type="submit">Create team</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+`;
+    }
+
+    for (i; i < max && i < teams.length; i++)
+    {
+        let element = teams[i];
+        if (i % 4 === 0 && i !== 0)
+        {
+            htmlproposal += `</div><div class="row">`;
+        }
+        htmlproposal += `<div class="col-md-3 proposalItem"  data-id="${element.id}">
+        <a href="team/${element.id}" class="list-group-item-action">
+            <div class="card mb-4 box-shadow">
+                <div class="card-body">
+                    <p class="card-text text-center hidden-p-sm-down font-weight-bold" style="font-size: larger"> ${element.teamname} </p>
+                </div>
+            </div>
+        </a>
+    </div>`;
+    };
+    htmlproposal += `</div>`;
+    if (i == teams.length)
+        showmorebutton.parentNode.removeChild(showmorebutton);
+    return htmlproposal;
 }
 
 function historyAlbumHandler()

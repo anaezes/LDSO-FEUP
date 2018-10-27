@@ -34,6 +34,11 @@ Route::get('home', 'HomeController@show')->name('home');
 Route::get('create', 'CreateProposalController@show')->name('create');
 Route::post('create', 'CreateProposalController@create');
 
+// Create Team
+
+Route::post('createteam', 'CreateTeamController@create');
+Route::get('createteam', 'CreateTeamController@show')->name('create_team');
+
 // Proposal Item Page
 Route::get('proposal/{id}', 'ProposalController@show')->name('proposal');
 Route::get('/proposal', 'ProposalController@updateProposals');
@@ -69,6 +74,7 @@ Route::post('search', 'SearchController@simpleSearch')->name('search');
 
 //ListPages
 Route::get('history', 'ListController@history')->name('history');
+Route::get('teams', 'ListController@teams')->name('teams');
 Route::get('myproposals', 'ListController@myproposals')->name('myproposals');
 Route::get('proposals_im_in','ListController@proposals_imIn')->name('proposals_im_in');
 Route::get('allproposals', 'ListController@allproposals')->name('allproposals');
