@@ -50,8 +50,15 @@ class CreateTeamController extends Controller
 
             $request->all();
 
+            $save_team->members()->attach(Auth::user()->id);
 
             return $save_team;
+
+            $members = $request->input('members');
+            foreach($members as $member){
+                $save_member = User::where('name', $member)->get()->first();
+                $save_team->members()->attach($save_member->id);
+            }
         });
 
         return $created_team;

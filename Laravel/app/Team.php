@@ -33,4 +33,8 @@ class Team extends Model
         return $this->belongsTo('App\User', 'idleader', 'id');
    }
 
+    public function members(){
+        return $this->belongsToMany('App\User', 'team_member', 'idteam', 'iduser');
+    }
+
 }
