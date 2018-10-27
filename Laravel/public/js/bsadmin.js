@@ -101,6 +101,10 @@ if (showmorebutton != null)
     {
         switch (window.location.pathname)
         {
+
+            case "/profile/1":
+                album.innerHTML += myproposalsAlbum();
+                break;
             case "/myproposals":
                 album.innerHTML += myproposalsAlbum();
                 break;
@@ -126,9 +130,16 @@ if (window.location.pathname === "/home")
     ajaxCallGet("api/search?proposalStatus=approved", proposalAlbumHandler);
 }
 
+if (window.location.pathname === "/profile/1")
+{
+    ajaxCallGet("api/search?proposalsOfUser=true", myproposalsAlbumHandler);
+
+}
+
 if (window.location.pathname === "/myproposals")
 {
     ajaxCallGet("api/search?proposalsOfUser=true", myproposalsAlbumHandler);
+
 }
 
 if (window.location.pathname === "/allproposals")
@@ -195,6 +206,7 @@ function myproposalsAlbumHandler()
     console.log(this.responseText);
     proposals = JSON.parse(this.responseText);
     album.innerHTML = myproposalsAlbum();
+
 }
 
 function myproposalsAlbum()

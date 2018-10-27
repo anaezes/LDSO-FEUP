@@ -69,7 +69,7 @@
                </tr>
                <tr>
                   <td>
-                     <strong>faculty</strong>
+                     <strong>Faculty</strong>
                   </td>
                   <td>
                      {{$user->faculty->facultyname}}
@@ -96,6 +96,13 @@
          </div>
       </div>
       @endif
+
+
+       <i class="fa fa-gavel"></i> My proposals
+            <hr id="hr_space" class="mt-2">
+                 <div id="proposalsAlbum" class="album p-2">
+                 </div>
+
 
       <div class="modal fade" id="myModalEdit" tabindex="-1" role="dialog" aria-labelledby="myModalEditLabel" aria-hidden="true">
          <div class="modal-dialog" role="document">
