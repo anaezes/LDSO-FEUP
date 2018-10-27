@@ -3,20 +3,12 @@
 namespace App\Http\Controllers;
 
 use Exception;
-use App\Proposal;
-use App\Skill;
-use App\SkillProposal;
-use App\Faculty;
-use App\FacultyProposal;
-use App\Http\Controllers\Controller;
-use App\Image;
-use App\Language;
-use App\Publisher;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\MessageBag;
+use App\Team;
 
 class CreateTeamController extends Controller
 {
@@ -48,39 +40,36 @@ class CreateTeamController extends Controller
       */
     private function db_create(Request $request)
     {
-            $createdteam = DB::transaction(function () use ($request) {
-            $saveteam = new Proposal;
-            $saveteam->idleader = Auth::user()->id;
+            $created_team = DB::transaction(function () use ($request) {
+            $save_team = new Team;
+            $save_team->idleader = Auth::user()->id;
 
-            $saveteam->teamname = $request->input('name');
+            $save_team->teamname = $request->input('teamName');
 
+            $save_team->save();
 
-            $saveteam->save();
-
-
-
-            $input = $request->all();
+            $request->all();
 
 
-
-            return $saveteam;
+            return $save_team;
         });
 
-        return $createdteam;
+        return $created_team;
     }
 
     /**
      * Creates a new team and redirects to its page.
-     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function create(Request $request)
+    public function createTeam(Request $request)
     {
         if (!Auth::check()) {
             return redirect('/home');
         }
 
         try {
-            $createdteam = $this->db_create($request);
+            $created_team = $this->db_create($request);
         } catch (Exception $qe) {
             $errors = new MessageBag();
 
@@ -90,7 +79,7 @@ class CreateTeamController extends Controller
                 ->route('create_team')
                 ->withErrors($errors);
         }
-        return redirect()->route('team', ['id' => $createdteam->id]);
+        return redirect()->route('team', ['id' => $created_team->id]);
     }
 
 

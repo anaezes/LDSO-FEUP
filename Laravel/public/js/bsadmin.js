@@ -95,6 +95,7 @@ let album = document.querySelector('#proposalsAlbum');
 let showmorebutton = document.querySelector('#showmorebutton');
 let i = 0;
 let proposals = [];
+let teams = [];
 if (showmorebutton != null)
 {
     showmorebutton.addEventListener('click', function(event)
@@ -144,7 +145,6 @@ if (window.location.pathname === "/proposals_im_in")
     ajaxCallGet("api/search?userBidOn=true", proposalAlbumHandler);
 }
 
-
 if (window.location.pathname === "/history")
 {
     ajaxCallGet("api/search?history=true", historyAlbumHandler);
@@ -157,7 +157,7 @@ if (window.location.pathname === "/teams")
 function teamsAlbumHandler()
 {
     teams = JSON.parse(this.responseText);
-    album.innerHTML = teamsAlbum();
+    album.innerHTML += teamsAlbum();
 }
 
 function teamsAlbum()
@@ -169,44 +169,10 @@ function teamsAlbum()
     if (teams.length == 0){
         htmlproposal += `
             <div class="col-md-12 proposalItem">
-                <a class="btn btn-outline-primary btn-block" data-toggle="modal" href="#" data-target="#myModalTeam">
-                    <i class="fa fa-plus"></i> It looks like you have no teams yet. Create a team!
-                </a>
-    
-                <div class="modal fade" id="myModalTeam" tabindex="-1" role="dialog" aria-labelledby="myModalTeamLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="myModalTeamLabel">Create Team</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <form method="POST" action="ajax" enctype="multipart/form-data">
-                                {{ csrf_field() }}
-                                <div class="modal-body">
-                                    <div class="form-group">
-                                        <label for="name">Team Name</label>
-                                        <input class="form-control" id="name" name="name" type="text" placeholder="Your Team Name" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="usernameR">Members</label>
-                                        <input class="form-control" id="members" name="members[]" type="text" placeholder="Search for members to add to your new team">
-                                    </div>
-                            
-                                <div class="modal-footer">
-                                    <button class="btn btn-primary btn-block" type="submit">Create team</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-`;
+                   <p class="text-center font-weight-bold" style="font-size: larger"> It looks like you have no teams yet. Create a team!</p>`;
     }
 
-    for (i; i < max && i < teams.length; i++)
-    {
+    for (i; i < max && i < teams.length; i++) {
         let element = teams[i];
         if (i % 4 === 0 && i !== 0)
         {
@@ -222,6 +188,7 @@ function teamsAlbum()
         </a>
     </div>`;
     };
+
     htmlproposal += `</div>`;
     if (i == teams.length)
         showmorebutton.parentNode.removeChild(showmorebutton);

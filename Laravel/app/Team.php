@@ -19,12 +19,18 @@ class Team extends Model
      *
      * @var string
      */
-    protected $table = 'skill';
+    protected $table = 'team';
 
     protected $primaryKey = "id";
 
-    public function users(){
-        return $this->belongsToMany('App\User', 'team_member', 'idteam', 'iduser');
-    }
+    /**
+     *
+     * The user that created this team
+     *
+     */
+
+   public function user(){
+        return $this->belongsTo('App\User', 'idleader', 'id');
+   }
 
 }

@@ -142,7 +142,7 @@ CREATE TABLE faculty_proposal (
 
 CREATE TABLE team (
      id SERIAL PRIMARY KEY,
-     teamName TEXT NOT NULL,
+     teamName TEXT NOT NULL UNIQUE,
      idLeader INTEGER NOT NULL REFERENCES users(id)
 );
 

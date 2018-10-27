@@ -35,9 +35,9 @@ Route::get('create', 'CreateProposalController@show')->name('create');
 Route::post('create', 'CreateProposalController@create');
 
 // Create Team
+Route::get('createTeam', 'CreateTeamController@show')->name('createTeam');
+Route::post('createTeam', 'CreateTeamController@createTeam');
 
-Route::post('createteam', 'CreateTeamController@create');
-Route::get('createteam', 'CreateTeamController@show')->name('create_team');
 
 // Proposal Item Page
 Route::get('proposal/{id}', 'ProposalController@show')->name('proposal');

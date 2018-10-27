@@ -32,9 +32,19 @@
         <div id="proposalsAlbum" class="album p-2">
         @else
         <div id="proposalsAlbum" class="list-group panel">
-            <a class="nav-link" id="create_proposal" href="{{ url("create/") }}" aria-haspopup="true" aria-expanded="false">
-            <i class="fa fa-fw fa-plus" title="Add a new Proposal"></i> NEW TEAM
+            <a data-toggle="modal" href="#" data-target="#myModalTeam">
+                <i class="fa fa-fw fa-plus" title="Add a new Team"></i> New Team
             </a>
+            <div class="modal fade" id="myModalTeam" tabindex="-1" role="dialog" aria-labelledby="myModalTeamLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="myModalTeamLabel">Create Team</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        @include('pages.createTeam')
         @endif
 
         </div>
