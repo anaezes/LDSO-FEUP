@@ -26,16 +26,14 @@
 
                   </div>
                 </div>
-                <table class="table">
-                    <tbody>
+                <table class="table" style="border: none">
+                    <tbody style="border: none">
                         <tr>
-                            <td style="width: 16.66%"><strong>Title</strong></td>
-                            <td>{{$proposal->title}}</td>
+                            <td colspan="2" style="border: none" > <strong style="font-size: xx-large">{{$proposal->title}}</strong></td>
                         </tr>
-
                         <tr>
-                            <td><strong>Faculty</strong></td>
-                            <td>{{$facultyName}}</td>
+                            <td style="border: none"><strong>Faculty</strong></td>
+                            <td style="border: none">{{$facultyName}}</td>
                         </tr>
 
                         <tr>
@@ -44,20 +42,27 @@
                         </tr>
                         <tr>
                             <td><strong>Proponent</strong></td>
-                            <td><a class="button btn btn-sm btn-outline-secondary p-2 " href="{{ url("profile/{$proposal->user->id}") }}"><b>{{$proposal->user->name}}</b></a></td>
+                            <td><a class="button btn btn-sm btn-outline-secondary p-2 " href="{{ url("profile/{$proposal->user->id}") }}">
+                                <b>
+                                    <i class="fa fa-user"></i>
+                                    <p> {{$proposal->user->name}}</p>
+                                </b></a></td>
                         </tr>
                         <tr>
-                            <td><strong>SKILLS</strong></td>
+                            <td><strong>Skills</strong></td>
+                            <td>
                             @foreach ($proposal->skills as $skill)
-                            <td>{{ $skill->skillname}}</td>
+                                {{$skill->skillname}}
                             @endforeach
+                            </td>
                         </tr>
                         <tr>
-                           <td><strong>Time left: </strong>
-                                <p id="timeLeft" class="text-danger">{{$timestamp}}</p>
-                            </td>
-                            <td><strong>Current bid: </strong>
-                                <p id="currentMaxBid" class="text-success">0€</td>
+                            <td><strong>Time left: </strong></td>
+                                <td id="timeLeft" class="text-danger">{{$timestamp}}</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 150px"><strong>Current bid: </strong></td>
+                               <td id="currentMaxBid" class="text-success">0€</td>
                             <td>
                                 <form>
                                     <div class="form-row">
@@ -73,15 +78,16 @@
                                             @else
                                             <input id="currentBid" disabled type="number" min="0.00" placeholder="0.00" step="0.01" class="form-control">
                                             @endif
-
                                         </div>
                                     </div>
                                 </form>
                             </td>
-                            <td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="border: none; text-align: right">
                                 @if (Auth::check())
                                     @if ($proposal->idproponent == Auth::user()->id)
-                                    <button id="edit-proposal" type="submit" class="btn btn-primary col-md-6" style = "margin-top: 3px;">Edit the proposal</button>
+                                    <button id="edit-proposal" type="submit" class="btn btn-primary col-md-6" style = "margin-top: 3px; width: 200px">Edit the proposal</button>
                                     @elseif ($proposal->proposal_status != "approved")
                                     <button id="unbiddable" type="submit" disabled class="btn btn-outline-secondary col-md-6">Unable to bid</button>
                                     @else
@@ -91,12 +97,6 @@
                                 <button id="bid-box" type="submit" disabled class="btn btn-outline-secondary col-md-10">Login to bid</button>
                                 @endif
                             </td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
                         </tr>
                     </tbody>
                 </table>

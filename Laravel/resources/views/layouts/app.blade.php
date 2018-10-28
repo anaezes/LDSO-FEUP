@@ -34,7 +34,6 @@
 
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav hidden-p-md-down">
-            <a class="nav-item nav-link" href="#">Repository</a>
             <a class="nav-item nav-link" href={{ url("allproposals") }}>Proposals</a>
             <a class="nav-item nav-link" href="#">People</a>
         </div>
@@ -265,7 +264,6 @@
         <p class="m-0 text-center text-white">Copyright &copy; BookHub 2018</p>
         <p class="m-0 text-center text-white">
             <a class="text-white" href="{{ url('about/') }}"> About</a> &nbsp; | &nbsp;
-            <a class="text-white" href="{{ url('faq/') }}"> FAQ</a> &nbsp; | &nbsp;
             <a class="text-white" href="{{ url('contact/') }}"> Contact</a>
         </p>
     </div>
