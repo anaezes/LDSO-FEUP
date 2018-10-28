@@ -38,7 +38,7 @@ class ProposalController extends Controller
     {
         $proposal = Proposal::find($id);
 
-      /*  $facultyNumber = FacultyProposal::where('idproposal', $proposal->id)->get()->first();
+        $facultyNumber = FacultyProposal::where('idproposal', $proposal->id)->get()->first();
         if ($facultyNumber != null) {
             $facultyName = Faculty::where('id', $facultyNumber->idfaculty)->get()->first();
             if ($facultyName != null) {
@@ -50,23 +50,28 @@ class ProposalController extends Controller
             $facultyName = "No faculty";
         }
 
-        if ($proposal->dateapproved != null) {
-            $timestamp = $this->createTimestamp($proposal->dateapproved, $proposal->duration);
-        } else {
-            $timestamp = "Proposal hasn't been approved yet";
-        }
+        $skills = DB::select('SELECT skillname from skill, skill_proposal WHERE skill.id = skill_proposal.idSkill AND skill_proposal.idProposal = ?', [$proposal->id]);
+
+        $proposal->skills = $skills;
 
 
-        $query = "SELECT max(bidValue) FROM bid WHERE idproposal = ?";
-        $maxBid = DB::select($query, [$id]);
-        if ($maxBid[0]->max == null) {
-            $maxBid[0]->max = 0.00;
-        }
+            /*   if ($proposal->dateapproved != null) {
+                   $timestamp = $this->createTimestamp($proposal->dateapproved, $proposal->duration);
+               } else {
+                   $timestamp = "Proposal hasn't been approved yet";
+               }
 
-*/
+
+               $query = "SELECT max(bidValue) FROM bid WHERE idproposal = ?";
+               $maxBid = DB::select($query, [$id]);
+               if ($maxBid[0]->max == null) {
+                   $maxBid[0]->max = 0.00;
+               }
+
+       */
 
         return view('pages.proposal', ['proposal' => $proposal,
-            'facultyName' => "No faculty",
+            'facultyName' => $facultyName,
             'maxBid' => 0,
             'timestamp' => "Proposal hasn't been approved yet"]);
     }
