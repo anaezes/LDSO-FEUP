@@ -22,6 +22,7 @@ DROP TABLE IF EXISTS proposal_modification CASCADE;
 DROP TABLE IF EXISTS bid CASCADE;
 DROP TABLE IF EXISTS team CASCADE;
 DROP TABLE IF EXISTS faculty_proposal CASCADE;
+DROP TABLE IF EXISTS skill_user CASCADE;
 DROP TABLE IF EXISTS skill_proposal CASCADE;
 DROP TABLE IF EXISTS skill CASCADE;
 DROP TABLE IF EXISTS proposal CASCADE;
@@ -53,6 +54,7 @@ DROP TABLE IF EXISTS proposal_modification CASCADE;
 DROP TABLE IF EXISTS bid CASCADE;
 DROP TABLE IF EXISTS team CASCADE;
 DROP TABLE IF EXISTS faculty_proposal CASCADE;
+DROP TABLE IF EXISTS skill_user CASCADE;
 DROP TABLE IF EXISTS skill_proposal CASCADE;
 DROP TABLE IF EXISTS skill CASCADE;
 DROP TABLE IF EXISTS proposal CASCADE;
@@ -127,6 +129,13 @@ CREATE TABLE skill (
 CREATE TABLE skill_proposal(
   idSkill INTEGER NOT NULL,
   idProposal INTEGER NOT NULL
+);
+
+CREATE TABLE skill_user(
+  idSkill INTEGER NOT NULL REFERENCES skill(id),
+  idUser INTEGER NOT NULL REFERENCES users(id)
+
+
 );
 
 --9
@@ -384,6 +393,8 @@ INSERT INTO "skill" (skillName) VALUES ('Skill1');
 INSERT INTO "skill" (skillName) VALUES ('Skill2');
 INSERT INTO "skill" (skillName) VALUES ('Skill3');
 INSERT INTO "skill" (skillName) VALUES ('Skill4');
+
+
 
 
 ----admin
