@@ -40,7 +40,7 @@ class ProfileController extends Controller
         $user = User::find($id);
 
 
-        $skills = DB::select("SELECT skillName FROM skill,skill_user INNER JOIN users ON users.id = skill_user.idSkill WHERE skill_user.idSkill=skill.id AND skill_user.idUser=users.id");
+        $skills = DB::select("SELECT skillName FROM skill,skill_user WHERE skill.id=skill_user.idSkill AND skill_user.idUser = ?",[$user->id]);
 
         $user->skills=$skills;
 
