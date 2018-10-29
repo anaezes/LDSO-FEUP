@@ -69,11 +69,22 @@
                </tr>
                <tr>
                   <td>
-                     <strong>faculty</strong>
+                     <strong>Faculty</strong>
                   </td>
                   <td>
                      {{$user->faculty->facultyname}}
                   </td>
+               <tr>
+                   <td>
+                       <strong>Skills</strong>
+                   </td>
+                   <td>
+
+                       @foreach ($user->skills as $skill)
+                       <p> {{ $skill->skillname }}  </p>
+                       @endforeach
+                     
+                   </td>
                </tr>
             </tbody>
          </table>
