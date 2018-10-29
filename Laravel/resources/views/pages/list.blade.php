@@ -22,18 +22,30 @@
                 @if($action=="HISTORY")
                     <i class="fa fa-history"></i> History 
                 @endif
-                @if($action=="WISHLIST")
-                        <i class="fa fa-star"></i> Wish List 
+                @if($action=="TEAMS")
+                        <i class="fa fa-object-group"></i> My Teams
                 @endif
             </h4>
         </div>
         <hr id="hr_space" class="mt-2">
-        @if($action!="WISHLIST")
+        @if($action!="TEAMS")
         <div id="proposalsAlbum" class="album p-2">
         @else
         <div id="proposalsAlbum" class="list-group panel">
+            <a data-toggle="modal" href="#" data-target="#myModalTeam">
+                <i class="fa fa-fw fa-plus" title="Add a new Team"></i> New Team
+            </a>
+            <div class="modal fade" id="myModalTeam" tabindex="-1" role="dialog" aria-labelledby="myModalTeamLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="myModalTeamLabel">Create Team</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        @include('pages.createTeam')
         @endif
-          
 
         </div>
         <a href="#" id="showmorebutton" class="btn btn-outline-primary my-2 btn-block">Show More</a>
