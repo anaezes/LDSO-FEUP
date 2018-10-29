@@ -66,11 +66,11 @@ class SearchController extends Controller
             }
             if ($request->input('proposalsAvailableToUser') !== null) { // todo proposal_status fix later
                 if(Auth::check()) {
-                    $res = DB::select("SELECT DISTINCT proposal.id FROM proposal, faculty_proposal, faculty WHERE (proposal_type = ? OR (faculty.id = faculty_proposal.idfaculty AND faculty_proposal.idfaculty = ?)) AND (proposal_status = ? OR proposal_status=?)", [true, Auth::user()->idfaculty, 'approved', 'waitingApproval']);
+                    $res = DB::select("SELECT A.id FROM proposal A iNNER JOIN faculty_proposal B ON A.id = B.idproposal INNER JOIN users C ON (C.idfaculty = B.idfaculty OR A.proposal_public = ? ) WHERE C.id = ? AND (A.proposal_status = ? OR A.proposal_status = ?)", ['true', Auth::user()->id, 'approved', 'waitingApproval']);
                     array_push($queryResults, $res);
                 }
                 else {
-                    $res = DB::select("SELECT DISTINCT proposal.id FROM proposal WHERE proposal_type = ? AND (proposal_status = ? OR proposal_status=?)", [true, 'approved', 'waitingApproval']);
+                    $res = DB::select("SELECT DISTINCT proposal.id FROM proposal WHERE proposal_public = ? AND (proposal_status = ? OR proposal_status=?)", ['true', 'approved', 'waitingApproval']);
                     array_push($queryResults, $res);
                 }
             }

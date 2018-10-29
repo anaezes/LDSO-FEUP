@@ -14,7 +14,6 @@
       <a class="text-white nav-item nav-link" href="#">Login</a>
       <a class="text-white nav-item nav-link" href="#">Register</a>
       @endif
-      <a class="text-white nav-item nav-link" href="#">Repository</a>
       <a class="text-white nav-item nav-link" href={{ url("allproposals") }}>Proposals</a>
       <a class="text-white nav-item nav-link" href="#">People</a>
       <br>

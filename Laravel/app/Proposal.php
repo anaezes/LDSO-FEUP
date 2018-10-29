@@ -19,9 +19,9 @@ class Proposal extends Model
      *
      * @var string
      */
-    protected $table = 'proposal';
+    public $table = 'proposal';
 
-    protected $primaryKey = "id";
+    public $primaryKey = "id";
 
     /**
      *
