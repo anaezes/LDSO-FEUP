@@ -785,7 +785,7 @@ if (window.location.href.includes("proposal/"))
     {
         let proposalID = getproposalID();
         let requestURL = "/api/bid/?proposalID=" + proposalID;
-        ajaxCallGet(requestURL, getBidHandler);
+        //ajaxCallGet(requestURL, getBidHandler);
         ajaxCallGet2('/proposal',
         {}, null);
     }, 2000);
@@ -843,12 +843,12 @@ function getproposalID()
     return proposalID;
 }
 
-function getBidHandler()
+/*function getBidHandler()
 {
     let answer = JSON.parse(this.responseText);
     let newVal = answer['max'];
     let currentBidValue = document.querySelector("#currentMaxBid").innerHTML = newVal + "€";
-}
+}*/
 
 function postBidHandler(data)
 {
