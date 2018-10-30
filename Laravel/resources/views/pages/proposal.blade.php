@@ -32,13 +32,23 @@
                             <td colspan="2" style="border: none" > <strong style="font-size: xx-large">{{$proposal->title}}</strong></td>
                         </tr>
                         <tr>
-                            <td style="border: none"><strong>Faculty</strong></td>
+                            <td style="border: none; width: 150px;"><strong>Faculty</strong></td>
                             <td style="border: none">{{$facultyName}}</td>
                         </tr>
 
                         <tr>
                             <td><strong>Description</strong></td>
                             <td>{{$proposal->description}}</td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>Due date</strong></td>
+                            <td>{{$proposal->duedate}}</td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>Announce team winner</strong></td>
+                            <td>{{$proposal->announcedate}}</td>
                         </tr>
                         <tr>
                             <td><strong>Proponent</strong></td>
@@ -60,7 +70,7 @@
                             <td><strong>Time left: </strong></td>
                                 <td id="timeLeft" class="text-danger">{{$timestamp}}</td>
                         </tr>
-                        <tr>
+                        <!--tr>
                             <td style="width: 150px"><strong>Current bid: </strong></td>
                                <td id="currentMaxBid" class="text-success">0€</td>
                             <td>
@@ -82,7 +92,7 @@
                                     </div>
                                 </form>
                             </td>
-                        </tr>
+                        </tr-->
                         <tr>
                             <td colspan="2" style="border: none; text-align: right">
                                 @if (Auth::check())
@@ -91,7 +101,7 @@
                                     @elseif ($proposal->proposal_status != "approved")
                                     <button id="unbiddable" type="submit" disabled class="btn btn-outline-secondary col-md-6">Unable to bid</button>
                                     @else
-                                    <button id="bid-box" type="submit" class="btn btn-primary col-md-6">Bid a new price</button>
+                                    <button id="bid-box" type="submit" class="btn btn-primary col-md-3">Bid</button>
                                     @endif
                                 @else
                                 <button id="bid-box" type="submit" disabled class="btn btn-outline-secondary col-md-10">Login to bid</button>
