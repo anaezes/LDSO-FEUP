@@ -154,11 +154,11 @@
                 <div class="form-row">
                 <div class="form-group col-md-4">
                 <label for="start">Announce winner</label>
-                <input type="date" name="announce">
+                <input type="date" name="announce" required>
                 </div>
                 <div class="form-group col-md-4">
                 <label>Due of project  </label>
-                <input type="date" name="due">
+                <input type="date" name="due" required>
                 </div>
                 </div>
             </div>
