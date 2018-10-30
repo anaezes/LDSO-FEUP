@@ -38,6 +38,12 @@ class ProposalController extends Controller
     {
         $proposal = Proposal::find($id);
 
+        //todo when exist moderators
+        $proposal->proposal_status = "approved";
+        $proposal->duedate = date('Y-m-d', strtotime($proposal->duedate));
+        $proposal->announcedate = date('Y-m-d', strtotime($proposal->announcedate));
+
+
         $facultyNumber = FacultyProposal::where('idproposal', $proposal->id)->get()->first();
         if ($facultyNumber != null) {
             $facultyName = Faculty::where('id', $facultyNumber->idfaculty)->get()->first();
@@ -55,7 +61,7 @@ class ProposalController extends Controller
         $proposal->skills = $skills;
 
 
-            /*   if ($proposal->dateapproved != null) {
+        /*   if ($proposal->dateapproved != null) {
                    $timestamp = $this->createTimestamp($proposal->dateapproved, $proposal->duration);
                } else {
                    $timestamp = "Proposal hasn't been approved yet";
@@ -73,7 +79,7 @@ class ProposalController extends Controller
         return view('pages.proposal', ['proposal' => $proposal,
             'facultyName' => $facultyName,
             'maxBid' => 0,
-            'timestamp' => "Proposal hasn't been approved yet"]);
+            'timestamp' => $proposal->duedate]);
     }
 
     /**
