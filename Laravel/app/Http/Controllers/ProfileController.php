@@ -39,6 +39,14 @@ class ProfileController extends Controller
 
         $user = User::find($id);
 
+
+        $skills = DB::select("SELECT skillName FROM skill,skill_user WHERE skill.id=skill_user.idSkill AND skill_user.idUser = ?",[$user->id]);
+
+        $user->skills=$skills;
+
+       //dd($skills);
+
+
         $images = DB::table('image')->where('idusers', $id)->pluck('source');
         if (sizeof($images) == 0) {
             $images = ["default.png"];

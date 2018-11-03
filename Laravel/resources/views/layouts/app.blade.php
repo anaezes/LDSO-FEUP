@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -35,97 +32,85 @@
 
     <a class="navbar-brand" href="{{ url('home/') }}">U.OPENLAB</a>
 
-    <div class="navbar-nav hidden-p-md-down">
-    <a class="nav-item nav-link" href="#">Repository</a>
-    <a class="nav-item nav-link" href="#">Proposals</a>
-    <a class="nav-item nav-link" href="#">People</a>
-</div>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav hidden-p-md-down">
+            <a class="nav-item nav-link" href={{ url("allproposals") }}>Proposals</a>
+            <a class="nav-item nav-link" href="#">People</a>
+        </div>
 
-    <div class="navbar-collapse collapse">
+        <div class="navbar-collapse collapse">
 
         <ul class="navbar-nav ml-auto" id="navbarList">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle hidden-p-md-down" href="#" id="catDropDown" data-toggle="dropdown" aria-expanded="false">
-                    All
+                    All Faculties
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" role="menu" id="catslist" aria-labelledby="catDropDown">
 
-                    <a href="#" class="category-dropdown dropdown-item">
-                        Arts&amp;Music</a>
+                    <a href="#" class="faculty-dropdown dropdown-item">
+                        Faculty of Architecture
+                    </a>
 
-                    <a href="#" class="category-dropdown dropdown-item">
-                        Biographies</a>
-
-
-                    <a href="#" class="category-dropdown dropdown-item">
-                        Business</a>
-
-                    <a href="#" class="category-dropdown dropdown-item">
-                        Kids</a>
-
-                    <a href="#" class="category-dropdown dropdown-item">
-                        Comics</a>
-
-                    <a href="#" class="category-dropdown dropdown-item">
-                        Cooking</a>
-
-                    <a href="#" class="category-dropdown dropdown-item">
-                        Computation&amp;Tech</a>
-
-                    <a href="#" class="category-dropdown dropdown-item">
-                        Education</a>
-
-                    <a href="#" class="category-dropdown dropdown-item">
-                        Health&amp;Fitness</a>
-
-                    <a href="#" class="category-dropdown dropdown-item">
-                        History</a>
-
-                    <a href="#" class="category-dropdown dropdown-item">
-                        Horror</a>
-
-                    <a href="#" class="category-dropdown dropdown-item">
-                        Religion</a>
-
-                    <a href="#" class="category-dropdown dropdown-item">
-                        Science</a>
-
-                    <a href="#" class="category-dropdown dropdown-item">
-                        Self-Help</a>
+                    <a href="#" class="faculty-dropdown dropdown-item">
+                        Faculty of Fine Arts
+                    </a>
 
 
-                    <a href="#" class="category-dropdown dropdown-item">
-                        Travel</a>
+                    <a href="#" class="faculty-dropdown dropdown-item">
+                        Faculty of Science
+                    </a>
 
-                    <a href="#" class="category-dropdown dropdown-item">
-                        Other</a>
-                    <b class="px-2">
-                        Literature</b>
-                    <ul class="list-unstyled">
-                        <li>
-                            <a href="#" class="category-dropdown dropdown-item">All</a>
-                        </li>
-                        <li>
-                            <a href="#" class="category-dropdown dropdown-item">Anthologies</a>
-                        </li>
-                        <li>
-                            <a href="#" class="category-dropdown dropdown-item">Classics</a>
-                        </li>
-                        <li>
-                            <a href="#" class="category-dropdown dropdown-item">Contemporary</a>
-                        </li>
-                        <li>
-                            <a href="#" class="category-dropdown dropdown-item">Sci-Fi&amp;Fantasy</a>
-                        </li>
-                        <li>
-                            <a href="#" class="category-dropdown dropdown-item">Romance</a>
-                        </li>
-                        <li>
-                            <a href="#" class="category-dropdown dropdown-item">Crime</a>
-                        </li>
-                    </ul>
-                </div>
+                    <a href="#" class="faculty-dropdown dropdown-item">
+                        Faculty of Nutrition and Food Science
+                    </a>
+
+                    <a href="#" class="faculty-dropdown dropdown-item">
+                        Faculty of Sports
+                    </a>
+
+                    <a href="#" class="faculty-dropdown dropdown-item">
+                        Faculty of Law
+                    </a>
+
+                    <a href="#" class="faculty-dropdown dropdown-item">
+                        Faculty of Economics
+                    </a>
+
+                    <a href="#" class="faculty-dropdown dropdown-item">
+                        Faculty of Engineering
+                    </a>
+
+                    <a href="#" class="faculty-dropdown dropdown-item">
+                        Faculty of Pharmacy
+                    </a>
+
+                    <a href="#" class="faculty-dropdown dropdown-item">
+                        Faculty of Arts
+                    </a>
+
+                    <a href="#" class="faculty-dropdown dropdown-item">
+                        Faculty of Medicine
+                    </a>
+
+                    <a href="#" class="faculty-dropdown dropdown-item">
+                        Faculty of Dental Medicine
+                    </a>
+
+                    <a href="#" class="faculty-dropdown dropdown-item">
+                        Faculty of Psychology and Education Science
+                    </a>
+
+                    <a href="#" class="faculty-dropdown dropdown-item">
+                        Abel Salazar Institute of Biomedical Science
+                    </a>
+
+
+                    <a href="#" class="faculty-dropdown dropdown-item">
+                        Porto Business School
+                    </a>
+
             </li>
+
             <li class="nav-item hidden-p-md-down">
                 <form class="form-inline my-2 my-lg-0 mr-lg-2 searchNav" method="POST" action="{{ route('search') }}">
                     <div class="input-group">
@@ -162,6 +147,9 @@
 
             </li>
             @if (Auth::check())
+            <a class="nav-link" id="create_proposal" href="{{ url("create/") }}" aria-haspopup="true" aria-expanded="false">
+             <i class="fa fa-fw fa-plus" title="Add a new Proposal"></i>
+            </a>
             <li class="nav-item dropdown"  id = "dropdown_noti">
                 <a class="nav-link dropdown-toggle container" id="alertsDropdown" href="#" data-toggle="dropdown"  onclick="notificationsClick()" aria-haspopup="true" aria-expanded="false">
                     <i class="label label-pill label-light count" id = "counter" style="border-radius:10px;"></i>
@@ -189,10 +177,10 @@
                     <a class="dropdown-item" href="{{ url("admin") }}">Admin Panel</a>
                     @endif
                     <a class="dropdown-item" href="{{ url("create/") }}">Create auction</a>
-                    <a class="dropdown-item" href="{{ url("myauctions") }}">My Auctions</a>
-                    <a class="dropdown-item" href="{{ url("auctions_im_in") }}">Auctions I'm in</a>
+                    <a class="dropdown-item" href="{{ url("myproposals") }}">My Proposals</a>
+                    <a class="dropdown-item" href="{{ url("proposals_im_in") }}">Proposals I'm in</a>
                     <a class="dropdown-item" href="{{ url("history") }}">History</a>
-                    <a class="dropdown-item" href="{{ url("wishlist") }}">WishList</a>
+                    <a class="dropdown-item" href="{{ url("teams") }}">My Teams</a>
                     <!--<a class="dropdown-item" href="messages.html">Messages</a>-->
                     <a class="dropdown-item" href="{{ url("logout") }}">Logout</a>
                 </div>
@@ -216,6 +204,7 @@
             </li>
             @endif
         </ul>
+    </div>
     </div>
 </nav>
 
@@ -275,7 +264,6 @@
         <p class="m-0 text-center text-white">Copyright &copy; BookHub 2018</p>
         <p class="m-0 text-center text-white">
             <a class="text-white" href="{{ url('about/') }}"> About</a> &nbsp; | &nbsp;
-            <a class="text-white" href="{{ url('faq/') }}"> FAQ</a> &nbsp; | &nbsp;
             <a class="text-white" href="{{ url('contact/') }}"> Contact</a>
         </p>
     </div>
@@ -289,3 +277,7 @@
 </body>
 
 </html>
+
+
+
+

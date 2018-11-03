@@ -33,6 +33,17 @@ class ListController extends Controller
     }
 
     /**
+     * Gets the user's proposals list page
+     * @return page
+     */
+    public function allproposals()
+    {
+        $action = "ALL_proposalS";
+
+        return view('pages.list', ['action' => $action]);
+    }
+
+    /**
       * Gets the list with the proposals the user is in
       * @return page
       */
@@ -56,6 +67,20 @@ class ListController extends Controller
             return redirect('/home');
         }
         $action = "HISTORY";
+
+        return view('pages.list', ['action' => $action]);
+    }
+
+    /**
+     * Gets the teams of the user
+     * @return page
+     */
+    public function teams()
+    {
+        if (!Auth::check()) {
+            return redirect('/home');
+        }
+        $action = "TEAMS";
 
         return view('pages.list', ['action' => $action]);
     }

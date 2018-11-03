@@ -33,17 +33,18 @@ class BidController extends Controller
             }
 
             $proposalID = $request->input('proposalID');
-            $query = "SELECT max(bidValue) FROM bid WHERE idproposal = ?";
+         /*   $query = "SELECT max(bidValue) FROM bid WHERE idproposal = ?";
             $response = DB::select($query, [$proposalID]);
             if ($response[0]->max == null) {
+            $response = [];
                 $response[0]->max = 0.00;
-            }
+            }*/
         } catch (Exception $e) {
             $this->error($e);
             return response('Internal Error', 500);
         }
 
-        return response()->json($response[0]);
+        return response()->json(0.00);
     }
 
     /**
@@ -53,13 +54,13 @@ class BidController extends Controller
       */
     public static function getMaxBidInternal($id)
     {
-        $query = "SELECT max(bidValue) FROM bid WHERE idproposal = ?";
+        /*$query = "SELECT max(bidValue) FROM bid WHERE idproposal = ?";
         $response = DB::select($query, [$id]);
         if ($response[0]->max == null) {
             $response[0]->max = 0.00;
-        }
+        }*/
 
-        return $response[0]->max;
+        return 0.00;
     }
 
     /**

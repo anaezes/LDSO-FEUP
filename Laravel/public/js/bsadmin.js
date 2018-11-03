@@ -95,6 +95,7 @@ let album = document.querySelector('#proposalsAlbum');
 let showmorebutton = document.querySelector('#showmorebutton');
 let i = 0;
 let proposals = [];
+let teams = [];
 if (showmorebutton != null)
 {
     showmorebutton.addEventListener('click', function(event)
@@ -104,8 +105,14 @@ if (showmorebutton != null)
             case "/myproposals":
                 album.innerHTML += myproposalsAlbum();
                 break;
+            case "/allproposals":
+                album.innerHTML += allproposalsAlbum();
+                break;
             case "/history":
                 album.innerHTML += historyAlbum();
+                break;
+            case "/teams":
+                album.innerHTML += teamsAlbum();
                 break;
             default:
                 album.innerHTML += makeAlbum();
@@ -128,15 +135,64 @@ if (window.location.pathname === "/myproposals")
     ajaxCallGet("api/search?proposalsOfUser=true", myproposalsAlbumHandler);
 }
 
+if (window.location.pathname === "/allproposals")
+{
+    ajaxCallGet("api/search?proposalsAvailableToUser=true", allproposalsAlbumHandler);
+}
+
 if (window.location.pathname === "/proposals_im_in")
 {
     ajaxCallGet("api/search?userBidOn=true", proposalAlbumHandler);
 }
 
-
 if (window.location.pathname === "/history")
 {
     ajaxCallGet("api/search?history=true", historyAlbumHandler);
+}
+if (window.location.pathname === "/teams")
+{
+    ajaxCallGet("api/search?teamsOfUser=true", teamsAlbumHandler);
+}
+
+function teamsAlbumHandler()
+{
+    teams = JSON.parse(this.responseText);
+    album.innerHTML += teamsAlbum();
+}
+
+function teamsAlbum()
+{
+    console.log(teams);
+    let htmlproposal = `<div class="row">`;
+    let max = i + 12;
+
+    if (teams.length == 0){
+        htmlproposal += `
+            <div class="col-md-12 proposalItem">
+                   <p class="text-center font-weight-bold" style="font-size: larger"> It looks like you have no teams yet. Create a team!</p>`;
+    }
+
+    for (i; i < max && i < teams.length; i++) {
+        let element = teams[i];
+        if (i % 4 === 0 && i !== 0)
+        {
+            htmlproposal += `</div><div class="row">`;
+        }
+        htmlproposal += `<div class="col-md-3 proposalItem"  data-id="${element.id}">
+        <a href="team/${element.id}" class="list-group-item-action">
+            <div class="card mb-4 box-shadow">
+                <div class="card-body">
+                    <p class="card-text text-center hidden-p-sm-down font-weight-bold" style="font-size: larger"> ${element.teamname} </p>
+                </div>
+            </div>
+        </a>
+    </div>`;
+    };
+
+    htmlproposal += `</div>`;
+    if (i == teams.length)
+        showmorebutton.parentNode.removeChild(showmorebutton);
+    return htmlproposal;
 }
 
 function historyAlbumHandler()
@@ -190,6 +246,47 @@ function myproposalsAlbumHandler()
 }
 
 function myproposalsAlbum()
+{
+    console.log(proposals);
+    let htmlproposal = `<div class="row">`;
+    let max = i + 12;
+
+    for (i; i < max && i < proposals.length; i++)
+    {
+        let element = proposals[i];
+        if (i % 4 === 0 && i !== 0)
+        {
+            htmlproposal += `</div><div class="row">`;
+        }
+        htmlproposal += `<div class="col-md-3 proposalItem"  data-id="${element.id}">
+        <a href="proposal/${element.id}" class="list-group-item-action">
+            <div class="card mb-4 box-shadow">
+                <div class="card-body">
+                    <p class="card-text text-center hidden-p-sm-down font-weight-bold" style="font-size: larger"> ${element.title} </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-success">${element.bidMsg} </small>
+                        <small class="text-danger">
+                                ${element.time}</small>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>`;
+    };
+    htmlproposal += `</div>`;
+    if (i == proposals.length)
+        showmorebutton.parentNode.removeChild(showmorebutton);
+    return htmlproposal;
+}
+
+function allproposalsAlbumHandler()
+{
+    console.log(this.responseText);
+    proposals = JSON.parse(this.responseText);
+    album.innerHTML = allproposalsAlbum();
+}
+
+function allproposalsAlbum()
 {
     console.log(proposals);
     let htmlproposal = `<div class="row">`;

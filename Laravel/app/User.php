@@ -32,6 +32,8 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    protected $primaryKey = 'id';
+
     /**
      *
      * This user's faculty
@@ -48,6 +50,10 @@ class User extends Authenticatable
      */
     public function proposals(){
        return $this->hasMany('App\Proposal','id','idproponent');
+    }
+
+    public function teams(){
+        return $this->belongsToMany('App\Team', 'team_member', 'iduser', 'idteam');
     }
 
 /*

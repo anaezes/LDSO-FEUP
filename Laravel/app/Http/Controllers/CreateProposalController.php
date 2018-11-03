@@ -68,19 +68,19 @@ class CreateproposalController extends Controller
 
             $public_prop = $request->input('public_prop');
             if ($public_prop == 'on'){
-                $saveproposal->proposal_type = true;
+                $saveproposal->proposal_public = true;
             }
             else {
-                $saveproposal->proposal_type = false;
+                $saveproposal->proposal_public = false;
             }
 
 
             $public_bid = $request->input('public_bid');
             if ($public_bid == 'on'){
-                $saveproposal->bid_type = true;
+                $saveproposal->bid_public = true;
             }
             else {
-                $saveproposal->bid_type = false;
+                $saveproposal->bid_public = false;
             }
 
 

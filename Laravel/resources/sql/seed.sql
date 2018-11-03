@@ -22,12 +22,14 @@ DROP TABLE IF EXISTS proposal_modification CASCADE;
 DROP TABLE IF EXISTS bid CASCADE;
 DROP TABLE IF EXISTS team CASCADE;
 DROP TABLE IF EXISTS faculty_proposal CASCADE;
+DROP TABLE IF EXISTS skill_user CASCADE;
 DROP TABLE IF EXISTS skill_proposal CASCADE;
 DROP TABLE IF EXISTS skill CASCADE;
 DROP TABLE IF EXISTS proposal CASCADE;
 DROP TABLE IF EXISTS requested_termination CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS faculty CASCADE;
+DROP TABLE IF EXISTS team_member CASCADE;
 
 DROP TRIGGER IF EXISTS  tr_check_number_off_row_admin ON users CASCADE;
 DROP TRIGGER IF EXISTS  tr_change_users_status ON users CASCADE;
@@ -53,12 +55,14 @@ DROP TABLE IF EXISTS proposal_modification CASCADE;
 DROP TABLE IF EXISTS bid CASCADE;
 DROP TABLE IF EXISTS team CASCADE;
 DROP TABLE IF EXISTS faculty_proposal CASCADE;
+DROP TABLE IF EXISTS skill_user CASCADE;
 DROP TABLE IF EXISTS skill_proposal CASCADE;
 DROP TABLE IF EXISTS skill CASCADE;
 DROP TABLE IF EXISTS proposal CASCADE;
 DROP TABLE IF EXISTS requested_termination CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS faculty CASCADE;
+DROP TABLE IF EXISTS team_member CASCADE;
 
 
 
@@ -109,8 +113,8 @@ CREATE TABLE proposal (
     title  text NOT NULL,
     dateCreated TIMESTAMP WITH TIME zone DEFAULT now() NOT NULL,
     proposal_status text NOT NULL DEFAULT 'waitingApproval'::text,
-    proposal_type boolean NOT NULL DEFAULT FALSE,
-    bid_type boolean NOT NULL DEFAULT FALSE,
+    proposal_public boolean NOT NULL DEFAULT FALSE,
+    bid_public boolean NOT NULL DEFAULT FALSE,
     dateApproved TIMESTAMP WITH TIME zone DEFAULT NULL,
     dateRemoved TIMESTAMP WITH TIME zone DEFAULT NULL,
     dateFinished TIMESTAMP WITH TIME zone DEFAULT NULL,
@@ -125,21 +129,37 @@ CREATE TABLE skill (
 );
 
 CREATE TABLE skill_proposal(
-  idSkill INTEGER NOT NULL,
-  idProposal INTEGER NOT NULL
+  idSkill INTEGER NOT NULL REFERENCES skill(id),
+  idProposal INTEGER NOT NULL REFERENCES proposal(id),
+  PRIMARY KEY (idSkill,idProposal)
+);
+
+CREATE TABLE skill_user(
+  idSkill INTEGER NOT NULL REFERENCES skill(id),
+  idUser INTEGER NOT NULL REFERENCES users(id)
+
+
 );
 
 --9
 
 CREATE TABLE faculty_proposal (
-    idFaculty INTEGER NOT NULL,
-    idProposal INTEGER NOT NULL
+    idFaculty INTEGER NOT NULL REFERENCES faculty(id),
+    idProposal INTEGER NOT NULL REFERENCES proposal(id),
+    PRIMARY KEY (idFaculty,idProposal)
 );
 
 --10
 
 CREATE TABLE team (
-     id SERIAL PRIMARY KEY
+     id SERIAL PRIMARY KEY,
+     teamName TEXT NOT NULL UNIQUE,
+     idLeader INTEGER NOT NULL REFERENCES users(id)
+);
+
+CREATE TABLE team_member(
+      idTeam INTEGER NOT NULL,
+      idUser INTEGER NOT NULL
 );
 
 
@@ -386,6 +406,8 @@ INSERT INTO "skill" (skillName) VALUES ('Skill3');
 INSERT INTO "skill" (skillName) VALUES ('Skill4');
 
 
+
+
 ----admin
 --INSERT INTO "users" (email, name, password, phone, username, users_status, idfaculty) VALUES ('admin@fe.up.pt', 'admin', '$2y$10$c1H9bNvOoNdOtoDAJDfrNOooEt7UPWTW6eeD9XTnfOL7BUGzjSpW6', '111111111','admin', 'admin', 8);
 ----others
@@ -402,23 +424,23 @@ INSERT INTO "skill" (skillName) VALUES ('Skill4');
 ----5
 ----proposal data from https://www.goodreads.com/shelf/show/nobel-prize
 ----Real data, approved
---INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_type,bid_type, idProponent, dateApproved)
+--INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_public,bid_public, idProponent, dateApproved)
 --VALUES ('Very good condition', '600000', 'One Hundred Years of Solitude', 'approved', TRUE, TRUE, 2, now());
---INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_type,bid_type, idProponent, dateApproved)
+--INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_public,bid_public, idProponent, dateApproved)
 --VALUES ('Very good condition', '600000', 'A', 'approved', TRUE, TRUE, 2, now());
---INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_type,bid_type, idProponent, dateApproved)
+--INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_public,bid_public, idProponent, dateApproved)
 --VALUES ('Very good condition', '600000', 'B', 'approved', TRUE, TRUE, 1, now());
---INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_type,bid_type, idProponent, dateApproved)
+--INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_public,bid_public, idProponent, dateApproved)
 --VALUES ('Very good condition', '600000', 'C', 'approved', TRUE, TRUE, 3, now());
---INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_type,bid_type, idProponent, dateApproved)
+--INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_public,bid_public, idProponent, dateApproved)
 --VALUES ('Very good condition', '600000', 'D', 'approved', TRUE, TRUE, 1, now());
---INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_type,bid_type, idProponent, dateApproved)
+--INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_public,bid_public, idProponent, dateApproved)
 --VALUES ('Very good condition', '600000', 'E', 'approved', TRUE, TRUE, 3, now());
---INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_type,bid_type, idProponent, dateApproved)
+--INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_public,bid_public, idProponent, dateApproved)
 --VALUES ('Very good condition', '600000', 'F', 'approved', TRUE, TRUE, 2, now());
---INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_type,bid_type, idProponent, dateApproved)
+--INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_public,bid_public, idProponent, dateApproved)
 --VALUES ('Very good condition', '600000', 'G', 'approved', TRUE, TRUE, 2, now());
---INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_type,bid_type, idProponent, dateApproved)
+--INSERT INTO "proposal" (description, duration, title, proposal_status,proposal_public,bid_public, idProponent, dateApproved)
 --VALUES ('Very good condition', '600000', 'I', 'approved', TRUE, TRUE, 1, now());
 
 
