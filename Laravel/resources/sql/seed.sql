@@ -118,6 +118,8 @@ CREATE TABLE proposal (
     dateApproved TIMESTAMP WITH TIME zone DEFAULT NULL,
     dateRemoved TIMESTAMP WITH TIME zone DEFAULT NULL,
     dateFinished TIMESTAMP WITH TIME zone DEFAULT NULL,
+    dueDate TIMESTAMP WITH TIME zone NOT NULL,
+    announceDate TIMESTAMP WITH TIME zone NOT NULL,
     idProponent INTEGER NOT NULL REFERENCES users(id),
     CONSTRAINT proposal_status_ck CHECK ((proposal_status = ANY (ARRAY['approved'::text, 'removed'::text, 'waitingApproval'::text, 'finished'::text]))),
     CONSTRAINT duration_ck CHECK (duration >= 300)
