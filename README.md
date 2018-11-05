@@ -17,6 +17,20 @@ selected and an online publication was submitted. The inherent credits are recor
 digital portfolio management and in the professional social networks profiles.
 The methodology will be presented and discussed as well as the process along with the obstacles and
 other factors contributing to the success and future replication of this experience.
+
+## How to compile/run
+
+* navigate to the root folder of the project - "Laravel"
+* create a ".env" file and place it in the root folder - [example .env](https://pastebin.com/EmMfU0UA)
+* open 2 terminal windows inside the root folder
+* run "composer install"
+* run "docker-compose up" on terminal #1
+* run "php artisan db:seed" on terminal #2
+* run "php artisan serve" on terminal #2
+
+The database will be available at localhost:5050
+The website will be available at localhost:8000
+
 ## Bug reporting
 
 To report a bug in the platform please use: [link](https://gitlab.com/ldso18-19/t2g4/issues).
