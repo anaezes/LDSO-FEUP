@@ -55,7 +55,7 @@ class Handler extends ExceptionHandler
         $errors = new MessageBag();
 
         // add your error messages:
-        $errors->add('An unexpected error ocurred', "An unexpected error ocurred");
+        $errors->add('An unexpected error ocurred', $exception->getMessage());
 
         //render for dev env
         if (Auth::check()) {
