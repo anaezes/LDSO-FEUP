@@ -167,15 +167,13 @@ CREATE TABLE team_member(
 
 --11
 CREATE TABLE bid (
+    id SERIAL PRIMARY KEY,
     idproposal INTEGER NOT NULL REFERENCES proposal(id),
     idteam INTEGER NOT NULL REFERENCES team(id),
     bidDate TIMESTAMP WITH TIME zone DEFAULT now() NOT NULL,
     description text NOT NULL,
     winner boolean DEFAULT FALSE,
-   -- bidValue REAL,
-    --CONSTRAINT bid_value_ck CHECK (bidValue > 0.0),
-    --CONSTRAINT bid_pk PRIMARY KEY (idBuyer, idproposal)
-    CONSTRAINT bid_pk PRIMARY KEY (idproposal,idteam)
+    submissionDate TIMESTAMP WITH TIME zone NOT NULL
 );
 
 --12
