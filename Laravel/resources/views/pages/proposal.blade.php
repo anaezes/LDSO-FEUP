@@ -101,7 +101,7 @@
                                     @elseif ($proposal->proposal_status != "approved")
                                     <button id="unbiddable" type="submit" disabled class="btn btn-outline-secondary col-md-6">Unable to bid</button>
                                     @else
-                                    <button id="bid-box" type="submit" class="btn btn-primary col-md-3">Bid</button>
+                                    <a href="{{ route ('createBid', ['id'=>$proposal->id])}}" class="btn btn-primary btn-lg my-2 mx-3 jumbotron-buttons">Bid</a>
                                     @endif
                                 @else
                                 <button id="bid-box" type="submit" disabled class="btn btn-outline-secondary col-md-10">Login to bid</button>
