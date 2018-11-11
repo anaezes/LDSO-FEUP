@@ -18,11 +18,13 @@ class Bid extends Model
      *
      * @var string
      */
-    protected $table = 'bid';
+    public $table = 'bid';
 
-    public function user()
+    public $primaryKey = 'id';
+
+    public function team()
     {
-        return $this->belongsTo('App\User', 'idbuyer', 'id');
+        return $this->belongsTo('App\Team', 'idteam', 'id');
     }
 
     public function proposal()

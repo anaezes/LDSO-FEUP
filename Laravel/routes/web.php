@@ -34,10 +34,16 @@ Route::get('home', 'HomeController@show')->name('home');
 Route::get('create', 'CreateProposalController@show')->name('create');
 Route::post('create', 'CreateProposalController@create');
 
+// Create Bid
+Route::get('createBid/{id}', 'CreateBidController@show')->name('createBid');
+Route::post('createBid/{id}', 'CreateBidController@createBid');
+
 // Create Team
 Route::get('createTeam', 'CreateTeamController@show')->name('createTeam');
 Route::post('createTeam', 'CreateTeamController@createTeam');
 
+// Bid page
+Route::get('bid/{id}', 'BidController@show')->name('bid');
 
 // Proposal Item Page
 Route::get('proposal/{id}', 'ProposalController@show')->name('proposal');
