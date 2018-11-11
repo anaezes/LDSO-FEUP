@@ -80,7 +80,8 @@
                                             @if (Auth::check())
                                                 @if(Auth::user()->id != $proposal->idproponent)
                                                     @if($proposal->proposal_status == "approved")
-                                                    <input id="currentBid" type="number" min="0.00" placeholder="0.00" step="0.01" class="form-control">
+                                                    <input id="currentBid" ty
+Copyright pe="number" min="0.00" placeholder="0.00" step="0.01" class="form-control">
                                                     @else
                                                     <input id="currentBid" type="number" min="0.00" placeholder="0.00" disabled step="0.01" class="form-control">
                                                     @endif
@@ -110,6 +111,22 @@
                         </tr>
                     </tbody>
                 </table>
+
+                @if (Auth::check())
+                    @if ($proposal->idproponent == Auth::user()->id)
+                    <table class="table" style= "border : none">
+                        <tbody style="border : none">
+                            <tr>
+                                <td colspan="2" style="border: none" > <strong style="font-size: x-large">Bids</strong></td>
+                            </tr>
+                            <tr>
+                            
+                            <tr> 
+                        </tbody>
+                    </table>
+                    @endif
+                @endif
+                
               </div>
             </main>
 
