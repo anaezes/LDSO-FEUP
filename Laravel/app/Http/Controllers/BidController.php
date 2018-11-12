@@ -27,4 +27,8 @@ class BidController extends Controller
         return view('pages.bid', ['bid' => $bid]);
     }
 
+    public function team(){
+        return $this->belongsTo('App\Team', 'idteam', 'id');
+    }
+
 }

@@ -119,9 +119,12 @@ Copyright pe="number" min="0.00" placeholder="0.00" step="0.01" class="form-cont
                             <tr>
                                 <td colspan="2" style="border: none" > <strong style="font-size: x-large">Bids</strong></td>
                             </tr>
-                            <tr>
-                            
-                            <tr> 
+                            @foreach ($proposal->bids as $bid)
+                                <tr>
+                                    <td><strong>{{$bid->team->teamName}} </strong></td>
+                                    <td style: align = "right">{{$bid->submissionDate}}</td>
+                                <tr>
+                            @endforeach
                         </tbody>
                     </table>
                     @endif
