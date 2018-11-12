@@ -5,9 +5,8 @@
 @section('content')
 
     <!-- proposal Content -->
-            <main  data-id="{{$proposal, $facultyName, $maxBid, $timestamp}}">
+            <main  data-id="{{$proposal, $facultyName, $timestamp, $bids}}">
               <div class="container p-5">
-
                 <div id="bidResult" class="modal fade" role="dialog">
                   <div class="modal-dialog">
 
@@ -111,26 +110,38 @@ Copyright pe="number" min="0.00" placeholder="0.00" step="0.01" class="form-cont
                         </tr>
                     </tbody>
                 </table>
-
-                @if (Auth::check())
-                    @if ($proposal->idproponent == Auth::user()->id)
                     <table class="table" style= "border : none">
-                        <tbody style="border : none">
                             <tr>
-                                <td colspan="2" style="border: none" > <strong style="font-size: x-large">Bids</strong></td>
+                                <td style="border: none" > <strong style="font-size: x-large">Bids</strong></td>
                             </tr>
-                            @foreach ($proposal->bids as $bid)
+                            <tr>
+                                <td> Bid </td>
+                                <td> Team </td>
+                                <td> Leader </td>
+                                <td> Date  </td>
+                            </tr>
+                            @foreach ($bids as $bid)
                                 <tr>
-                                    <td><strong>{{$bid->team->teamName}} </strong></td>
-                                    <td style: align = "right">{{$bid->submissionDate}}</td>
-                                <tr>
+                                    <td>
+                                        <a style="border:none" class="button btn btn-sm btn-outline-secondary p-2 "
+                                           href="{{ url("bid/{$bid->id}") }}">
+                                        <b> <p> {{$bid->id}}</p> </b>
+                                        </a>
+                                    </td>
+                                    <td><strong>{{$bid->teamname}} </strong></td>
+                                    <td>
+                                    <a style="border:none" class="button btn btn-sm btn-outline-secondary p-2 "
+                                       href="{{ url("profile/{$bid->teamleaderid}") }}">
+                                    <b> <p> {{$bid->teamleadername}}</p> </b>
+                                    </a>
+                                    </td>
+                                    <td>{{$bid->biddate}}</td>
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>
-                    @endif
-                @endif
-                
               </div>
             </main>
 
 @endsection
+
