@@ -23,7 +23,20 @@ class Faculty extends Model
 
     protected $primaryKey = "id";
 
+
+    /**
+    * The proposals associated with this faculty
+    *
+    */
     public function proposal(){
         return $this->belongsToMany('App\Proposal', 'faculty_proposal', 'idfaculty', 'idproposal');
+    }
+
+    /**
+    * The teams associated with this faculty
+    *
+    */
+    public function teams() {
+      return $this->belongsToMany('App\Team', 'team_faculty', 'idfaculty', 'idteam');
     }
 }

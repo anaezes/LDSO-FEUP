@@ -5,8 +5,6 @@ DROP TRIGGER IF EXISTS  tr_image_proposal ON image CASCADE;
 DROP TRIGGER IF EXISTS  tr_change_proposal_modification_is_approved ON proposal_modification CASCADE;
 DROP TRIGGER IF EXISTS  tr_check_approved_proposal ON proposal_modification CASCADE;
 
-
-
 DROP FUNCTION IF EXISTS check_number_of_row_admin() CASCADE;
 DROP FUNCTION IF EXISTS  change_users_status() CASCADE;
 DROP FUNCTION IF EXISTS  change_proposal_status() CASCADE;
@@ -30,42 +28,7 @@ DROP TABLE IF EXISTS requested_termination CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS faculty CASCADE;
 DROP TABLE IF EXISTS team_member CASCADE;
-
-DROP TRIGGER IF EXISTS  tr_check_number_off_row_admin ON users CASCADE;
-DROP TRIGGER IF EXISTS  tr_change_users_status ON users CASCADE;
-DROP TRIGGER IF EXISTS  tr_change_proposal_status ON proposal CASCADE;
-DROP TRIGGER IF EXISTS  tr_image_proposal ON image CASCADE;
-DROP TRIGGER IF EXISTS  tr_change_proposal_modification_is_approved ON proposal_modification CASCADE;
-DROP TRIGGER IF EXISTS  tr_check_approved_proposal ON proposal_modification CASCADE;
-
-
-
-DROP FUNCTION IF EXISTS check_number_of_row_admin() CASCADE;
-DROP FUNCTION IF EXISTS  change_users_status() CASCADE;
-DROP FUNCTION IF EXISTS  change_proposal_status() CASCADE;
-DROP FUNCTION IF EXISTS  check_approved_proposal() CASCADE;
-DROP FUNCTION IF EXISTS  change_proposal_modification_is_approved() CASCADE;
-DROP FUNCTION IF EXISTS image_proposal_or_users() CASCADE;
-
-DROP TABLE IF EXISTS public.password_resets CASCADE;
-DROP TABLE IF EXISTS image CASCADE;
-DROP TABLE IF EXISTS notification_proposal CASCADE;
-DROP TABLE IF EXISTS notification CASCADE;
-DROP TABLE IF EXISTS proposal_modification CASCADE;
-DROP TABLE IF EXISTS bid CASCADE;
-DROP TABLE IF EXISTS team CASCADE;
-DROP TABLE IF EXISTS faculty_proposal CASCADE;
-DROP TABLE IF EXISTS skill_user CASCADE;
-DROP TABLE IF EXISTS skill_proposal CASCADE;
-DROP TABLE IF EXISTS skill CASCADE;
-DROP TABLE IF EXISTS proposal CASCADE;
-DROP TABLE IF EXISTS requested_termination CASCADE;
-DROP TABLE IF EXISTS users CASCADE;
-DROP TABLE IF EXISTS faculty CASCADE;
-DROP TABLE IF EXISTS team_member CASCADE;
-
-
-
+DROP TABLE IF EXISTS team_faculty CASCADE;
 
 --Tables
 
@@ -154,19 +117,26 @@ CREATE TABLE faculty_proposal (
 CREATE TABLE team (
      id SERIAL PRIMARY KEY,
      teamName TEXT NOT NULL UNIQUE,
-     idLeader INTEGER NOT NULL REFERENCES users(id)
+     idLeader INTEGER NOT NULL REFERENCES users(id),
+     teamDescription TEXT NOT NULL
 );
 
 CREATE TABLE team_member(
-      idTeam INTEGER NOT NULL,
-      idUser INTEGER NOT NULL
+      idTeam INTEGER NOT NULL REFERENCES team(id) ON DELETE CASCADE,
+      idUser INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE team_faculty (
+      idTeam INTEGER NOT NULL REFERENCES team(id) ON DELETE CASCADE,
+      idFaculty INTEGER NOT NULL REFERENCES faculty(id) ON DELETE CASCADE,
+      CONSTRAINT team_faculty_pk PRIMARY KEY (idTeam, idFaculty)
 );
 
 
 --11
 CREATE TABLE bid (
     idproposal INTEGER NOT NULL REFERENCES proposal(id),
-    idteam INTEGER NOT NULL REFERENCES team(id),
+    idteam INTEGER NOT NULL REFERENCES team(id) ON DELETE CASCADE,
     bidDate TIMESTAMP WITH TIME zone DEFAULT now() NOT NULL,
     description text NOT NULL,
     winner boolean DEFAULT FALSE,
@@ -560,4 +530,3 @@ INSERT INTO "skill" (skillName) VALUES ('Skill4');
 --INSERT INTO notification_proposal (idProposal, idNotification) VALUES (7, 1);
 --INSERT INTO notification_proposal (idProposal, idNotification) VALUES (1, 3);
 --INSERT INTO notification_proposal (idProposal, idNotification) VALUES (4, 2);
-

@@ -180,7 +180,7 @@
                     <a class="dropdown-item" href="{{ url("myproposals") }}">My Proposals</a>
                     <a class="dropdown-item" href="{{ url("proposals_im_in") }}">Proposals I'm in</a>
                     <a class="dropdown-item" href="{{ url("history") }}">History</a>
-                    <a class="dropdown-item" href="{{ url("teams") }}">My Teams</a>
+                    <a class="dropdown-item" href="{{ url("team") }}">My Teams</a>
                     <!--<a class="dropdown-item" href="messages.html">Messages</a>-->
                     <a class="dropdown-item" href="{{ url("logout") }}">Logout</a>
                 </div>
@@ -277,7 +277,3 @@
 </body>
 
 </html>
-
-
-
-

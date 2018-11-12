@@ -35,8 +35,8 @@ Route::get('create', 'CreateProposalController@show')->name('create');
 Route::post('create', 'CreateProposalController@create');
 
 // Create Team
-Route::get('createTeam', 'CreateTeamController@show')->name('createTeam');
-Route::post('createTeam', 'CreateTeamController@createTeam');
+// Route::get('createTeam', 'CreateTeamController@show')->name('createTeam');
+// Route::post('createTeam', 'CreateTeamController@createTeam');
 
 
 // Proposal Item Page
@@ -74,7 +74,7 @@ Route::post('search', 'SearchController@simpleSearch')->name('search');
 
 //ListPages
 Route::get('history', 'ListController@history')->name('history');
-Route::get('teams', 'ListController@teams')->name('teams');
+// Route::get('teams', 'ListController@teams')->name('teams');
 Route::get('myproposals', 'ListController@myproposals')->name('myproposals');
 Route::get('proposals_im_in','ListController@proposals_imIn')->name('proposals_im_in');
 Route::get('allproposals', 'ListController@allproposals')->name('allproposals');
@@ -84,3 +84,8 @@ Route::get('moderator','ModeratorController@show')->name('moderator');
 
 //Administrator
 Route::get('admin','AdministratorController@show')->name('admin');
+
+//Team
+Route::resource('team', 'TeamController')->except('create');
+Route::post('team/{id}/addMember', 'TeamController@addMember')->name('team.addMember');
+Route::delete('team/{id}/removeMember', 'TeamController@removeMember')->name('team.removeMember');
