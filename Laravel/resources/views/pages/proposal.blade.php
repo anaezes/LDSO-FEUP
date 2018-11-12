@@ -138,7 +138,7 @@
                                     <b> <p> {{$bid->teamleadername}}</p> </b>
                                     </a>
                                 </td>
-                                <td>{{$bid->biddate}}</td>
+                                <td>{{date("d/m/Y H:i", strtotime($bid->biddate))}}</td>
                                  </tr>
                                 @endforeach
                                 @else
