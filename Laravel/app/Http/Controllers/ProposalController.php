@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Proposal;
+use App\Bid;
+use App\User;
+use App\Team;
 use App\Faculty;
 use App\FacultyProposal;
 use App\Http\Controllers\Controller;
@@ -56,29 +59,28 @@ class ProposalController extends Controller
             $facultyName = "No faculty";
         }
 
-        $skills = DB::select('SELECT skillname from skill, skill_proposal WHERE skill.id = skill_proposal.idSkill AND skill_proposal.idProposal = ?', [$proposal->id]);
+        $skills = DB::select('SELECT skillname from skill, skill_proposal 
+                  WHERE skill.id = skill_proposal.idSkill AND skill_proposal.idProposal = ?', [$proposal->id]);
 
         $proposal->skills = $skills;
 
+        //$bids = Bid::where('idproposal', $proposal->id)->get()->first();
 
-        /*   if ($proposal->dateapproved != null) {
-                   $timestamp = $this->createTimestamp($proposal->dateapproved, $proposal->duration);
-               } else {
-                   $timestamp = "Proposal hasn't been approved yet";
-               }
+        $bids = DB::select('SELECT id, idteam, biddate from bid WHERE  bid.idProposal = ?', [$proposal->id]);
 
+        foreach ($bids as $bid) {
+          $team = Team::where('id', $bid->idteam)->get()->first();
+          $bid->teamname = $team->teamname;
+          $leader = User::where('id', $team->idleader)->get()->first();
+          $bid->teamleaderid = $leader->id;
+          $bid->teamleadername = "$leader->username";
 
-               $query = "SELECT max(bidValue) FROM bid WHERE idproposal = ?";
-               $maxBid = DB::select($query, [$id]);
-               if ($maxBid[0]->max == null) {
-                   $maxBid[0]->max = 0.00;
-               }
+        }
 
-       */
 
         return view('pages.proposal', ['proposal' => $proposal,
             'facultyName' => $facultyName,
-            'maxBid' => 0,
+            'bids' => $bids,
             'timestamp' => $proposal->duedate]);
     }
 
