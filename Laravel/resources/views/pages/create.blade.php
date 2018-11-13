@@ -13,6 +13,8 @@
     <main>
         <form class="ml-4 mr-4" method="POST" action="{{ route('create') }}" enctype="multipart/form-data">
             {{ csrf_field() }}
+            <div class="form-row">
+                <div class="form-group col-md-12">
                 <label for="title">Title</label>
                 <input id="title" name="title" type="text" class="form-control" value="{{ old('title') }}" required>
                 @if ($errors->has('title'))
@@ -20,9 +22,11 @@
                     {{ $errors->first('title') }}
                   </span>
                 @endif
+            </div>
+            </div>
 
             <div class="form-row">
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-6"> <!-- todo: get database skills -->
                     <label for="skill">Skill</label>
                     <select id="skill" name="skill[]" class="form-control" value="{{ old('skill') }}" multiple required>
                         <option>Skill1</option>
@@ -143,7 +147,26 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group col-md-6">
+
+
+            <div class="form-group col-md-6"> <!-- todo triggers to database-->
+                <label><i class="fa fa-calendar"></i> Dates</label>
+                <div class="form-row">
+                <div class="form-group col-md-4">
+                <label for="start">Announce winner</label>
+                <input type="date" name="announce" required>
+                </div>
+                <div class="form-group col-md-4">
+                <label>Due of project  </label>
+                <input type="date" name="due" required>
+                </div>
+                </div>
+            </div>
+
+            </div>
+
+            <div class="form-row">
+            <div class="form-group col-md-6">
                     <label><i class="fa fa-stop-circle"></i> Privacy</label>
                     <div class="form-row">
                         <div class="checkbox col-md-6">
@@ -158,6 +181,7 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
 
                 <div class="form-group col-md-12">

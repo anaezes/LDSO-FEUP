@@ -42,6 +42,9 @@ class Proposal extends Model
         return $this->belongsToMany('App\Skill', 'skill_proposal', 'idproposal', 'idskill');
     }
 
+    public function bids(){
+        return $this->hasMany('App\Bid','idproposal', 'id');
+    }
 
 
 }

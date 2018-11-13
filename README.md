@@ -1,17 +1,41 @@
 # t2g4
 # U.Openlab: Transparent Bidding Platform with Blockchain Strategies
 
-O conceito U.Openlab é desenvolvido na Universidade do Porto (U.Porto) no contexto do processo de ensino / aprendizagem e assume-se como uma plataforma facilitadora da interacção entre necessidades do mundo real e tópicos de trabalhos práticos. O objectivo é fornecer respostas inovadoras e o uso efectivo de resultados de avaliações, o reconhecimento de créditos para futuras carreiras profissionais ou científicas e um processo sustentável orientado para, entre outros, as necessidades dos serviços de património das universidades.
+The  U.Openlab  concept  is  developed  at  the  University  of  Porto  (U.Porto)  in  the  context  of  the
+teaching/learning  process  and  is  assumed  to  be  an  interaction  facilitator  platform  between  real
+-world needs  and  practical  works  topics.  The  aim  is  to  provide  innovative  answers  and  the  effective  use  of assessment  results,  the  credits  recognition  for  future  professional  or  scientific  careers  and  a sustainable process oriented for, among others, universities heritage services' needs.
 
-O projecto-piloto em curso na Universidade do Porto, centrado no Museu Digital da Universidade do Porto, inclui uma infra-estrutura tecnológica com três componentes principais: várias colecções, uma plataforma de gestão de informação e serviços, com o correspondente repositório digital; a plataforma de gestão de contribuições da comunidade da U.Porto (U.Porto OpenLab); e uma estrutura adaptável que suportará vários aplicativos de interface com públicos não específicos.
+The pilot-project in course at the University of Porto, focusing on the U.Porto Digital Museum, includes
+a  technological  infrastructure with  three  main  components:  several  collections,  an  information  and
+services  management  platform,  with  its  corresponding  digital  repository;  the  U.Porto  community
+contributions  management  platform  (U.Porto  OpenLab);  and  an  adaptive  framework  that  will  support various interface applications with non-specific audiences.
 
-O OpenLab da U.Porto considera duas áreas principais: a área de gestão de licitações / apela a contribuições e uma área de gestão pessoal de contribuições. O coordenador os elementos da equipa e o proponente são os actores do processo. Quanto às principais tarefas, destacamos a recepção, selecção e distribuição de necessidades / problemas reais. Tendo concluído o processo de avaliação, os resultados são seleccionados e uma publicação online é enviada. Os créditos inerentes são registados na gestão de portefólio digital de colaboradores e nos perfis de redes sociais profissionais.
+The   U.Porto   OpenLab   considers   two   main   areas:   the   bidding   management   area   /   calls   for
+contributions  and  a  contributions  personal  management  area.  The  professor,  the  student  and  the
+“client”  are  the  actors  in  the  process.  As  for  main  tasks  we  point  out  the  reception,  selection  and distribution  of  real  needs  /  problems.  Having  concluded  the  assessment  process,  results  were
+selected and an online publication was submitted. The inherent credits are recorded in a contributors'
+digital portfolio management and in the professional social networks profiles.
+The methodology will be presented and discussed as well as the process along with the obstacles and
+other factors contributing to the success and future replication of this experience.
 
-## Reportar Erros
+## How to compile/run
 
-Para reportar qualquer erro na plataforma, estes podem ser reportados [aqui](https://gitlab.com/ldso18-19/t2g4/issues).
+* navigate to the root folder of the project - "Laravel"
+* create a ".env" file and place it in the root folder - [example .env](https://pastebin.com/EmMfU0UA)
+* open 2 terminal windows inside the root folder
+* run "composer install"
+* run "docker-compose up" on terminal #1
+* run "php artisan db:seed" on terminal #2
+* run "php artisan serve" on terminal #2
 
-## Créditos
+The database will be available at localhost:5050
+The website will be available at localhost:8000
+
+## Bug reporting
+
+To report a bug in the platform please use: [link](https://gitlab.com/ldso18-19/t2g4/issues).
+
+## Credits
 
 ### Product Owner:
 

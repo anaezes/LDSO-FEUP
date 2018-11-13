@@ -58,12 +58,19 @@ class CreateproposalController extends Controller
     private function db_create(Request $request)
     {
             $createdproposal = DB::transaction(function () use ($request) {
+
             $saveproposal = new Proposal;
             $saveproposal->idproponent = Auth::user()->id;
 
             $saveproposal->title = $request->input('title');
             $saveproposal->description = $request->input('description');
             $saveproposal->duration = $this->buildDuration($request);
+
+            $announce = strtotime($request->input('announce'));
+            $saveproposal->announcedate = date('Y-m-d H:i:s', $announce);
+
+            $due = strtotime($request->input('due'));
+            $saveproposal->duedate = date('Y-m-d H:i:s', $due);
 
 
             $public_prop = $request->input('public_prop');

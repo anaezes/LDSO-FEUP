@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Search')
+@section('title', strtolower($action))
 
 @section('content')
 
@@ -9,7 +9,7 @@
 <div class="container-fluid bg-white">
     <main>
         <div class="bg-white mb-0 mt-5 panel p-1">
-            <h4> 
+            <h4>
                 @if($action=="MY_proposalS")
                     <i class="fa fa-gavel"></i> My proposals
                 @endif
@@ -20,7 +20,7 @@
                     <i class="fa fa-clock"></i> Proposals I'm in
                 @endif
                 @if($action=="HISTORY")
-                    <i class="fa fa-history"></i> History 
+                    <i class="fa fa-history"></i> History
                 @endif
                 @if($action=="TEAMS")
                         <i class="fa fa-object-group"></i> My Teams
@@ -35,6 +35,7 @@
             <a data-toggle="modal" href="#" data-target="#myModalTeam">
                 <i class="fa fa-fw fa-plus" title="Add a new Team"></i> New Team
             </a>
+            @include('pages.teamItems')
             <div class="modal fade" id="myModalTeam" tabindex="-1" role="dialog" aria-labelledby="myModalTeamLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
