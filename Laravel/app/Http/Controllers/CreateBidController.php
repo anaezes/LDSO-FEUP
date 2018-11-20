@@ -36,7 +36,11 @@ class CreateBidController extends Controller
             return redirect('/home');
         }
 
-        return view('pages.createBid', ['id' => $id]);
+        $data = [];
+        $data[0] = DB::select('SELECT * from team WHERE  idleader = ?', [Auth::user()->id]);
+        $data[1] = $id;
+
+        return view('pages.createBid', ['data' => $data]);
     }
 
     /**
