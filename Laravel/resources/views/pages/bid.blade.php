@@ -30,10 +30,6 @@
             <tr>
                 <td colspan="2" style="border: none" > <strong style="font-size: xx-large">Bid</strong></td>
             </tr>
-            <tr>
-                <td style="border: none; width: 150px;"><strong>Faculty</strong></td>
-                <td style="border: none">Faculdade 1 </td>
-            </tr>
 
             <tr>
                 <td><strong>Description</strong></td>
@@ -48,15 +44,31 @@
                 <td><strong>Team</strong></td>
                 <td><a class="button btn btn-sm btn-outline-secondary p-2 " href="{{ url("team/{$bid->idteam}") }}">
                     <b>
-                        <i class="fa fa-user"></i>
-                        <p> {{$bid->idteam}}</p>
+                        <i class="fa fa-users"></i>
+                        <p> {{$bid->team->teamname}}</p>
                     </b></a></td>
+            </tr>
+            <tr>
+                <td style="border: none; width: 150px;"><strong>Faculty Leader</strong></td>
+                <td>
+                     <p>{{$bid->facultyLeader->facultyname}}</p>
+                 </td>
+            </tr>
+
+            <tr>
+                <td style="border: none; width: 200px;"><strong>Team members</strong></td>
+                <td>
+                @foreach ($bid->facultysMembers as $fac)
+                <p>{{$fac->facultyname}}</p>
+                @endforeach
+                </td>
             </tr>
             <tr>
                 <td><strong>Skills</strong></td>
                 <td>
-                   <p>Skill 1</p>
-                    <p>Skill 2</p>
+                    @foreach ($bid->skills as $skill)
+                    <p>{{$skill}}</p>
+                    @endforeach
                 </td>
             </tr>
 
