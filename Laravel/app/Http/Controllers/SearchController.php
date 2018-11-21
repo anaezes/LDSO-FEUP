@@ -120,7 +120,7 @@ class SearchController extends Controller
     private function buildTimestamps($proposals)
     {
         foreach ($proposals as $proposal) {
-            $ts = ProposalController::createTimestamp($proposal->dateapproved, $proposal->duration);
+            $ts = ProposalController::createTimestamp($proposal->datecreated, $proposal->duration);
             $proposal->timestamp = $ts;
         }
     }

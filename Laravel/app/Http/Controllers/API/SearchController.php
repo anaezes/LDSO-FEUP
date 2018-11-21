@@ -121,7 +121,7 @@ class SearchController extends Controller
                 if ($proposal->proposal_status == "waitingApproval") {
                     $proposal->time = "Not yet started";
                 } elseif ($proposal->proposal_status == "approved") {
-                    $proposal->time = ProposalController::createTimestamp($proposal->dateapproved, $proposal->duration);
+                    $proposal->time = ProposalController::createTimestamp($proposal->datecreated, $proposal->duration);
                 } elseif ($proposal->proposal_status == "finished") {
                     $proposal->time = "Finished";
                 }
