@@ -324,12 +324,20 @@ class ProposalController extends Controller
         }
 
         $ts = "";
-        $ts .= intdiv($time, 86400) . "d ";
-        $time = $time % 86400;
-        $ts .= intdiv($time, 3600) . "h ";
-        $time = $time % 3600;
-        $ts .= intdiv($time, 60) . "m ";
-        $ts .= $time % 60 . "s";
+        $d = floor($time/86400);
+        $ts .= $d . "d ";
+
+
+        $h = floor(($time-$d*86400)/3600);
+        $ts .= $h . "h ";
+
+        $m = floor(($time-($d*86400+$h*3600))/60);
+        $ts .= $m . "m ";
+
+
+        $ts .= $time-($d*86400+$h*3600+$m*60) . "s";
+
+
 
         if (strpos($ts, "0d ") !== false) {
             $ts = str_replace("0d ", "", $ts);
