@@ -11,7 +11,7 @@
     </div>
     <hr id="hr_space" class="mt-2">
     <main>
-        <form class="ml-4 mr-115" method="POST" action="{{ route ('createBid', ['id' => $data[1] ]) }}" enctype="multipart/form-data">
+        <form class="ml-4 mr-115" method="POST" action="{{ route ('createBid', ['id' => $id ]) }}" enctype="multipart/form-data">
             {{ csrf_field() }}
 
             <div class="form-row">
@@ -31,10 +31,10 @@
                     <label for="team"><i class="fa fa-calendar"></i> Teams</label>
                     <select name="team" class="form-control" value="{{ old('team') }}" required>
                     @if (Auth::check())
-                        @foreach ($data[0] as $team)
+                        @foreach (Auth::user()->teams as $team)
                         <option value="{{$team->id}}" >{{$team->teamname}}</option>
                         @endforeach
-                        @if(sizeof($data[0]) == 0)
+                        @if(sizeof(Auth::user()->teams) == 0)
                         <option value="0" > "Please create a team first..."</option>
                         @endif
                     @endif
@@ -53,7 +53,7 @@
 
                 <div class="form-group col-md-12">
                     <p><br><br>
-                        @if(sizeof($data[0]) == 0)
+                        @if(sizeof(Auth::user()->teams) == 0)
                         <button id="unbiddable" type="submit" disabled class="btn btn-outline-secondary col-md-6">Unable to bid, create a team first...</button>
                         @else
                         <button type="submit" class="btn btn-primary col-md-12">Create Bid</button>
