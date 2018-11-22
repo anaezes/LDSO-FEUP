@@ -101,9 +101,8 @@ CREATE TABLE skill_proposal(
 
 CREATE TABLE skill_user(
   idSkill INTEGER NOT NULL REFERENCES skill(id),
-  idUser INTEGER NOT NULL REFERENCES users(id)
-
-
+  idUser INTEGER NOT NULL REFERENCES users(id),
+  PRIMARY KEY (idSkill,idUser)
 );
 
 --9
@@ -124,14 +123,15 @@ CREATE TABLE team (
 );
 
 CREATE TABLE team_member(
-      idTeam INTEGER NOT NULL REFERENCES team(id) ON DELETE CASCADE,
-      idUser INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE
+      idTeam INTEGER NOT NULL REFERENCES team(id),
+      idUser INTEGER NOT NULL REFERENCES users(id),
+      PRIMARY KEY (idTeam,idUser)
 );
 
 CREATE TABLE team_faculty (
-      idTeam INTEGER NOT NULL REFERENCES team(id) ON DELETE CASCADE,
-      idFaculty INTEGER NOT NULL REFERENCES faculty(id) ON DELETE CASCADE,
-      CONSTRAINT team_faculty_pk PRIMARY KEY (idTeam, idFaculty)
+      idTeam INTEGER NOT NULL REFERENCES team(id),
+      idFaculty INTEGER NOT NULL REFERENCES faculty(id),
+      PRIMARY KEY (idTeam, idFaculty)
 );
 
 
