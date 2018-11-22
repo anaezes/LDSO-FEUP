@@ -69,30 +69,6 @@
                                 <td><strong>Time left: </strong></td>
                                     <td id="timeLeft" class="text-danger">{{$timestamp}}</td>
                             </tr>
-                            <!--tr>
-                                <td style="width: 150px"><strong>Current bid: </strong></td>
-                                   <td id="currentMaxBid" class="text-success">0€</td>
-                                <td>
-                                    <form>
-                                        <div class="form-row">
-                                            <div class="form-group col-md-12">
-                                                @if (Auth::check())
-                                                    @if(Auth::user()->id != $proposal->idproponent)
-                                                        @if($proposal->proposal_status == "approved")
-                                                        <input id="currentBid" ty
-    Copyright pe="number" min="0.00" placeholder="0.00" step="0.01" class="form-control">
-                                                        @else
-                                                        <input id="currentBid" type="number" min="0.00" placeholder="0.00" disabled step="0.01" class="form-control">
-                                                        @endif
-                                                    @endif
-                                                @else
-                                                <input id="currentBid" disabled type="number" min="0.00" placeholder="0.00" step="0.01" class="form-control">
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </form>
-                                </td>
-                            </tr-->
                             <tr>
                                 <td colspan="2" style="border: none; text-align: right">
                                     @if (Auth::check())

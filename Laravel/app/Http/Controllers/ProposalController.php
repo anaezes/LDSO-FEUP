@@ -46,6 +46,8 @@ class ProposalController extends Controller
         $proposal->duedate = date('Y-m-d', strtotime($proposal->duedate));
         $proposal->announcedate = date('Y-m-d', strtotime($proposal->announcedate));
 
+        $timestamp = ProposalController::createTimestamp($proposal->datecreated, $proposal->duration);
+
 
         $facultyNumber = FacultyProposal::where('idproposal', $proposal->id)->get()->first();
         if ($facultyNumber != null) {
@@ -64,8 +66,6 @@ class ProposalController extends Controller
 
         $proposal->skills = $skills;
 
-        //$bids = Bid::where('idproposal', $proposal->id)->get()->first();
-
         $bids = DB::select('SELECT id, idteam, biddate from bid WHERE  bid.idProposal = ?', [$proposal->id]);
 
         foreach ($bids as $bid) {
@@ -81,7 +81,7 @@ class ProposalController extends Controller
         return view('pages.proposal', ['proposal' => $proposal,
             'facultyName' => $facultyName,
             'bids' => $bids,
-            'timestamp' => $proposal->duedate]);
+            'timestamp' => $timestamp]);
     }
 
     /**
@@ -168,7 +168,7 @@ class ProposalController extends Controller
         $over = [];
 
         foreach ($proposals as $proposal) {
-            $timestamp = ProposalController::createTimestamp($proposal->dateapproved, $proposal->duration);
+            $timestamp = ProposalController::createTimestamp($proposal->datecreated, $proposal->duration);
             if ($timestamp === "Proposal has ended!") {
                 array_push($over, $proposal->id);
             }
@@ -308,14 +308,13 @@ class ProposalController extends Controller
 
     /**
       * Creates a timestamp based on a starting date and a duration
-      * @param String $dateApproved
+      * @param String $dateCreated
       * @param int $duration
       * @return String timestamp
       */
-    public static function createTimestamp($dateApproved, $duration)
+    public static function createTimestamp($dateCreated, $duration)
     {
-        $start = strtotime($dateApproved);
-        $duration = $duration;
+        $start = strtotime($dateCreated);
         $end = $start + $duration;
         $current = time();
         $time = $end - $current;
@@ -325,12 +324,20 @@ class ProposalController extends Controller
         }
 
         $ts = "";
-        $ts .= intdiv($time, 86400) . "d ";
-        $time = $time % 86400;
-        $ts .= intdiv($time, 3600) . "h ";
-        $time = $time % 3600;
-        $ts .= intdiv($time, 60) . "m ";
-        $ts .= $time % 60 . "s";
+        $d = floor($time/86400);
+        $ts .= $d . "d ";
+
+
+        $h = floor(($time-$d*86400)/3600);
+        $ts .= $h . "h ";
+
+        $m = floor(($time-($d*86400+$h*3600))/60);
+        $ts .= $m . "m ";
+
+
+        $ts .= $time-($d*86400+$h*3600+$m*60) . "s";
+
+
 
         if (strpos($ts, "0d ") !== false) {
             $ts = str_replace("0d ", "", $ts);
