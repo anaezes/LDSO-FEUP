@@ -1,5 +1,3 @@
-image: registry.gitlab.com/feup-tbs/ldso18-19/t2g3/base-ci-image
-
 services:
 - docker:dind
 
@@ -33,4 +31,3 @@ deploy-staging:
 #    - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "cd ~/production && chmod 777 script.sh && ./script.sh"
 #  only:
 #    - master
-
