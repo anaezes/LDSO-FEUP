@@ -1,3 +1,5 @@
+image: registry.gitlab.com/feup-tbs/ldso18-19/t2g3/base-ci-image
+
 before_script:
   - export SSHPASS=$USER_PASS
 
