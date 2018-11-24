@@ -1,13 +1,17 @@
 <?php
 
-
 namespace App\Http\Controllers;
+
 use App\Bid;
 use App\Skill;
 use App\User;
 use App\Team;
 use App\Faculty;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Validator;
+
 
 
 class BidController extends Controller
@@ -74,8 +78,22 @@ class BidController extends Controller
         return view('pages.bid', [ 'bid' => $bid]);
     }
 
-    public function team(){
-        return $this->belongsTo('App\Team', 'idteam', 'id');
-    }
+    public function setWinner(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'bidid' => 'required|integer|exists:bid,id',
+        ]);
 
+        if ($validator->fails()) {
+            return redirect()->back()
+                             ->withErrors($validator)
+                             ->withInput();
+        }
+
+        $bid = Bid::find($request->input('bidid'));
+        $bid->winner = true;
+        $bid->save();
+
+        return redirect()->back()->withInput();
+    }
 }
