@@ -1,7 +1,7 @@
 version: '3'
 services:
 
-  web:
+  web-prod:
     image: hitalos/laravel:latest
     ports:
         - 8100:90
@@ -10,7 +10,7 @@ services:
     depends_on:
         - postgres
     environment:
-        DB_HOST: postgres
+        DB_HOST: postgres-prod
         DB_DATABASE: postgres
         DB_USERNAME: postgres
         DB_PASSWORD: pg!fcp
@@ -19,12 +19,13 @@ services:
              && php artisan db:seed
              && php artisan serve --host=0.0.0.0 --port=90"
 
-  postgres:
+  postgres-prod:
     image: postgres:9.4
     restart: always
     environment:
         POSTGRES_DB: postgres
         POSTGRES_USER: postgres
         POSTGRES_PASSWORD: pg!fcp
+        PGPORT: 5431
     ports:
       - 5431:5431
