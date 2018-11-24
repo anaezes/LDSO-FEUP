@@ -111,13 +111,6 @@ class SearchController extends Controller
             $response = DB::select($query, []);
 
             foreach ($response as $proposal) {
-                $proposal->maxBid = BidController::getMaxBidInternal($proposal->id);
-                if ($proposal->maxBid == 0) {
-                    $proposal->bidMsg = "No bids yet";
-                } else {
-                    $proposal->bidMsg = $proposal->maxBid . "€";
-                }
-
                 if ($proposal->proposal_status == "waitingApproval") {
                     $proposal->time = "Not yet started";
                 } elseif ($proposal->proposal_status == "approved") {
@@ -125,8 +118,6 @@ class SearchController extends Controller
                 } elseif ($proposal->proposal_status == "finished") {
                     $proposal->time = "Finished";
                 }
-
-
             }
         } catch (Exception $e) {
             $this->error($e);
