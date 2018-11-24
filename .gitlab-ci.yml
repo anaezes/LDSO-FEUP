@@ -1,7 +1,6 @@
 image: registry.gitlab.com/feup-tbs/ldso18-19/t2g4/ci-image
 
 before_script:
-  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
   - export SSHPASS=$USER_PASS
 
 stages:
