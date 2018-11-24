@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Validator;
+use App\Http\Controllers\ProposalController;
 
 
 
@@ -93,6 +94,8 @@ class BidController extends Controller
         $bid = Bid::find($request->input('bidid'));
         $bid->winner = true;
         $bid->save();
+
+        ProposalController::notifyWinnerAndPurchase($bid->proposal->id);
 
         return redirect()->back()->withInput();
     }

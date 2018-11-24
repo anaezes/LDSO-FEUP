@@ -8,6 +8,8 @@ use App\User;
 use App\Team;
 use App\Faculty;
 use App\FacultyProposal;
+use App\Notification;
+use App\NotificationProposal;
 use App\Http\Controllers\Controller;
 use App\Image;
 use Illuminate\Database\QueryException;
@@ -251,21 +253,37 @@ class ProposalController extends Controller
       * @param int $id
       * @return 200 if successful, 404 if not
       */
-    public function notifyWinnerAndPurchase($id)
+    public static function notifyWinnerAndPurchase($id)
     {
         try{
-            $res = DB::select("SELECT bid.idbuyer
-                               FROM bid
-                               WHERE bid.idproposal  = ?
-                               ORDER BY bid.bidvalue DESC",[$id]);
+            $proposal = Proposal::findOrFail($id);
+            $winner = $proposal->bids()->where('winner', true)->first();
 
-            $proposal = DB::select("SELECT title
-                                    FROM proposal
-                                    WHERE id = ?", [$id]);
-            $text = "You won the proposal for " . $proposal[0]->title . ".";
+            $text = "You won the proposal for ".$proposal->title.".";
 
-            $notifID = DB::table('notification')->insertGetId(['information' => $text, 'idusers' => $res[0]->idbuyer]);
-            DB::insert("INSERT INTO notification_proposal (idproposal, idNotification) VALUES (?, ?)", [$id, $notifID]);
+            $notification = new Notification;
+            $notification->information = $text;
+            $notification->idusers = $winner->id;
+            $notification->save();
+
+            $notificationProposal = new NotificationProposal;
+            $notificationProposal->idproposal = $proposal->id;
+            $notificationProposal->idnotification = 1;
+            $notificationProposal->save();
+
+
+            // $res = DB::select("SELECT bid.idbuyer
+            //                    FROM bid
+            //                    WHERE bid.idproposal  = ?
+            //                    ORDER BY bid.bidvalue DESC",[$id]);
+
+            // $proposal = DB::select("SELECT title
+            //                         FROM proposal
+            //                         WHERE id = ?", [$id]);
+            // $text = "You won the proposal for " . $proposal[0]->title . ".";
+
+            // $notifID = DB::table('notification')->insertGetId(['information' => $text, 'idusers' => $res[0]->idbuyer]);
+            // DB::insert("INSERT INTO notification_proposal (idproposal, idNotification) VALUES (?, ?)", [$id, $notifID]);
 
 
         }catch(QueryException $qe){
