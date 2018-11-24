@@ -129,6 +129,10 @@
                                 <td>
                                     <span class="badge badge-secondary">Winner</span>                                                
                                 </td>
+                            @else
+                                <td>
+                                    <!-- Display nothing but dont break borders and page layout -->
+                                </td>
                             @endif
                         </tr>
                     @endforeach
