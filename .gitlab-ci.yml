@@ -1,0 +1,27 @@
+image: registry.gitlab.com/feup-tbs/ldso18-19/t2g4/ci-image
+
+before_script:
+  - export SSHPASS=$USER_PASS
+
+stages:
+  - deploy
+
+deploy-staging:
+  stage: deploy
+  environment:
+    name: staging
+    url: http://46.101.156.192:8000
+  script:
+    - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "cd ~/staging && chmod 777 script.sh && ./script.sh"
+  only:
+   - project-development
+
+deploy-production:
+ stage: deploy
+ environment:
+   name: production
+   url: http://46.101.156.192:8100
+ script:
+   - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "cd ~/production && chmod 777 script.sh && ./script.sh"
+ only:
+   - master
