@@ -11,8 +11,8 @@ services:
         - postgres-prod
     environment:
         DB_HOST: postgres-prod
-        DB_DATABASE: postgres-prod
-        DB_USERNAME: postgres-prod
+        DB_DATABASE: prod
+        DB_USERNAME: prod
         DB_PASSWORD: pg!fcp
         DB_CONNECTION: pgsql
     command: bash -c "composer install
@@ -23,8 +23,8 @@ services:
     image: postgres:9.4
     restart: always
     environment:
-        POSTGRES_DB: postgres-prod
-        POSTGRES_USER: postgres-prod
+        POSTGRES_DB: prod
+        POSTGRES_USER: prod
         POSTGRES_PASSWORD: pg!fcp
         PGPORT: 5431
     ports:
