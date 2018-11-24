@@ -15,13 +15,13 @@ deploy-staging:
     - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "cd ~/staging && chmod 777 script.sh && ./script.sh"
 #  only:
 #    - project-development
-#
-# deploy-production:
-#  stage: deploy
-#  environment:
-#    name: production
-#    url: http://46.101.156.192:8100
-#  script:
-#    - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "cd ~/production && chmod 777 script.sh && ./script.sh"
+
+deploy-production:
+ stage: deploy
+ environment:
+   name: production
+   url: http://46.101.156.192:8100
+ script:
+   - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "cd ~/production && chmod 777 script.sh && ./script.sh"
 #  only:
 #    - master

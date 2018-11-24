@@ -5,6 +5,7 @@ services:
     image: hitalos/laravel:latest
     ports:
         - 8000:80
+        - 8100:80
     volumes:
         - ./:/var/www
     depends_on:
@@ -27,6 +28,7 @@ services:
         POSTGRES_USER: postgres
         POSTGRES_PASSWORD: pg!fcp
     ports:
+      - 5431:5431
       - 5432:5432
 
   pgadmin:
