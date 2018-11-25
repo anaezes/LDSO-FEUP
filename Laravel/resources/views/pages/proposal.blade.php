@@ -28,8 +28,16 @@
     <table class="table" style="border: none">
         <tbody style="border: none">
             <tr>
-                <td colspan="2" style="border: none" > <strong style="font-size: xx-large">{{$proposal->title}}</strong></td>
+                <td colspan="2" style="border: none" >
+                    <strong style="font-size: xx-large">{{$proposal->title}}</strong>
+                    @if($proposal->proposal_status == "finished")
+                        <strong style="font-size: xx-large">
+                            <span class="badge badge-pill badge-secondary ml-5">Finished</span>
+                        </strong>
+                    @endif
+                </td>
             </tr>
+            
             <tr>
                 <td style="border: none; width: 150px;"><strong>Faculty</strong></td>
                 <td style="border: none">{{$facultyName}}</td>
@@ -67,20 +75,28 @@
             </tr>
             <tr>
                 <td><strong>Time left: </strong></td>
-                    <td id="timeLeft" class="text-danger">{{$timestamp}}</td>
+                @if($proposal->proposal_status == "finished")
+                <td id="timeLeft" class="text-danger">Proposal has finished</td>
+                @else
+                <td id="timeLeft" class="text-danger">{{$timestamp}}</td>
+                @endif
             </tr>
             <tr>
                 <td colspan="2" style="border: none; text-align: right">
                     @if (Auth::check())
                         @if ($proposal->idproponent == Auth::user()->id)
-                        <button id="edit-proposal" type="submit" class="btn btn-primary col-md-6" style = "margin-top: 3px; width: 200px">Edit the proposal</button>
+                            @if($proposal->proposal_status != "finished")
+                                <button id="edit-proposal" type="submit" class="btn btn-primary col-md-6 mt-3" style = "width: 250px">Edit the proposal</button>
+                            @else
+                                <button id="unbiddable" type="submit" disabled class="btn btn-outline-secondary col-md-6 mt-3" style="width: 250px">The proposal has finished</button>
+                            @endif
                         @elseif ($proposal->proposal_status != "approved")
-                        <button id="unbiddable" type="submit" disabled class="btn btn-outline-secondary col-md-6">Unable to bid</button>
+                            <button id="unbiddable" type="submit" disabled class="btn btn-outline-secondary col-md-6 mt-3" style="width: 250px">Unable to bid</button>
                         @else
-                        <a href="{{ route ('createBid', ['id'=>$proposal->id])}}" class="btn btn-primary btn-lg my-2 mx-3 jumbotron-buttons">Bid</a>
+                            <a href="{{ route ('createBid', ['id'=>$proposal->id])}}" class="btn btn-primary btn-lg my-2 mx-3 jumbotron-buttons">Bid</a>
                         @endif
                     @else
-                    <button id="bid-box" type="submit" disabled class="btn btn-outline-secondary col-md-10">Login to bid</button>
+                    <button id="bid-box" type="submit" disabled class="btn btn-outline-secondary col-md-6 mt-3" style="width: 250px">Login to bid</button>
                     @endif
                 </td>
             </tr>

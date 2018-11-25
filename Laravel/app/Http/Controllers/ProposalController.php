@@ -44,7 +44,7 @@ class ProposalController extends Controller
         $proposal = Proposal::find($id);
 
         //todo when exist moderators
-        $proposal->proposal_status = "approved";
+        // $proposal->proposal_status = "approved";
         $proposal->duedate = date('Y-m-d', strtotime($proposal->duedate));
         $proposal->announcedate = date('Y-m-d', strtotime($proposal->announcedate));
 
