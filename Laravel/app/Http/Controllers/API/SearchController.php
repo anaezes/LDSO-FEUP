@@ -57,7 +57,7 @@ class SearchController extends Controller
                 array_push($queryResults, $res1);
             }
             if ($request->input('proposalsOfUser') !== null && Auth::check()) {
-                $res = DB::select("SELECT DISTINCT proposal.id FROM proposal WHERE idproponent = ? AND (proposal_status = ? OR proposal_status=?)", [Auth::user()->id, 'approved', 'waitingApproval']);
+                $res = DB::select("SELECT DISTINCT proposal.id FROM proposal WHERE idproponent = ?", [Auth::user()->id]);
                 array_push($queryResults, $res);
             }
             if ($request->input('userBidOn') !== null && Auth::check()) {

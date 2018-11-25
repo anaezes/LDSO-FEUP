@@ -196,11 +196,11 @@ class ProposalController extends Controller
       * @param int $id
       * @return 404 if error
       */
-    public function notifyOwner($id)
+    public static function notifyOwner($id)
     {
         try {
             $proposal = Proposal::findOrFail($id);
-            $text = "Your proposal of ".$proposal->title." has finished!";
+            $text = "Your proposal ".$proposal->title." has finished!";
 
             $notification = new Notification;
             $notification->information = $text;
@@ -214,7 +214,7 @@ class ProposalController extends Controller
             $message .= "\naddress: " . $notification->user->address;
             $message .= "\npostal code: " . $notification->user->PostalCode;
 
-            sendMail($message, $proposal->user->email);
+            // (new ProposalController)::sendMail($message, $proposal->user->email);
 
         } catch (QueryException $qe) {
             return response('NOT FOUND', 404);
@@ -236,7 +236,7 @@ class ProposalController extends Controller
             "$domain",
             array('from' => 'Home remote Sandbox <postmaster@sandboxeb3d0437da8c4b4f8d5a428ed93f64cc.mailgun.org>',
                 'to' => 'Bookhub seller <' . $email . '>',
-                'subject' => 'Buyer information',
+                'subject' => 'Proposal information',
                 'text' => $message,
                 'require_tls' => 'false',
                 'skip_verification' => 'true',
@@ -249,13 +249,13 @@ class ProposalController extends Controller
       * @param int $id
       * @return 200 if successful, 404 if not
       */
-    public static function notifyWinnerAndPurchase($id)
+    public static function notifyWinner($id)
     {
         try{
             $proposal = Proposal::findOrFail($id);
             $winner = $proposal->bids()->where('winner', true)->first();
 
-            $text = "You won the proposal for ".$proposal->title.".";
+            $text = "You won the proposal ".$proposal->title.".";
 
             $notification = new Notification;
             $notification->information = $text;
@@ -274,10 +274,10 @@ class ProposalController extends Controller
       * @param int $id
       * @return 200 if ok, 404 if not
       */
-    public function notifyBidders($id)
+    public static function notifyBidders($id)
     {
         try{
-            $proposal = Proposal::findOfFail($id);
+            $proposal = Proposal::findOrFail($id);
 
             foreach ($proposal->bids as $bid){
                 if(!$bid->winner){
@@ -285,7 +285,7 @@ class ProposalController extends Controller
 
                     $notification = new Notification;
                     $notification->information = $text;
-                    $notification->idusers = $bid->team->user;
+                    $notification->idusers = $bid->team->user->id;
                     $notification->idproposal = $proposal->id;
                     $notification->save();
                 }

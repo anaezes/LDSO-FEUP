@@ -95,7 +95,13 @@ class BidController extends Controller
         $bid->winner = true;
         $bid->save();
 
-        ProposalController::notifyWinnerAndPurchase($bid->proposal->id);
+        $proposal = $bid->proposal;
+        $proposal->proposal_status = "finished";
+        $proposal->save();
+
+        ProposalController::notifyBidders($bid->proposal->id);
+        ProposalController::notifyWinner($bid->proposal->id);
+        ProposalController::notifyOwner($bid->proposal->id);
 
         return redirect()->back()->withInput();
     }
