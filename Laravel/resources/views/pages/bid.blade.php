@@ -28,7 +28,29 @@
         <table class="table" style="border: none">
             <tbody style="border: none">
             <tr>
-                <td colspan="2" style="border: none" > <strong style="font-size: xx-large">Bid</strong></td>
+                <td style="border: none" > <strong style="font-size: xx-large">Bid</strong></td>
+                <?php 
+                    $winner = $bid->proposal->bids()->where('winner', true)->first();
+                    $today = date("Y-m-d H:i:s");
+                ?>
+                @if($winner == null && $today <= $bid->proposal->announcedate)
+                    @if(Auth::check() && Auth::id() == $bid->proposal->idproponent)
+                        <td style="border: none; float: right">
+                            <form action="{{ route('bid.winner', $bid->id) }}" method="post">
+                                {!! method_field('PUT') !!}
+                                {!! csrf_field() !!}
+                                <input type="hidden" name="bidid" value="{{$bid->id}}" required>
+                                <button type="submit" class="btn btn-warning">Select as winner</button>
+                            </form>
+                        </td>
+                    @endif
+                @elseif($winner != null && $winner->id == $bid->id)
+                <td style="border: none; float: right" >
+                    <strong style="font-size: xx-large">
+                        <span class="badge badge-secondary">Winner</span>
+                    </strong>
+                </td>
+                @endif
             </tr>
 
             <tr>

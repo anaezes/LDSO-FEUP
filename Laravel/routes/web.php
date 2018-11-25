@@ -44,6 +44,7 @@ Route::post('createBid/{id}', 'CreateBidController@createBid');
 
 // Bid page
 Route::get('bid/{id}', 'BidController@show')->name('bid');
+Route::put('bid/winner/{id}', 'BidController@setWinner')->name('bid.winner');
 
 // Proposal Item Page
 Route::get('proposal/{id}', 'ProposalController@show')->name('proposal');
