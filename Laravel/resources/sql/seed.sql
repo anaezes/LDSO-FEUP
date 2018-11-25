@@ -164,7 +164,8 @@ CREATE TABLE notification (
     information text,
     is_seen boolean DEFAULT FALSE,
     dateSeen TIMESTAMP WITH TIME zone,
-    idusers INTEGER NOT NULL REFERENCES users(id)
+    idusers INTEGER NOT NULL REFERENCES users(id),
+    idproposal INTEGER NOT NULL REFERENCES proposal(id)
 );
 
 
