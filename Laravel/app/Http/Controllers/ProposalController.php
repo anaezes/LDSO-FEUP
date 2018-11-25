@@ -50,6 +50,19 @@ class ProposalController extends Controller
 
         $timestamp = ProposalController::createTimestamp($proposal->datecreated, $proposal->duration);
 
+        if ($timestamp === "Proposal has ended!")
+        {
+            $proposal->proposal_status = "finished";
+        }
+
+        else {
+            $proposal->proposal_status = "approved";
+        }
+
+
+        $update = ProposalController::updateProposals();
+
+
 
         $facultyNumber = FacultyProposal::where('idproposal', $proposal->id)->get()->first();
         if ($facultyNumber != null) {
@@ -221,6 +234,36 @@ class ProposalController extends Controller
         }
 
     }
+
+    public static function notifyProponent($id)
+    {
+        try {
+            $proposal = Proposal::findOrFail($id);
+            $text = "Your proposal ".$proposal->title." has finished, here is your project(project.rar)!";
+
+            $notification = new Notification;
+            $notification->information = $text;
+            $notification->idusers = $proposal->idproponent;
+            $notification->idproposal = $proposal->id;
+            $notification->save();
+
+            $message = "Information of the sender:";
+            $message .= "\nName: " . $notification->user->name;
+            $message .= "\nemail: " . $notification->user->email;
+            $message .= "\naddress: " . $notification->user->address;
+            $message .= "\npostal code: " . $notification->user->PostalCode;
+
+            // (new ProposalController)::sendMail($message, $proposal->user->email);
+
+        } catch (QueryException $qe) {
+            return response('NOT FOUND', 404);
+        }
+
+        return redirect('/proposal/' . $id);
+
+    }
+
+
 
     public function sendMail($message, $email)
     {
