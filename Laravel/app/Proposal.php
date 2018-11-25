@@ -46,5 +46,7 @@ class Proposal extends Model
         return $this->hasMany('App\Bid','idproposal', 'id');
     }
 
-
+    public function notifications(){
+        return $this->hasMany('App\Notification', 'idproposal', 'id');
+    }
 }

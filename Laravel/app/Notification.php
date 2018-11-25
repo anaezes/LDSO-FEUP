@@ -20,4 +20,12 @@ class Notification extends Model
      * @var string
      */
     protected $table = 'notification';
+
+    public function proposal(){
+        return $this->belongsTo('App\Proposal', 'idproposal');
+    }
+
+    public function user(){
+        return $this->belongsTo('App\User', 'idusers');
+    }
 }

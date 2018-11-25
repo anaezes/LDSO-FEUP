@@ -52,20 +52,19 @@ class User extends Authenticatable
        return $this->hasMany('App\Proposal','id','idproponent');
     }
 
+    /**
+     * This user's teams
+     */
     public function teams(){
         return $this->belongsToMany('App\Team', 'team_member', 'iduser', 'idteam');
     }
 
-/*
     /**
-     *
-     * This user's bids
-     *
-
-    public function bids(){
-       return $this->hasMany('App\Bid','id','idbuyer');
+     * This user's notifications
+     */
+    public function notifications(){
+        return $this->hasMany('App\Notification', 'idusers', 'id');
     }
-    */
 
     /**
      *
