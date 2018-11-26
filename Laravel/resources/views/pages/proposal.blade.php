@@ -90,8 +90,11 @@
                             @else
                                 <button id="unbiddable" type="submit" disabled class="btn btn-outline-secondary col-md-6 mt-3" style="width: 250px">The proposal has finished</button>
                             @endif
-                        @elseif ($proposal->proposal_status != "approved")
+                        @elseif ($proposal->proposal_status == "waitingApproval")
+                    <button id="unbiddable" type="submit" disabled class="btn btn-outline-secondary col-md-6 mt-3" style="width: 250px">Unable to bid</button>
+                        @elseif ($proposal->proposal_status == "finished")
                             <button id="unbiddable" type="submit" disabled class="btn btn-outline-secondary col-md-6 mt-3" style="width: 250px">Unable to bid</button>
+                    <a href="{{ route('proposal.notify', $proposal->id) }}" class="btn btn-primary btn-lg my-2 mx-3 jumbotron-buttons">Submit Project</a>
                         @else
                             <a href="{{ route ('createBid', ['id'=>$proposal->id])}}" class="btn btn-primary btn-lg my-2 mx-3 jumbotron-buttons">Bid</a>
                         @endif
