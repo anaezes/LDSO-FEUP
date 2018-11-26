@@ -64,6 +64,18 @@ class SearchController extends Controller
                 $res = DB::select("SELECT DISTINCT proposal.id FROM proposal, bid WHERE bid.idproposal = proposal.id and bid.idBuyer = ? and proposal.proposal_status = ? ", [Auth::user()->id, 'approved']);
                 array_push($queryResults, $res);
             }
+            if ($request->input('userBidWinner') !== null && Auth::check()) {
+                //$res = DB::select("SELECT DISTINCT proposal.id FROM proposal, bid WHERE bid.idproposal = proposal.id and bid.idBuyer = ? and proposal.proposal_status = ? ", [Auth::user()->id, 'approved']);
+                $res = DB::table('proposal')
+                    ->join('bid', 'proposal.id', '=', 'bid.idproposal')
+                    ->join('team', 'bid.idteam', '=', 'team.id')
+                    ->where([
+                            ['team.idleader', '=', Auth::user()->id],
+                            ['bid.winner', '=', true]
+                        ])
+                    ->select('proposal.id')->get();
+                array_push($queryResults, $res);
+            }
             if ($request->input('proposalsAvailableToUser') !== null) { // todo proposal_status fix later
                 if(Auth::check()) {
                     $res = DB::select("SELECT A.id FROM proposal A iNNER JOIN faculty_proposal B ON A.id = B.idproposal INNER JOIN users C ON (C.idfaculty = B.idfaculty OR A.proposal_public = ? ) WHERE C.id = ? AND (A.proposal_status = ? OR A.proposal_status = ?)", ['true', Auth::user()->id, 'approved', 'waitingApproval']);

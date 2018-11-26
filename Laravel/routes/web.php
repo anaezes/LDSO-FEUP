@@ -86,6 +86,7 @@ Route::get('history', 'ListController@history')->name('history');
 Route::get('myproposals', 'ListController@myproposals')->name('myproposals');
 Route::get('proposals_im_in','ListController@proposals_imIn')->name('proposals_im_in');
 Route::get('allproposals', 'ListController@allproposals')->name('allproposals');
+Route::get('proposals_i_won', 'ListController@proposals_i_won')->name('proposals_i_won');
 
 //Moderator
 Route::get('moderator','ModeratorController@show')->name('moderator');

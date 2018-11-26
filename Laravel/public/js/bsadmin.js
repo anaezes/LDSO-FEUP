@@ -111,6 +111,9 @@ if (showmorebutton != null)
             case "/history":
                 album.innerHTML += historyAlbum();
                 break;
+            case "/propolas_i_won":
+                album.innerHTML += proposals_i_wonAlbum();
+            break;
             case "/teams":
                 album.innerHTML += teamsAlbum();
                 break;
@@ -143,6 +146,11 @@ if (window.location.pathname === "/allproposals")
 if (window.location.pathname === "/proposals_im_in")
 {
     ajaxCallGet("api/search?userBidOn=true", proposalAlbumHandler);
+}
+
+if (window.location.pathname === "/proposals_i_won")
+{
+    ajaxCallGet("api/search?userBidWinner=true", proposals_i_wonAlbumHandler);
 }
 
 if (window.location.pathname === "/history")
@@ -288,6 +296,45 @@ function allproposalsAlbumHandler()
 
 function allproposalsAlbum()
 {
+    console.log(proposals);
+    let htmlproposal = `<div class="row">`;
+    let max = i + 12;
+
+    for (i; i < max && i < proposals.length; i++)
+    {
+        let element = proposals[i];
+        if (i % 4 === 0 && i !== 0)
+        {
+            htmlproposal += `</div><div class="row">`;
+        }
+        htmlproposal += `<div class="col-md-3 proposalItem"  data-id="${element.id}">
+        <a href="proposal/${element.id}" class="list-group-item-action">
+            <div class="card mb-4 box-shadow">
+                <div class="card-body">
+                    <p class="card-text text-center hidden-p-sm-down font-weight-bold" style="font-size: larger"> ${element.title} </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-success">${element.bidMsg} </small>
+                        <small class="text-danger">
+                                ${element.time}</small>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>`;
+    };
+    htmlproposal += `</div>`;
+    if (i == proposals.length)
+        showmorebutton.parentNode.removeChild(showmorebutton);
+    return htmlproposal;
+}
+
+function proposals_i_wonAlbumHandler(){
+    console.log(this.responseText);
+    proposals = JSON.parse(this.responseText);
+    album.innerHTML = proposals_i_wonAlbum();
+}
+
+function proposals_i_wonAlbum(){
     console.log(proposals);
     let htmlproposal = `<div class="row">`;
     let max = i + 12;

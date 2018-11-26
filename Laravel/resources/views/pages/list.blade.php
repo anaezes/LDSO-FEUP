@@ -19,6 +19,9 @@
                 @if($action=="proposalS_IN")
                     <i class="fa fa-clock"></i> Proposals I'm in
                 @endif
+                @if($action=="proposals_i_won")
+                    <i class="fa fa-clock"></i> Proposals I won
+                @endif
                 @if($action=="HISTORY")
                     <i class="fa fa-history"></i> History
                 @endif
