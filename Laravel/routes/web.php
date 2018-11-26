@@ -51,7 +51,7 @@ Route::get('proposal/{id}', 'ProposalController@show')->name('proposal');
 Route::get('/proposal', 'ProposalController@updateProposals');
 Route::get('proposal/{id}/edit', 'ProposalController@edit')->name('proposal.edit');
 Route::post('proposal/{id}/edit', 'ProposalController@submitEdit')->name('proposal.edit');
-Route::post('proposal/{id}/notify', 'ProposalController@notifyProponent')->name('proposal.notify');
+Route::get('proposal/{id}/notify', 'ProposalController@notifyProponent')->name('proposal.notify');
 
 // Profile Page
 Route::get('profile/{id}', 'ProfileController@show')->name('profile');
