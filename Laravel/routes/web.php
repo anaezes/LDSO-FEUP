@@ -38,10 +38,6 @@ Route::post('create', 'CreateProposalController@create');
 Route::get('createBid/{id}', 'CreateBidController@show')->name('createBid');
 Route::post('createBid/{id}', 'CreateBidController@createBid');
 
-// Create Team
-// Route::get('createTeam', 'CreateTeamController@show')->name('createTeam');
-// Route::post('createTeam', 'CreateTeamController@createTeam');
-
 // Bid page
 Route::get('bid/{id}', 'BidController@show')->name('bid');
 Route::put('bid/winner/{id}', 'BidController@setWinner')->name('bid.winner');
@@ -50,7 +46,7 @@ Route::put('bid/winner/{id}', 'BidController@setWinner')->name('bid.winner');
 Route::get('proposal/{id}', 'ProposalController@show')->name('proposal');
 Route::get('/proposal', 'ProposalController@updateProposals');
 Route::get('proposal/{id}/edit', 'ProposalController@edit')->name('proposal.edit');
-Route::post('proposal/{id}/edit', 'ProposalController@submitEdit')->name('proposal.edit');
+Route::put('proposal/{id}', 'ProposalController@update')->name('proposal.update');
 Route::get('proposal/{id}/notify', 'ProposalController@notifyProponent')->name('proposal.notify');
 
 // Profile Page

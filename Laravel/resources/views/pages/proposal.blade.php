@@ -86,7 +86,9 @@
                     @if (Auth::check())
                         @if ($proposal->idproponent == Auth::user()->id)
                             @if($proposal->proposal_status != "finished")
-                                <button id="edit-proposal" type="submit" class="btn btn-primary col-md-6 mt-3" style = "width: 250px">Edit the proposal</button>
+                                <a id="edit-proposal" href="{{ route('proposal.edit', $proposal->id) }}" class="btn btn-primary col-md-6 mt-3" style="width: 250px">
+                                    Edit the proposal
+                                </a>
                             @else
                                 <button id="unbiddable" type="submit" disabled class="btn btn-outline-secondary col-md-6 mt-3" style="width: 250px">The proposal has finished</button>
                             @endif
