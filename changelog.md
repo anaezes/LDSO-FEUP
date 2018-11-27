@@ -1,3 +1,19 @@
+# 0.1 (15/10/2018)
+## Closed PBIs
+
+* [Homepage](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/1)
+* [About us page](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/14)
+* [Contacts page](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/15)
+* [Register](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/16)
+* [Authentication](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/17)
+* [Logout](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/19)
+* [Project setup](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/38)
+
+## Increment description
+The team interacted with the PO for the first time, a discussion about what the project entailed was had. The team had some trouble figuring out the requirements for the entire project but are sure that in future meetings they will be clarified. The sprint consisted of project setup and some basic pages.
+
+The sprint ended with another meeting with the PO who clarified the project requirements, the team will be focusing on issues ordered by the PO in the next stream.
+
 # 0.2 (29/10/2018)
 ## Closed PBIs
 
