@@ -459,7 +459,7 @@ function notificationsHandler(response)
 function getNotCounter(response)
 {
     let notifications = JSON.parse(JSON.stringify(response));
-    if (notifications.length != 0)
+    if (notifications.length != 0 && notifications instanceof Array)
     {
         counter.innerHTML = notifications.length;
     }
@@ -699,25 +699,20 @@ for (let i = 0; i < cats.length; i++)
 /**
  * JS for bidding-related stuff and APIs
  */
-if (window.location.href.includes("proposal/"))
-{
+if (window.location.href.includes("proposal/")) {
     let editButton = document.querySelector("#edit-proposal");
-    if (editButton != null)
-    {
-        editButton.addEventListener("click", function()
-        {
+    if (editButton != null) {
+        editButton.addEventListener("click", function () {
             window.location.href = window.location.href + "/edit";
         });
     }
 
     let timeLeft = document.querySelector("#timeLeft").innerHTML;
-    if (timeLeft !== "Proposal hasn't been approved yet" && timeLeft !== "Proposal has ended!")
-    {
+    if (timeLeft !== "Proposal hasn't been approved yet" && timeLeft !== "Proposal has ended!") {
         let elements = timeLeft.split(" ");
         let days, hours, minutes, seconds;
 
-        switch (elements.length)
-        {
+        switch (elements.length) {
             case 4:
                 days = parseInt(elements[0].slice(0, -1));
                 hours = parseInt(elements[1].slice(0, -1));
@@ -746,18 +741,17 @@ if (window.location.href.includes("proposal/"))
 
         let timer = new Timer();
         timer.start(
-        {
-            countdown: true,
-            startValues:
             {
-                days: days,
-                hours: hours,
-                minutes: minutes,
-                seconds: seconds
-            }
-        });
-        timer.addEventListener('secondsUpdated', function(e)
-        {
+                countdown: true,
+                startValues:
+                {
+                    days: days,
+                    hours: hours,
+                    minutes: minutes,
+                    seconds: seconds
+                }
+            });
+        timer.addEventListener('secondsUpdated', function (e) {
             let newTime = "";
             if (timer.getTimeValues().days > 0)
                 newTime += timer.getTimeValues().days + "d ";
@@ -773,31 +767,26 @@ if (window.location.href.includes("proposal/"))
             document.querySelector("#timeLeft").innerHTML = newTime;
 
             let bidBox = document.querySelector("#bid-box");
-            if (newTime === "Proposal has ended!")
-            {
+            if (newTime === "Proposal has ended!") {
                 bidBox.disabled = true;
                 bidBox.innerHTML = "Proposal is unbiddable right now";
             }
         });
     }
 
-    window.setInterval(function()
-    {
+    window.setInterval(function () {
         let proposalID = getproposalID();
         let requestURL = "/api/bid/?proposalID=" + proposalID;
         //ajaxCallGet(requestURL, getBidHandler);
         ajaxCallGet2('/proposal',
-        {}, null);
+            {}, null);
     }, 2000);
 
     let bidBox = document.querySelector("#bid-box");
-    if (bidBox != null)
-    {
-        bidBox.addEventListener("click", function()
-        {
+    if (bidBox != null) {
+        bidBox.addEventListener("click", function () {
             let currVal = document.querySelector("#currentBid").value;
-            if (currVal == "")
-            {
+            if (currVal == "") {
                 let header = document.querySelector("#bidResultHeader");
                 let body = document.querySelector("#bidResultBody");
                 header.innerHTML = "Bidding value not set";
@@ -811,8 +800,7 @@ if (window.location.href.includes("proposal/"))
             let maxVal = document.querySelector("#currentMaxBid").innerHTML;
             maxVal = parseFloat(maxVal);
 
-            if (currVal <= maxVal)
-            {
+            if (currVal <= maxVal) {
                 let header = document.querySelector("#bidResultHeader");
                 let body = document.querySelector("#bidResultBody");
                 header.innerHTML = "Insufficient bidding value";
