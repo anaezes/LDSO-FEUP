@@ -26,3 +26,21 @@ The sprint ended with a meeting with the PO who validated the issues for this it
 The team worked on features prioritized by the POs, such as creating a bid to an auction, listing the bids of a given auction and viewing team invites (needed for bidding). Besides PO oriented issues, care was taken to ensure discussion on every merge request as well as linking the related issue in the description field.
 
 The sprint ended with a meeting with the PO who validated the issues for this iteration and approved the planned features for the next sprint.
+
+# 0.4 (26/11/2018)
+## Closed PBIs
+
+* [Add coding guidelines](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/70)
+* [Start development of Unit Tests](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/67)
+* [Setup automatic deployment](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/66)
+* [Display the auction time count properly](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/64)
+* [Setup single docker-compose](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/63)
+* [Show a leader's teams when creating bid](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/62)
+* [Project submission](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/33)
+* [Pick auction winner](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/27)
+* [View bid page](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/26)
+
+## Increment description
+The team worked on bug fixing the bidding system as well as putting the finishing touches on that same system. Besides application oriented issues the team also created a production and staging server with automatic deployment using Gitlab CI. Coding guidelines were also created but not automatically enforced yet.
+
+The sprint ended with a meeting with the PO who validated the issues for this iteration and approved the next sprint. An estimate of what would be completed was provided to the PO (around 20 weight points).
