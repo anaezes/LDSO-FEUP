@@ -40,7 +40,7 @@ class ProfileController extends Controller
         $user = User::find($id);
 
 
-        $skills = DB::select("SELECT skillName FROM skill,skill_user WHERE skill.id=skill_user.idSkill AND skill_user.idUser = ?",[$user->id]);
+        $skills = DB::select("SELECT skillName FROM skill, skill_user WHERE skill.id=skill_user.idSkill AND skill_user.idUser = ?", [$user->id]);
 
         $user->skills=$skills;
 
@@ -122,6 +122,4 @@ class ProfileController extends Controller
         }
         return redirect()->route('profile', ['id' => Auth::user()->id]);
     }
-
-
 }

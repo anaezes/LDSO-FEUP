@@ -50,19 +50,13 @@ class ProposalController extends Controller
 
         $timestamp = ProposalController::createTimestamp($proposal->datecreated, $proposal->duration);
 
-        if ($timestamp === "Proposal has ended!")
-        {
+        if ($timestamp === "Proposal has ended!") {
             $proposal->proposal_status = "finished";
-        }
-
-        else {
+        } else {
             $proposal->proposal_status = "approved";
         }
 
-
         $update = ProposalController::updateProposals();
-
-
 
         $facultyNumber = FacultyProposal::where('idproposal', $proposal->id)->get()->first();
         if ($facultyNumber != null) {
@@ -76,7 +70,7 @@ class ProposalController extends Controller
             $facultyName = "No faculty";
         }
 
-        $skills = DB::select('SELECT skillname from skill, skill_proposal 
+        $skills = DB::select('SELECT skillname from skill, skill_proposal
                   WHERE skill.id = skill_proposal.idSkill AND skill_proposal.idProposal = ?', [$proposal->id]);
 
         $proposal->skills = $skills;
@@ -84,14 +78,12 @@ class ProposalController extends Controller
         $bids = DB::select('SELECT id, idteam, biddate from bid WHERE  bid.idProposal = ?', [$proposal->id]);
 
         foreach ($bids as $bid) {
-          $team = Team::where('id', $bid->idteam)->get()->first();
-          $bid->teamname = $team->teamname;
-          $leader = User::where('id', $team->idleader)->get()->first();
-          $bid->teamleaderid = $leader->id;
-          $bid->teamleadername = "$leader->username";
-
+            $team = Team::where('id', $bid->idteam)->get()->first();
+            $bid->teamname = $team->teamname;
+            $leader = User::where('id', $team->idleader)->get()->first();
+            $bid->teamleaderid = $leader->id;
+            $bid->teamleadername = "$leader->username";
         }
-
 
         return view('pages.proposal', ['proposal' => $proposal,
             'facultyName' => $facultyName,
@@ -151,8 +143,7 @@ class ProposalController extends Controller
                     $saveImage->save();
                 }
                 DB::commit();
-            }
-            else{
+            } else {
                 DB::rollback();
                 $errors = new MessageBag();
 
@@ -228,11 +219,9 @@ class ProposalController extends Controller
             $message .= "\npostal code: " . $notification->user->PostalCode;
 
             // (new ProposalController)::sendMail($message, $proposal->user->email);
-
         } catch (QueryException $qe) {
             return response('NOT FOUND', 404);
         }
-
     }
 
     public static function notifyProponent($id)
@@ -254,16 +243,12 @@ class ProposalController extends Controller
             $message .= "\npostal code: " . $notification->user->PostalCode;
 
             // (new ProposalController)::sendMail($message, $proposal->user->email);
-
         } catch (QueryException $qe) {
             return response('NOT FOUND', 404);
         }
 
         return redirect('/proposal/' . $id);
-
     }
-
-
 
     public function sendMail($message, $email)
     {
@@ -294,7 +279,7 @@ class ProposalController extends Controller
       */
     public static function notifyWinner($id)
     {
-        try{
+        try {
             $proposal = Proposal::findOrFail($id);
             $winner = $proposal->bids()->where('winner', true)->first();
 
@@ -305,8 +290,7 @@ class ProposalController extends Controller
             $notification->idusers = $winner->team->user->id;
             $notification->idproposal = $proposal->id;
             $notification->save();
-
-        }catch(QueryException $qe){
+        } catch (QueryException $qe) {
             return response('NOT FOUND', 404);
         }
         return response('success', 200);
@@ -319,11 +303,11 @@ class ProposalController extends Controller
       */
     public static function notifyBidders($id)
     {
-        try{
+        try {
             $proposal = Proposal::findOrFail($id);
 
-            foreach ($proposal->bids as $bid){
-                if(!$bid->winner){
+            foreach ($proposal->bids as $bid) {
+                if (!$bid->winner) {
                     $text = "You lost the proposal for " . $proposal->title . ".";
 
                     $notification = new Notification;
@@ -333,7 +317,7 @@ class ProposalController extends Controller
                     $notification->save();
                 }
             }
-        }catch(QueryException $qe) {
+        } catch (QueryException $qe) {
             return response('NOT FOUND', 404);
         }
         return response('success', 200);

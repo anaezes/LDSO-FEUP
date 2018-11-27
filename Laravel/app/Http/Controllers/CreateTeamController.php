@@ -40,7 +40,7 @@ class CreateTeamController extends Controller
       */
     private function db_create(Request $request)
     {
-            $created_team = DB::transaction(function () use ($request) {
+        $created_team = DB::transaction(function () use ($request) {
             $save_team = new Team;
             $save_team->idleader = Auth::user()->id;
 
@@ -55,7 +55,7 @@ class CreateTeamController extends Controller
             return $save_team;
 
             $members = $request->input('members');
-            foreach($members as $member){
+            foreach ($members as $member) {
                 $save_member = User::where('name', $member)->get()->first();
                 $save_team->members()->attach($save_member->id);
             }
@@ -88,6 +88,4 @@ class CreateTeamController extends Controller
         }
         return redirect()->route('team', ['id' => $created_team->id]);
     }
-
-
 }

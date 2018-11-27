@@ -20,16 +20,6 @@ use Illuminate\Support\MessageBag;
 
 class CreateproposalController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-     */
 
     /**
      * Create a new controller instance.
@@ -57,7 +47,7 @@ class CreateproposalController extends Controller
       */
     private function db_create(Request $request)
     {
-            $createdproposal = DB::transaction(function () use ($request) {
+        $createdproposal = DB::transaction(function () use ($request) {
 
             $saveproposal = new Proposal;
             $saveproposal->idproponent = Auth::user()->id;
@@ -74,19 +64,17 @@ class CreateproposalController extends Controller
 
 
             $public_prop = $request->input('public_prop');
-            if ($public_prop == 'on'){
+            if ($public_prop == 'on') {
                 $saveproposal->proposal_public = true;
-            }
-            else {
+            } else {
                 $saveproposal->proposal_public = false;
             }
 
 
             $public_bid = $request->input('public_bid');
-            if ($public_bid == 'on'){
+            if ($public_bid == 'on') {
                 $saveproposal->bid_public = true;
-            }
-            else {
+            } else {
                 $saveproposal->bid_public = false;
             }
 
@@ -94,24 +82,19 @@ class CreateproposalController extends Controller
             $saveproposal->save();
 
             $faculties = $request->input('faculty');
-            foreach($faculties as $faculty){
+            foreach ($faculties as $faculty) {
                 $saveFaculty = Faculty::where('facultyname', $faculty)->get()->first();
                 $saveproposal->faculty()->attach($saveFaculty->id);
             }
 
-
             $skills = $request->input('skill');
-            foreach($skills as $skill) {
+            foreach ($skills as $skill) {
                 $saveSkill = Skill::where('skillname', $skill)->get()->first();
                 $saveproposal->skill()->attach($saveSkill->id);
                 //DB::insert("INSERT INTO skill_proposal (idskill, idproposal) VALUES (?, ?)", [$saveSkill->id, $saveproposal->id]);
             }
 
-
             $input = $request->all();
-
-
-
             return $saveproposal;
         });
 

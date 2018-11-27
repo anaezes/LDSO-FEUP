@@ -196,8 +196,6 @@ class AdminController extends Controller
         if ($id !== null) {
             return response($id, 200);
         }
-
-
     }
 
     /**

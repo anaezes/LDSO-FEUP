@@ -28,7 +28,8 @@ class Faculty extends Model
     * The proposals associated with this faculty
     *
     */
-    public function proposal(){
+    public function proposal()
+    {
         return $this->belongsToMany('App\Proposal', 'faculty_proposal', 'idfaculty', 'idproposal');
     }
 
@@ -36,7 +37,8 @@ class Faculty extends Model
     * The teams associated with this faculty
     *
     */
-    public function teams() {
-      return $this->belongsToMany('App\Team', 'team_faculty', 'idfaculty', 'idteam');
+    public function teams()
+    {
+        return $this->belongsToMany('App\Team', 'team_faculty', 'idfaculty', 'idteam');
     }
 }

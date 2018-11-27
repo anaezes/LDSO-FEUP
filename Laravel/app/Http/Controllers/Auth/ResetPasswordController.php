@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-
 use Auth;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Http\Request;
@@ -61,8 +60,7 @@ class ResetPasswordController extends Controller
       */
     public function getReset($token = null)
     {
-        if (is_null($token))
-        {
+        if (is_null($token)) {
             throw new NotFoundHttpException;
         }
 
