@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Mailgun\Mailgun;
 use GuzzleHttp\Client;
+use Validator;
+use Illuminate\Validation\Rule;
+
 
 class ProposalController extends Controller
 {
@@ -131,8 +134,13 @@ class ProposalController extends Controller
             'proposalTitle' => [
                 'required',
                 'string',
-                Rule::unique('proposal')->ignore()
+                Rule::unique('proposal', 'title')->ignore($proposal->id)
             ],
+            'proposalDescription' => 'required|string|min:20',
+            'proposalSkills' => 'array|exists:skill,id',
+            'proposalFaculty' => 'array|exists:faculty,id',
+            'proposalDueDate' => 'required|date',
+            'proposalAnnounceDate' => 'required|date'
         ]);
 
         if ($validator->fails()) {
@@ -141,6 +149,39 @@ class ProposalController extends Controller
                              ->withInput();
         }
 
+
+        $proposal->title = $request->proposalTitle;
+
+        $proposal->description = $request->proposalDescription;
+
+        $skills = $request->input('proposalSkills.*', []);
+        foreach ($proposal->skill as $skill) {
+            if (!in_array($skill->id, $skills)) {
+                $proposal->skill()->detach($skill->id);
+            }
+        }
+        $proposal->skill()->syncWithoutDetaching($skills);
+
+
+        $faculties = $request->input('proposalFaculty.*', []);
+        foreach ($proposal->faculty as $faculty) {
+            if (!in_array($faculty->id, $faculties)) {
+                $proposal->faculty()->detach($faculty->id);
+            }
+        }
+        $proposal->faculty()->syncWithoutDetaching($faculties);
+
+        $proposal->duedate = $request->proposalDueDate;
+        
+        $proposal->announcedate = $request->proposalAnnounceDate;
+
+        $proposal->proposal_public = $request->proposalPublic;
+
+        $proposal->bid_public = $request->proposalBid;
+
+        $proposal->save();
+
+        return ProposalController::show($proposal->id);
 
     }
 
