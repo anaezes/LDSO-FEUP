@@ -65,7 +65,6 @@ class SearchController extends Controller
                 array_push($queryResults, $res);
             }
             if ($request->input('userBidWinner') !== null && Auth::check()) {
-                //$res = DB::select("SELECT DISTINCT proposal.id FROM proposal, bid WHERE bid.idproposal = proposal.id and bid.idBuyer = ? and proposal.proposal_status = ? ", [Auth::user()->id, 'approved']);
                 $res = DB::table('proposal')
                     ->join('bid', 'proposal.id', '=', 'bid.idproposal')
                     ->join('team', 'bid.idteam', '=', 'team.id')

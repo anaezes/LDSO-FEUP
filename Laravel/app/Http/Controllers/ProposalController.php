@@ -58,10 +58,8 @@ class ProposalController extends Controller
         else {
             $proposal->proposal_status = "approved";
         }
-
-
+        
         $update = ProposalController::updateProposals();
-
 
 
         $facultyNumber = FacultyProposal::where('idproposal', $proposal->id)->get()->first();
@@ -235,10 +233,17 @@ class ProposalController extends Controller
 
     }
 
-    public static function notifyProponent($id)
+    public static function notifyProponent($id,Request $request)
     {
         try {
+            
             $proposal = Proposal::findOrFail($id);
+            DB::table('bid')->join('proposal', 'proposal.id', '=', 'bid.idproposal')
+                ->where([
+                    ['proposal.id','=', $id],
+                    ['bid.winner','=', true]
+                ])
+                ->update(['selfevaluation' => $request->input('self_evaluation')]);
             $text = "Your proposal ".$proposal->title." has finished, here is your project(project.rar)!";
 
             $notification = new Notification;

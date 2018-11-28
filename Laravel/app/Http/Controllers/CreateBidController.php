@@ -59,6 +59,7 @@ class CreateBidController extends Controller
 
             $due = strtotime($request->input('submissionDate'));
             $savebid->submissiondate = date('Y-m-d H:i:s', $due);
+            $savebid->selfevaluation = null;
 
             $savebid->save();
 

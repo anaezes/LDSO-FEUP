@@ -93,9 +93,28 @@
                     @endforeach
                 </td>
             </tr>
-
             </tbody>
         </table>
+        @if ($bid->proposal->proposal_status == "finished" && Auth::id() == $bid->team->user->id)
+        <form class="ml-4 mr-4" method="POST" action="{{ route('proposal.notify', $bid->proposal->id) }}" enctype="multipart/form-data">
+            {{ csrf_field() }}
+            <div class="row">
+                <div class="form-group col-md-3">
+                    <label for="self_evaluation">Self-Evaluation</label>
+                    <input id="self_evaluation" class="form-control" type="number" name="self_evaluation" min="1" max="20" required value="1">
+                    @if ($errors->has('self_evaluation'))
+                        <span class="error">
+                        </span>
+                    {{ $errors->first('self_evaluation') }}
+                    @endif
+                </div>
+                <br>
+                <div class="form-group col-md-3">
+                    <button type="submit" class="btn btn-primary col-md-12">Submit Project</button>
+                </div>
+            <div>
+        </form>
+        @endif
     </div>
 </main>
 
