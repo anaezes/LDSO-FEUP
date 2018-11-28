@@ -57,7 +57,7 @@ class SearchController extends Controller
                 array_push($queryResults, $res1);
             }
             if ($request->input('proposalsOfUser') !== null && Auth::check()) {
-                $res = DB::select("SELECT DISTINCT proposal.id FROM proposal WHERE idproponent = ? AND (proposal_status = ? OR proposal_status=?)", [Auth::user()->id, 'approved', 'waitingApproval']);
+                $res = DB::select("SELECT DISTINCT proposal.id FROM proposal WHERE idproponent = ?", [Auth::user()->id]);
                 array_push($queryResults, $res);
             }
             if ($request->input('userBidOn') !== null && Auth::check()) {
@@ -111,22 +111,13 @@ class SearchController extends Controller
             $response = DB::select($query, []);
 
             foreach ($response as $proposal) {
-                $proposal->maxBid = BidController::getMaxBidInternal($proposal->id);
-                if ($proposal->maxBid == 0) {
-                    $proposal->bidMsg = "No bids yet";
-                } else {
-                    $proposal->bidMsg = $proposal->maxBid . "€";
-                }
-
                 if ($proposal->proposal_status == "waitingApproval") {
                     $proposal->time = "Not yet started";
                 } elseif ($proposal->proposal_status == "approved") {
-                    $proposal->time = ProposalController::createTimestamp($proposal->dateapproved, $proposal->duration);
+                    $proposal->time = ProposalController::createTimestamp($proposal->datecreated, $proposal->duration);
                 } elseif ($proposal->proposal_status == "finished") {
                     $proposal->time = "Finished";
                 }
-
-
             }
         } catch (Exception $e) {
             $this->error($e);

@@ -1,0 +1,31 @@
+version: '3'
+services:
+
+  web-prod:
+    image: hitalos/laravel:latest
+    ports:
+        - 8100:80
+    volumes:
+        - ./:/var/www
+    depends_on:
+        - postgres-prod
+    environment:
+        DB_HOST: postgres-prod
+        DB_DATABASE: prod
+        DB_USERNAME: prod
+        DB_PASSWORD: pg!fcp
+        DB_CONNECTION: pgsql
+    command: bash -c "composer install
+             && php artisan db:seed
+             && php artisan serve --host=0.0.0.0 --port=80"
+
+  postgres-prod:
+    image: postgres:9.4
+    restart: always
+    environment:
+        POSTGRES_DB: prod
+        POSTGRES_USER: prod
+        POSTGRES_PASSWORD: pg!fcp
+        PGPORT: 5431
+    ports:
+      - 5431:5431
