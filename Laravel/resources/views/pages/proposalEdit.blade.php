@@ -45,7 +45,7 @@
                     </h3>
                 </div>
                 <div class="col-lg-8">
-                    <textarea name="proposalDescription" cols="70" rows="5" class="w-100" minlength="20" placeholder="Proposal's description">{{ $proposal->description }}</textarea>
+                    <textarea name="proposalDescription" cols="70" rows="5" class="w-100" minlength="20" placeholder="Proposal's description" required>{{ $proposal->description }}</textarea>
                 </div>
             </div>
 
@@ -110,8 +110,13 @@
                     <?php
                         $created = strtotime($proposal->datecreated);
                         $duedate = strtotime($proposal->duedate);
+                        $announce = strtotime($proposal->announcedate);
+                        $day = 86400;
+                        $month = $day * 30;
+                        $year = $day * 365;
+                        $today = date('Y-m-d');
                     ?>
-                    <input type="date" name="proposalDueDate" value="{{ date('Y-m-d', $duedate) }}" min="{{ date('Y-m-d', $duedate) }}" max="{{ date('Y-m-d',mktime(0, 0, 0, date('m', $created), date('d', $created), date('Y', $created)+2)) }}" required>
+                    <input type="date" name="proposalDueDate" value="{{ date('Y-m-d', $duedate) }}" min="{{ date('Y-m-d', $created + $proposal->duration) }}" max="{{ date('Y-m-d',$created + 1*$year) }}" required>
                 </div>
             </div>
 
@@ -131,11 +136,7 @@
                     </h6>
                 </div>
                 <div class="col-lg-8">
-                    <?php
-                        $created = strtotime($proposal->datecreated);
-                        $announce = strtotime($proposal->announcedate);
-                    ?>
-                    <input type="date" name="proposalAnnounceDate" value="{{ date('Y-m-d', $announce) }}" min="{{ date('Y-m-d', $announce) }}" max="{{ date('Y-m-d',mktime(0, 0, 0, date('m', $created), date('d', $created), date('Y', $created)+1)) }}" required>
+                    <input type="date" name="proposalAnnounceDate" value="{{ date('Y-m-d', $announce) }}" min="{{ date('Y-m-d', $created + $proposal->duration) }}" max="{{ date('Y-m-d', $created + $proposal->duration + 3*$month) }}" required>
                 </div>
             </div>
 

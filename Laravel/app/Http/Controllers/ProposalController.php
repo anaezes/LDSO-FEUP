@@ -130,6 +130,14 @@ class ProposalController extends Controller
     {
         $proposal = Proposal::find($id);
 
+        $created = strtotime($proposal->datecreated);
+        $duedate = strtotime($proposal->duedate);
+        $announce = strtotime($proposal->announcedate);
+        $duration = $proposal->duration;
+        $day = 86400;
+        $month = $day * 30;
+        $year = $day * 365;
+
         $validator = Validator::make($request->all(), [
             'proposalTitle' => [
                 'required',
@@ -139,8 +147,8 @@ class ProposalController extends Controller
             'proposalDescription' => 'required|string|min:20',
             'proposalSkills' => 'array|exists:skill,id',
             'proposalFaculty' => 'array|exists:faculty,id',
-            'proposalDueDate' => 'required|date',
-            'proposalAnnounceDate' => 'required|date'
+            'proposalDueDate' => 'required|date|after:proposalAnnounceDate',
+            'proposalAnnounceDate' => 'required|date|after_or_equal:'.date('Y-m-d', $created + $duration )."|before_or_equal:".date('Y-m-d',$created + $duration + 3 * $month)
         ]);
 
         if ($validator->fails()) {
