@@ -47,7 +47,7 @@ class ProposalController extends Controller
         $proposal = Proposal::find($id);
 
         //todo when exist moderators
-        // $proposal->proposal_status = "approved";
+        // $proposal->proposal_status = "approved"; 
         $proposal->duedate = date('Y-m-d', strtotime($proposal->duedate));
         $proposal->announcedate = date('Y-m-d', strtotime($proposal->announcedate));
 
@@ -175,13 +175,13 @@ class ProposalController extends Controller
         
         $proposal->announcedate = $request->proposalAnnounceDate;
 
-        $proposal->proposal_public = $request->proposalPublic;
+        $proposal->proposal_public = $request->has('proposalPublic') ? true : false;
 
-        $proposal->bid_public = $request->proposalBid;
+        $proposal->bid_public = $request->has('proposalBid') ? true : false;
 
         $proposal->save();
 
-        return ProposalController::show($proposal->id);
+        return redirect()->route('proposal', [$proposal]);
 
     }
 
