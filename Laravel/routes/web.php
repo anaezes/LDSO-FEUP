@@ -29,7 +29,6 @@ Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('passw
 // Home
 Route::get('home', 'HomeController@show')->name('home');
 
-
 // Create Proposal
 Route::get('create', 'CreateProposalController@show')->name('create');
 Route::post('create', 'CreateProposalController@create');
@@ -70,7 +69,6 @@ Route::post('api/bid', 'API\BidController@bidNewValue');
 Route::get('api/notifications', 'API\NotificationsController@getNotifications');
 Route::post('/notifications/{id}','API\NotificationsController@markAsSeen');
 
-
 //Search Page
 Route::get('search', 'SearchController@show')->name('search');
 Route::post('search', 'SearchController@simpleSearch')->name('search');
@@ -81,10 +79,6 @@ Route::get('history', 'ListController@history')->name('history');
 Route::get('myproposals', 'ListController@myproposals')->name('myproposals');
 Route::get('proposals_im_in','ListController@proposalsImIn')->name('proposals_im_in');
 Route::get('allproposals', 'ListController@allproposals')->name('allproposals');
-
-
-//Administrator
-Route::get('admin','AdministratorController@show')->name('admin');
 
 //Team
 Route::resource('team', 'TeamController')->except('create');

@@ -45,7 +45,7 @@ class CreateproposalController extends Controller
       * @param Request $request
       * @return created proposal
       */
-    private function db_create(Request $request)
+    private function dbCreate(Request $request)
     {
         $createdproposal = DB::transaction(function () use ($request) {
 
@@ -112,7 +112,7 @@ class CreateproposalController extends Controller
         }
 
         try {
-            $createdproposal = $this->db_create($request);
+            $createdproposal = $this->dbCreate($request);
         } catch (Exception $qe) {
             $errors = new MessageBag();
 

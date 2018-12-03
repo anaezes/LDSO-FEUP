@@ -44,7 +44,7 @@ class CreateBidController extends Controller
      * @param Request $request
      * @return created bid
      */
-    private function db_create($id, Request $request)
+    private function dbCreate($id, Request $request)
     {
         $createdbid = DB::transaction(function () use ($id, $request) {
 
@@ -75,7 +75,7 @@ class CreateBidController extends Controller
         }
 
         try {
-            $createdbid = $this->db_create($id, $request);
+            $createdbid = $this->dbCreate($id, $request);
         } catch (Exception $qe) {
             $errors = new MessageBag();
 
