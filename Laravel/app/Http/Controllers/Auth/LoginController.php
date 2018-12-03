@@ -55,17 +55,17 @@ class LoginController extends Controller
     {
         if ($user->isNormal()) {
             return redirect()->route('home');
-        } else if ($user->isModerator() || $user->isAdmin()) {
+        } elseif ($user->isModerator() || $user->isAdmin()) {
             return redirect()->route('home');
-        } else if ($user->isSuspended()) {
+        } elseif ($user->isSuspended()) {
             Auth::logout();
             return redirect()->route('contact')->withErrors("Your account has been suspended. Contact the admin through the contact page for details.");
-        } else if ($user->isBanned()) {
+        } elseif ($user->isBanned()) {
             Auth::logout();
-            return redirect()->route('contact')->withErrors("You are permanently banned. Contact the admin through contact page for details.");
-        } else if ($user->isTerminated()) {
+            return redirect()->route('contact')->withErrors("You are permanently banned. Contact the admin through the contact page for details.");
+        } elseif ($user->isTerminated()) {
             Auth::logout();
-            return redirect()->route('contact')->withErrors("Your account has been terminated. Contact the admin through contact page for details.");
+            return redirect()->route('contact')->withErrors("Your account has been terminated. Contact the admin through the contact page for details.");
         }
     }
 }

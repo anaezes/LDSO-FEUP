@@ -20,6 +20,4 @@ class FacultyProposal extends Model
      * @var string
      */
     protected $table = 'faculty_proposal';
-
-
 }

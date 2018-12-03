@@ -21,7 +21,6 @@ use GuzzleHttp\Client;
 use Validator;
 use Illuminate\Validation\Rule;
 
-
 class ProposalController extends Controller
 {
     private static $lastUpdate = 0;
@@ -39,33 +38,25 @@ class ProposalController extends Controller
     /**
      * Shows the proposal for a given id.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return Response
      */
     public function show($id)
     {
         $proposal = Proposal::find($id);
 
-        //todo when exist moderators
-        // $proposal->proposal_status = "approved"; 
         $proposal->duedate = date('Y-m-d', strtotime($proposal->duedate));
         $proposal->announcedate = date('Y-m-d', strtotime($proposal->announcedate));
 
         $timestamp = ProposalController::createTimestamp($proposal->datecreated, $proposal->duration);
 
-        if ($timestamp === "Proposal has ended!")
-        {
+        if ($timestamp === "Proposal has ended!") {
             $proposal->proposal_status = "finished";
-        }
-
-        else {
+        } else {
             $proposal->proposal_status = "approved";
         }
 
-
         $update = ProposalController::updateProposals();
-
-
 
         $facultyNumber = FacultyProposal::where('idproposal', $proposal->id)->get()->first();
         if ($facultyNumber != null) {
@@ -79,35 +70,40 @@ class ProposalController extends Controller
             $facultyName = "No faculty";
         }
 
-        $skills = DB::select('SELECT skillname from skill, skill_proposal 
-                  WHERE skill.id = skill_proposal.idSkill AND skill_proposal.idProposal = ?', [$proposal->id]);
+        $skills = DB::select(
+            'SELECT skillname from skill, skill_proposal
+                  WHERE skill.id = skill_proposal.idSkill
+                  AND skill_proposal.idProposal = ?',
+            [$proposal->id]
+        );
 
         $proposal->skills = $skills;
 
         $bids = DB::select('SELECT id, idteam, biddate from bid WHERE  bid.idProposal = ?', [$proposal->id]);
 
         foreach ($bids as $bid) {
-          $team = Team::where('id', $bid->idteam)->get()->first();
-          $bid->teamname = $team->teamname;
-          $leader = User::where('id', $team->idleader)->get()->first();
-          $bid->teamleaderid = $leader->id;
-          $bid->teamleadername = "$leader->username";
-
+            $team = Team::where('id', $bid->idteam)->get()->first();
+            $bid->teamname = $team->teamname;
+            $leader = User::where('id', $team->idleader)->get()->first();
+            $bid->teamleaderid = $leader->id;
+            $bid->teamleadername = "$leader->username";
         }
 
-
-        return view('pages.proposal', ['proposal' => $proposal,
+        return view(
+            'pages.proposal',
+            ['proposal' => $proposal,
             'facultyName' => $facultyName,
             'bids' => $bids,
-            'timestamp' => $timestamp]);
+            'timestamp' => $timestamp]
+        );
     }
 
     /**
-    * Show the form for editing the specified resource.
-    *
-    * @param  int  $id
-    * @return \Illuminate\Http\Response
-    */
+     * Show the form for editing the specified resource.
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
     public function edit($id)
     {
         $proposal = Proposal::find($id);
@@ -120,12 +116,12 @@ class ProposalController extends Controller
     }
 
     /**
-    * Update the specified resource in storage.
-    *
-    * @param  \Illuminate\Http\Request  $request
-    * @param  int  $id
-    * @return \Illuminate\Http\Response
-    */
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  int                      $id
+     * @return \Illuminate\Http\Response
+     */
     public function update(Request $request, $id)
     {
         $proposal = Proposal::find($id);
@@ -138,7 +134,9 @@ class ProposalController extends Controller
         $month = $day * 30;
         $year = $day * 365;
 
-        $validator = Validator::make($request->all(), [
+        $validator = Validator::make(
+            $request->all(),
+            [
             'proposalTitle' => [
                 'required',
                 'string',
@@ -148,15 +146,15 @@ class ProposalController extends Controller
             'proposalSkills' => 'array|exists:skill,id',
             'proposalFaculty' => 'array|exists:faculty,id',
             'proposalDueDate' => 'required|date|after:proposalAnnounceDate',
-            'proposalAnnounceDate' => 'required|date|after_or_equal:'.date('Y-m-d', $created + $duration )."|before_or_equal:".date('Y-m-d',$created + $duration + 3 * $month)
-        ]);
+            'proposalAnnounceDate' => 'required|date|after_or_equal:'.date('Y-m-d', $created + $duration)."|before_or_equal:".date('Y-m-d', $created + $duration + 3 * $month)
+            ]
+        );
 
         if ($validator->fails()) {
             return redirect()->back()
-                             ->withErrors($validator)
-                             ->withInput();
+                ->withErrors($validator)
+                ->withInput();
         }
-
 
         $proposal->title = $request->proposalTitle;
 
@@ -190,12 +188,11 @@ class ProposalController extends Controller
         $proposal->save();
 
         return redirect()->route('proposal', [$proposal]);
-
     }
 
     /**
-      * Updates all proposals, setting them to finished if their time is up and sending out notifications
-      */
+     * Updates all proposals, setting them to finished if their time is up and sending out notifications
+     */
     public function updateProposals()
     {
         $proposals = DB::select("SELECT id, duration, dateApproved, idproponent FROM proposal WHERE proposal_status = ?", ["approved"]);
@@ -224,10 +221,11 @@ class ProposalController extends Controller
     }
 
     /**
-      * Notifies the owner of an proposal if it is finished
-      * @param int $id
-      * @return 404 if error
-      */
+     * Notifies the owner of an proposal if it is finished
+     *
+     * @param  int $id
+     * @return 404 if error
+     */
     public static function notifyOwner($id)
     {
         try {
@@ -247,11 +245,9 @@ class ProposalController extends Controller
             $message .= "\npostal code: " . $notification->user->PostalCode;
 
             // (new ProposalController)::sendMail($message, $proposal->user->email);
-
         } catch (QueryException $qe) {
             return response('NOT FOUND', 404);
         }
-
     }
 
     public static function notifyProponent($id)
@@ -273,23 +269,21 @@ class ProposalController extends Controller
             $message .= "\npostal code: " . $notification->user->PostalCode;
 
             // (new ProposalController)::sendMail($message, $proposal->user->email);
-
         } catch (QueryException $qe) {
             return response('NOT FOUND', 404);
         }
 
         return redirect('/proposal/' . $id);
-
     }
-
-
 
     public function sendMail($message, $email)
     {
-        $client = new Client([
+        $client = new Client(
+            [
             'base_uri' => 'https://api.mailgun.net/v3',
             'verify' => false,
-        ]);
+            ]
+        );
         $adapter = new \Http\Adapter\Guzzle6\Client($client);
         $domain = "sandboxeb3d0437da8c4b4f8d5a428ed93f64cc.mailgun.org";
         $mailgun = new \Mailgun\Mailgun('key-44a6c35045fe3c3add9fcf0a018e654e', $adapter);
@@ -307,13 +301,14 @@ class ProposalController extends Controller
     }
 
     /**
-      * Notifies winner and sends an email with purchase info
-      * @param int $id
-      * @return 200 if successful, 404 if not
-      */
+     * Notifies winner and sends an email with purchase info
+     *
+     * @param  int $id
+     * @return 200 if successful, 404 if not
+     */
     public static function notifyWinner($id)
     {
-        try{
+        try {
             $proposal = Proposal::findOrFail($id);
             $winner = $proposal->bids()->where('winner', true)->first();
 
@@ -324,25 +319,25 @@ class ProposalController extends Controller
             $notification->idusers = $winner->team->user->id;
             $notification->idproposal = $proposal->id;
             $notification->save();
-
-        }catch(QueryException $qe){
+        } catch (QueryException $qe) {
             return response('NOT FOUND', 404);
         }
         return response('success', 200);
     }
 
     /**
-      * Notifies all bidders if proposal is finished
-      * @param int $id
-      * @return 200 if ok, 404 if not
-      */
+     * Notifies all bidders if proposal is finished
+     *
+     * @param  int $id
+     * @return 200 if ok, 404 if not
+     */
     public static function notifyBidders($id)
     {
-        try{
+        try {
             $proposal = Proposal::findOrFail($id);
 
-            foreach ($proposal->bids as $bid){
-                if(!$bid->winner){
+            foreach ($proposal->bids as $bid) {
+                if (!$bid->winner) {
                     $text = "You lost the proposal for " . $proposal->title . ".";
 
                     $notification = new Notification;
@@ -352,18 +347,19 @@ class ProposalController extends Controller
                     $notification->save();
                 }
             }
-        }catch(QueryException $qe) {
+        } catch (QueryException $qe) {
             return response('NOT FOUND', 404);
         }
         return response('success', 200);
     }
 
     /**
-      * Creates a timestamp based on a starting date and a duration
-      * @param String $dateCreated
-      * @param int $duration
-      * @return String timestamp
-      */
+     * Creates a timestamp based on a starting date and a duration
+     *
+     * @param  String $dateCreated
+     * @param  int    $duration
+     * @return String timestamp
+     */
     public static function createTimestamp($dateCreated, $duration)
     {
         $start = strtotime($dateCreated);

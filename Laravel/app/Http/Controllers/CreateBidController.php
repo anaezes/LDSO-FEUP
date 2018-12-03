@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\MessageBag;
 
-
 class CreateBidController extends Controller
 {
 
@@ -41,11 +40,11 @@ class CreateBidController extends Controller
 
     /**
      * Creates a new bid
-    @param int $id
+     * @param int $id
      * @param Request $request
      * @return created bid
      */
-    private function db_create($id, Request $request)
+    private function dbCreate($id, Request $request)
     {
         $createdbid = DB::transaction(function () use ($id, $request) {
 
@@ -53,7 +52,7 @@ class CreateBidController extends Controller
 
             $savebid->idproposal = $id;
 
-            $savebid->idteam = $request->input('team');;
+            $savebid->idteam = $request->input('team');
 
             $savebid->description = $request->input('descriptionBid');
 
@@ -68,15 +67,15 @@ class CreateBidController extends Controller
         return $createdbid;
     }
 
-    public function createBid(Request $request, $id) {
-
+    public function createBid(Request $request, $id)
+    {
 
         if (!Auth::check()) {
             return redirect('/home');
         }
 
         try {
-            $createdbid = $this->db_create($id, $request);
+            $createdbid = $this->dbCreate($id, $request);
         } catch (Exception $qe) {
             $errors = new MessageBag();
 

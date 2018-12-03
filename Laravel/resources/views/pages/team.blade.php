@@ -277,7 +277,7 @@
 
     <!-- Participations -->
     <?php
-      $bids = App\Bid::where('idteam', $team->id)->get();
+     $bids = App\Bid::where('idteam', $team->id)->get();
      ?>
     <div class="row mt-3">
       <div class="col-lg-3">

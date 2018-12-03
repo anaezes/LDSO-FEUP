@@ -22,5 +22,4 @@ class TeamMember extends Model
     protected $table = 'team_member';
 
     protected $primaryKey = "id";
-
 }

@@ -74,6 +74,5 @@ class Handler extends ExceptionHandler
         return redirect()
             ->route('home')
             ->withErrors($errors);
-
     }
 }

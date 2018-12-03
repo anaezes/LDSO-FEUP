@@ -17,7 +17,6 @@ use GuzzleHttp\Client;
 class TeamMemberController extends Controller
 {
 
-
     /**
      * Create a new controller instance.
      *
@@ -27,6 +26,4 @@ class TeamMemberController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
-
-
 }
