@@ -84,7 +84,7 @@ CREATE TABLE proposal (
     dueDate TIMESTAMP WITH TIME zone NOT NULL,
     announceDate TIMESTAMP WITH TIME zone NOT NULL,
     idProponent INTEGER NOT NULL REFERENCES users(id),
-    CONSTRAINT proposal_status_ck CHECK ((proposal_status = ANY (ARRAY['approved'::text, 'removed'::text, 'waitingApproval'::text, 'finished'::text]))),
+    CONSTRAINT proposal_status_ck CHECK ((proposal_status = ANY (ARRAY['approved'::text, 'removed'::text, 'waitingApproval'::text, 'finished'::text, 'evaluated'::text]))),
     CONSTRAINT duration_ck CHECK (duration >= 300)
 );
 

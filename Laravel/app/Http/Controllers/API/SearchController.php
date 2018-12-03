@@ -70,7 +70,8 @@ class SearchController extends Controller
                     ->join('team', 'bid.idteam', '=', 'team.id')
                     ->where([
                             ['team.idleader', '=', Auth::user()->id],
-                            ['bid.winner', '=', true]
+                            ['bid.winner', '=', true],
+                            ['proposal.proposal_status', '!=', 'evaluated'],
                         ])
                     ->select('proposal.id')->get();
                 array_push($queryResults, $res);

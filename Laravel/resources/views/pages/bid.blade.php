@@ -95,7 +95,7 @@
             </tr>
             </tbody>
         </table>
-        @if ($bid->winner == true && $bid->proposal->proposal_status == "finished" && Auth::id() == $bid->team->user->id && $bid->selfevaluation == null)
+        @if ($bid->winner == true && $bid->proposal->proposal_status != "evaluated" && Auth::id() == $bid->team->user->id && $bid->selfevaluation == null)
         <form class="ml-4 mr-4" method="POST" action="{{ route('proposal.notify', $bid->proposal->id) }}" enctype="multipart/form-data" style = "margin-top: 5em">
             {{ csrf_field() }}
             <div class="row">

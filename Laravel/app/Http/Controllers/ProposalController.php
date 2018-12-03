@@ -50,13 +50,15 @@ class ProposalController extends Controller
 
         $timestamp = ProposalController::createTimestamp($proposal->datecreated, $proposal->duration);
 
-        if ($timestamp === "Proposal has ended!")
+        if ($timestamp === "Proposal has ended!" && $proposal->proposal_status != "evaluated")
         {
             $proposal->proposal_status = "finished";
         }
-
         else {
-            $proposal->proposal_status = "approved";
+            if ($proposal->proposal_status != "evaluated"){
+                $proposal->proposal_status = "approved";
+            }
+            
         }
         
         $update = ProposalController::updateProposals();
@@ -238,12 +240,15 @@ class ProposalController extends Controller
         try {
             
             $proposal = Proposal::findOrFail($id);
+            DB::table('proposal')->where('proposal.id', '=', $id)->update(['proposal_status' => 'evaluated']);
+            $proposal->proposal_status = "evaluated";
             DB::table('bid')->join('proposal', 'proposal.id', '=', 'bid.idproposal')
                 ->where([
                     ['proposal.id','=', $id],
                     ['bid.winner','=', true]
                 ])
                 ->update(['selfevaluation' => $request->input('self_evaluation')]);
+            
             $text = "Your proposal ".$proposal->title." has finished, here is your project(project.rar)!";
 
             $notification = new Notification;
