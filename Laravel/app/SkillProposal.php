@@ -20,5 +20,4 @@ class SkillProposal extends Model
      * @var string
      */
     protected $table = 'skill_proposal';
-
 }

@@ -67,7 +67,7 @@ Route::get('api/search', 'API\SearchController@search');
 Route::get('api/bid', 'API\BidController@getMaxBid');
 Route::post('api/bid', 'API\BidController@bidNewValue');
 Route::get('api/notifications', 'API\NotificationsController@getNotifications');
-Route::post('/notifications/{id}','API\NotificationsController@markAsSeen');
+Route::post('/notifications/{id}', 'API\NotificationsController@markAsSeen');
 
 //Search Page
 Route::get('search', 'SearchController@show')->name('search');
@@ -75,9 +75,8 @@ Route::post('search', 'SearchController@simpleSearch')->name('search');
 
 //ListPages
 Route::get('history', 'ListController@history')->name('history');
-// Route::get('teams', 'ListController@teams')->name('teams');
 Route::get('myproposals', 'ListController@myproposals')->name('myproposals');
-Route::get('proposals_im_in','ListController@proposalsImIn')->name('proposals_im_in');
+Route::get('proposals_im_in', 'ListController@proposalsImIn')->name('proposals_im_in');
 Route::get('allproposals', 'ListController@allproposals')->name('allproposals');
 
 //Team
