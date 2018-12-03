@@ -179,7 +179,7 @@
                     <a class="dropdown-item" href="{{ url("create/") }}">Create auction</a>
                     <a class="dropdown-item" href="{{ url("myproposals") }}">My Proposals</a>
                     <a class="dropdown-item" href="{{ url("proposals_im_in") }}">Proposals I'm in</a>
-                    <a class="dropdown-item" href="{{ url("proposals_i_won") }}">Proposals I won</a>
+                    <a class="dropdown-item" href="{{ url("proposalsIWon") }}">Proposals I won</a>
                     <a class="dropdown-item" href="{{ url("history") }}">History</a>
                     <a class="dropdown-item" href="{{ url("team") }}">My Teams</a>
                     <!--<a class="dropdown-item" href="messages.html">Messages</a>-->

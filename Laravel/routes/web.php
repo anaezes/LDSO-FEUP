@@ -79,7 +79,7 @@ Route::get('history', 'ListController@history')->name('history');
 Route::get('myproposals', 'ListController@myproposals')->name('myproposals');
 Route::get('proposals_im_in', 'ListController@proposalsImIn')->name('proposals_im_in');
 Route::get('allproposals', 'ListController@allproposals')->name('allproposals');
-Route::get('proposals_i_won', 'ListController@proposals_i_won')->name('proposals_i_won');
+Route::get('proposalsIWon', 'ListController@proposalsIWon')->name('proposalsIWon');
 
 //Team
 Route::resource('team', 'TeamController')->except('create');

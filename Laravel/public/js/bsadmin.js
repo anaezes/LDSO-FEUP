@@ -111,8 +111,8 @@ if (showmorebutton != null)
             case "/history":
                 album.innerHTML += historyAlbum();
                 break;
-            case "/propolas_i_won":
-                album.innerHTML += proposals_i_wonAlbum();
+            case "/proposalsIWon":
+                album.innerHTML += proposalsIWonAlbum();
             break;
             case "/teams":
                 album.innerHTML += teamsAlbum();
@@ -148,9 +148,9 @@ if (window.location.pathname === "/proposals_im_in")
     ajaxCallGet("api/search?userBidOn=true", proposalAlbumHandler);
 }
 
-if (window.location.pathname === "/proposals_i_won")
+if (window.location.pathname === "/proposalsIWon")
 {
-    ajaxCallGet("api/search?userBidWinner=true", proposals_i_wonAlbumHandler);
+    ajaxCallGet("api/search?userBidWinner=true", proposalsIWonAlbumHandler);
 }
 
 if (window.location.pathname === "/history")
@@ -328,13 +328,13 @@ function allproposalsAlbum()
     return htmlproposal;
 }
 
-function proposals_i_wonAlbumHandler(){
+function proposalsIWonAlbumHandler(){
     console.log(this.responseText);
     proposals = JSON.parse(this.responseText);
-    album.innerHTML = proposals_i_wonAlbum();
+    album.innerHTML = proposalsIWonAlbum();
 }
 
-function proposals_i_wonAlbum(){
+function proposalsIWonAlbum(){
     console.log(proposals);
     let htmlproposal = `<div class="row">`;
     let max = i + 12;
