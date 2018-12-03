@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Mailgun\Mailgun;
 use GuzzleHttp\Client;
+use Validator;
+use Illuminate\Validation\Rule;
+
 
 class ProposalController extends Controller
 {
@@ -44,7 +47,7 @@ class ProposalController extends Controller
         $proposal = Proposal::find($id);
 
         //todo when exist moderators
-        // $proposal->proposal_status = "approved";
+        // $proposal->proposal_status = "approved"; 
         $proposal->duedate = date('Y-m-d', strtotime($proposal->duedate));
         $proposal->announcedate = date('Y-m-d', strtotime($proposal->announcedate));
 
@@ -100,10 +103,11 @@ class ProposalController extends Controller
     }
 
     /**
-      * Gets the edit proposal page
-      * @param int $id
-      * @return page
-      */
+    * Show the form for editing the specified resource.
+    *
+    * @param  int  $id
+    * @return \Illuminate\Http\Response
+    */
     public function edit($id)
     {
         $proposal = Proposal::find($id);
@@ -112,66 +116,81 @@ class ProposalController extends Controller
             return redirect('/proposal/' . $id);
         }
 
-        return view('pages.proposalEdit', ['desc' => $proposal->description, 'id' => $id]);
+        return view('pages.proposalEdit', ['proposal' => $proposal]);
     }
 
     /**
-      * Submits an proposal edit request
-      * @param Request $request
-      * @param int $id
-      * @return redirect
-      */
-    public function submitEdit(Request $request, $id)
+    * Update the specified resource in storage.
+    *
+    * @param  \Illuminate\Http\Request  $request
+    * @param  int  $id
+    * @return \Illuminate\Http\Response
+    */
+    public function update(Request $request, $id)
     {
         $proposal = Proposal::find($id);
-        if ($proposal->idproponent != Auth::user()->id) {
-            return redirect('/proposal/' . $id);
-        }
-        try {
-            DB::beginTransaction();
-            if (sizeof(DB::select('select * FROM proposal_modification WHERE proposal_modification.idapprovedproposal = ? AND proposal_modification.is_approved is NULL', [$id])) == "0") {
-                $modID = DB::table('proposal_modification')->insertGetId(['newdescription' => $request->input('description'), 'idapprovedproposal' => $id]);
 
-                $input = $request->all();
-                $images = array();
-                if ($files = $request->file('images')) {
-                    $integer = 0;
-                    foreach ($files as $file) {
-                        $name = time() . (string) $integer . $file->getClientOriginalName();
-                        $file->move('img', $name);
-                        $images[] = $name;
-                        $integer += 1;
-                    }
-                }
+        $created = strtotime($proposal->datecreated);
+        $duedate = strtotime($proposal->duedate);
+        $announce = strtotime($proposal->announcedate);
+        $duration = $proposal->duration;
+        $day = 86400;
+        $month = $day * 30;
+        $year = $day * 365;
 
-                foreach ($images as $image) {
-                    $saveImage = new Image;
-                    $saveImage->source = $image;
-                    $saveImage->idproposalmodification = $modID;
-                    $saveImage->save();
-                }
-                DB::commit();
-            }
-            else{
-                DB::rollback();
-                $errors = new MessageBag();
+        $validator = Validator::make($request->all(), [
+            'proposalTitle' => [
+                'required',
+                'string',
+                Rule::unique('proposal', 'title')->ignore($proposal->id)
+            ],
+            'proposalDescription' => 'required|string|min:20',
+            'proposalSkills' => 'array|exists:skill,id',
+            'proposalFaculty' => 'array|exists:faculty,id',
+            'proposalDueDate' => 'required|date|after:proposalAnnounceDate',
+            'proposalAnnounceDate' => 'required|date|after_or_equal:'.date('Y-m-d', $created + $duration )."|before_or_equal:".date('Y-m-d',$created + $duration + 3 * $month)
+        ]);
 
-                $errors->add('An error ocurred', "There is already a request to edit this proposal's information");
-                return redirect('/proposal/' . $id)
-                    ->withErrors($errors);
-            }
-        } catch (QueryException $qe) {
-            DB::rollback();
-            $errors = new MessageBag();
-
-            $errors->add('An error ocurred', "There was a problem editing proposal information. Try Again!");
-
-            $this->warn($qe);
-            return redirect('/proposal/' . $id)
-                ->withErrors($errors);
+        if ($validator->fails()) {
+            return redirect()->back()
+                             ->withErrors($validator)
+                             ->withInput();
         }
 
-        return redirect('/proposal/' . $id);
+
+        $proposal->title = $request->proposalTitle;
+
+        $proposal->description = $request->proposalDescription;
+
+        $skills = $request->input('proposalSkills.*', []);
+        foreach ($proposal->skill as $skill) {
+            if (!in_array($skill->id, $skills)) {
+                $proposal->skill()->detach($skill->id);
+            }
+        }
+        $proposal->skill()->syncWithoutDetaching($skills);
+
+
+        $faculties = $request->input('proposalFaculty.*', []);
+        foreach ($proposal->faculty as $faculty) {
+            if (!in_array($faculty->id, $faculties)) {
+                $proposal->faculty()->detach($faculty->id);
+            }
+        }
+        $proposal->faculty()->syncWithoutDetaching($faculties);
+
+        $proposal->duedate = $request->proposalDueDate;
+        
+        $proposal->announcedate = $request->proposalAnnounceDate;
+
+        $proposal->proposal_public = $request->has('proposalPublic') ? true : false;
+
+        $proposal->bid_public = $request->has('proposalBid') ? true : false;
+
+        $proposal->save();
+
+        return redirect()->route('proposal', [$proposal]);
+
     }
 
     /**
