@@ -29,7 +29,6 @@ Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('passw
 // Home
 Route::get('home', 'HomeController@show')->name('home');
 
-
 // Create Proposal
 Route::get('create', 'CreateProposalController@show')->name('create');
 Route::post('create', 'CreateProposalController@create');
@@ -37,10 +36,6 @@ Route::post('create', 'CreateProposalController@create');
 // Create Bid
 Route::get('createBid/{id}', 'CreateBidController@show')->name('createBid');
 Route::post('createBid/{id}', 'CreateBidController@createBid');
-
-// Create Team
-// Route::get('createTeam', 'CreateTeamController@show')->name('createTeam');
-// Route::post('createTeam', 'CreateTeamController@createTeam');
 
 // Bid page
 Route::get('bid/{id}', 'BidController@show')->name('bid');
@@ -50,9 +45,9 @@ Route::put('bid/winner/{id}', 'BidController@setWinner')->name('bid.winner');
 Route::get('proposal/{id}', 'ProposalController@show')->name('proposal');
 Route::get('/proposal', 'ProposalController@updateProposals');
 Route::get('proposal/{id}/edit', 'ProposalController@edit')->name('proposal.edit');
-Route::post('proposal/{id}/edit', 'ProposalController@submitEdit')->name('proposal.edit');
-//Route::get('proposal/{id}/notify', 'ProposalController@notifyProponent')->name('proposal.notify');
+Route::put('proposal/{id}', 'ProposalController@update')->name('proposal.update');
 Route::post('proposal/{id}/notify', 'ProposalController@notifyProponent')->name('proposal.notify');
+
 
 // Profile Page
 Route::get('profile/{id}', 'ProfileController@show')->name('profile');
@@ -73,9 +68,7 @@ Route::get('api/search', 'API\SearchController@search');
 Route::get('api/bid', 'API\BidController@getMaxBid');
 Route::post('api/bid', 'API\BidController@bidNewValue');
 Route::get('api/notifications', 'API\NotificationsController@getNotifications');
-Route::post('/notifications/{id}','API\NotificationsController@markAsSeen');
-Route::post('api/admin','API\AdminController@action')->name('admin');
-Route::post('api/moderator','API\ModeratorController@action')->name('moderator');
+Route::post('/notifications/{id}', 'API\NotificationsController@markAsSeen');
 
 //Search Page
 Route::get('search', 'SearchController@show')->name('search');
@@ -83,17 +76,10 @@ Route::post('search', 'SearchController@simpleSearch')->name('search');
 
 //ListPages
 Route::get('history', 'ListController@history')->name('history');
-// Route::get('teams', 'ListController@teams')->name('teams');
 Route::get('myproposals', 'ListController@myproposals')->name('myproposals');
-Route::get('proposals_im_in','ListController@proposals_imIn')->name('proposals_im_in');
+Route::get('proposals_im_in', 'ListController@proposalsImIn')->name('proposals_im_in');
 Route::get('allproposals', 'ListController@allproposals')->name('allproposals');
 Route::get('proposals_i_won', 'ListController@proposals_i_won')->name('proposals_i_won');
-
-//Moderator
-Route::get('moderator','ModeratorController@show')->name('moderator');
-
-//Administrator
-Route::get('admin','AdministratorController@show')->name('admin');
 
 //Team
 Route::resource('team', 'TeamController')->except('create');

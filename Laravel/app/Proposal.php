@@ -33,20 +33,24 @@ class Proposal extends Model
         return $this->belongsTo('App\User', 'idproponent', 'id');
     }
 
-    public function faculty(){
+    public function faculty()
+    {
         return $this->belongsToMany('App\Faculty', 'faculty_proposal', 'idproposal', 'idfaculty');
     }
 
 
-    public function skill(){
+    public function skill()
+    {
         return $this->belongsToMany('App\Skill', 'skill_proposal', 'idproposal', 'idskill');
     }
 
-    public function bids(){
-        return $this->hasMany('App\Bid','idproposal', 'id');
+    public function bids()
+    {
+        return $this->hasMany('App\Bid', 'idproposal', 'id');
     }
 
-    public function notifications(){
+    public function notifications()
+    {
         return $this->hasMany('App\Notification', 'idproposal', 'id');
     }
 }

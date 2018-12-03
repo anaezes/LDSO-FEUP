@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Mailgun\Mailgun;
 use GuzzleHttp\Client;
+use Validator;
+use Illuminate\Validation\Rule;
 
 class ProposalController extends Controller
 {
@@ -36,15 +38,13 @@ class ProposalController extends Controller
     /**
      * Shows the proposal for a given id.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return Response
      */
     public function show($id)
     {
         $proposal = Proposal::find($id);
 
-        //todo when exist moderators
-        // $proposal->proposal_status = "approved";
         $proposal->duedate = date('Y-m-d', strtotime($proposal->duedate));
         $proposal->announcedate = date('Y-m-d', strtotime($proposal->announcedate));
 
@@ -76,34 +76,40 @@ class ProposalController extends Controller
             $facultyName = "No faculty";
         }
 
-        $skills = DB::select('SELECT skillname from skill, skill_proposal 
-                  WHERE skill.id = skill_proposal.idSkill AND skill_proposal.idProposal = ?', [$proposal->id]);
+        $skills = DB::select(
+            'SELECT skillname from skill, skill_proposal
+                  WHERE skill.id = skill_proposal.idSkill
+                  AND skill_proposal.idProposal = ?',
+            [$proposal->id]
+        );
 
         $proposal->skills = $skills;
 
         $bids = DB::select('SELECT id, idteam, biddate from bid WHERE  bid.idProposal = ?', [$proposal->id]);
 
         foreach ($bids as $bid) {
-          $team = Team::where('id', $bid->idteam)->get()->first();
-          $bid->teamname = $team->teamname;
-          $leader = User::where('id', $team->idleader)->get()->first();
-          $bid->teamleaderid = $leader->id;
-          $bid->teamleadername = "$leader->username";
-
+            $team = Team::where('id', $bid->idteam)->get()->first();
+            $bid->teamname = $team->teamname;
+            $leader = User::where('id', $team->idleader)->get()->first();
+            $bid->teamleaderid = $leader->id;
+            $bid->teamleadername = "$leader->username";
         }
 
-
-        return view('pages.proposal', ['proposal' => $proposal,
+        return view(
+            'pages.proposal',
+            ['proposal' => $proposal,
             'facultyName' => $facultyName,
             'bids' => $bids,
-            'timestamp' => $timestamp]);
+            'timestamp' => $timestamp]
+        );
     }
 
     /**
-      * Gets the edit proposal page
-      * @param int $id
-      * @return page
-      */
+     * Show the form for editing the specified resource.
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
     public function edit($id)
     {
         $proposal = Proposal::find($id);
@@ -112,71 +118,87 @@ class ProposalController extends Controller
             return redirect('/proposal/' . $id);
         }
 
-        return view('pages.proposalEdit', ['desc' => $proposal->description, 'id' => $id]);
+        return view('pages.proposalEdit', ['proposal' => $proposal]);
     }
 
     /**
-      * Submits an proposal edit request
-      * @param Request $request
-      * @param int $id
-      * @return redirect
-      */
-    public function submitEdit(Request $request, $id)
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  int                      $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
     {
         $proposal = Proposal::find($id);
-        if ($proposal->idproponent != Auth::user()->id) {
-            return redirect('/proposal/' . $id);
-        }
-        try {
-            DB::beginTransaction();
-            if (sizeof(DB::select('select * FROM proposal_modification WHERE proposal_modification.idapprovedproposal = ? AND proposal_modification.is_approved is NULL', [$id])) == "0") {
-                $modID = DB::table('proposal_modification')->insertGetId(['newdescription' => $request->input('description'), 'idapprovedproposal' => $id]);
 
-                $input = $request->all();
-                $images = array();
-                if ($files = $request->file('images')) {
-                    $integer = 0;
-                    foreach ($files as $file) {
-                        $name = time() . (string) $integer . $file->getClientOriginalName();
-                        $file->move('img', $name);
-                        $images[] = $name;
-                        $integer += 1;
-                    }
-                }
+        $created = strtotime($proposal->datecreated);
+        $duedate = strtotime($proposal->duedate);
+        $announce = strtotime($proposal->announcedate);
+        $duration = $proposal->duration;
+        $day = 86400;
+        $month = $day * 30;
+        $year = $day * 365;
 
-                foreach ($images as $image) {
-                    $saveImage = new Image;
-                    $saveImage->source = $image;
-                    $saveImage->idproposalmodification = $modID;
-                    $saveImage->save();
-                }
-                DB::commit();
-            }
-            else{
-                DB::rollback();
-                $errors = new MessageBag();
+        $validator = Validator::make(
+            $request->all(),
+            [
+            'proposalTitle' => [
+                'required',
+                'string',
+                Rule::unique('proposal', 'title')->ignore($proposal->id)
+            ],
+            'proposalDescription' => 'required|string|min:20',
+            'proposalSkills' => 'array|exists:skill,id',
+            'proposalFaculty' => 'array|exists:faculty,id',
+            'proposalDueDate' => 'required|date|after:proposalAnnounceDate',
+            'proposalAnnounceDate' => 'required|date|after_or_equal:'.date('Y-m-d', $created + $duration)."|before_or_equal:".date('Y-m-d', $created + $duration + 3 * $month)
+            ]
+        );
 
-                $errors->add('An error ocurred', "There is already a request to edit this proposal's information");
-                return redirect('/proposal/' . $id)
-                    ->withErrors($errors);
-            }
-        } catch (QueryException $qe) {
-            DB::rollback();
-            $errors = new MessageBag();
-
-            $errors->add('An error ocurred', "There was a problem editing proposal information. Try Again!");
-
-            $this->warn($qe);
-            return redirect('/proposal/' . $id)
-                ->withErrors($errors);
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
         }
 
-        return redirect('/proposal/' . $id);
+        $proposal->title = $request->proposalTitle;
+
+        $proposal->description = $request->proposalDescription;
+
+        $skills = $request->input('proposalSkills.*', []);
+        foreach ($proposal->skill as $skill) {
+            if (!in_array($skill->id, $skills)) {
+                $proposal->skill()->detach($skill->id);
+            }
+        }
+        $proposal->skill()->syncWithoutDetaching($skills);
+
+
+        $faculties = $request->input('proposalFaculty.*', []);
+        foreach ($proposal->faculty as $faculty) {
+            if (!in_array($faculty->id, $faculties)) {
+                $proposal->faculty()->detach($faculty->id);
+            }
+        }
+        $proposal->faculty()->syncWithoutDetaching($faculties);
+
+        $proposal->duedate = $request->proposalDueDate;
+        
+        $proposal->announcedate = $request->proposalAnnounceDate;
+
+        $proposal->proposal_public = $request->has('proposalPublic') ? true : false;
+
+        $proposal->bid_public = $request->has('proposalBid') ? true : false;
+
+        $proposal->save();
+
+        return redirect()->route('proposal', [$proposal]);
     }
 
     /**
-      * Updates all proposals, setting them to finished if their time is up and sending out notifications
-      */
+     * Updates all proposals, setting them to finished if their time is up and sending out notifications
+     */
     public function updateProposals()
     {
         $proposals = DB::select("SELECT id, duration, dateApproved, idproponent FROM proposal WHERE proposal_status = ?", ["approved"]);
@@ -205,10 +227,11 @@ class ProposalController extends Controller
     }
 
     /**
-      * Notifies the owner of an proposal if it is finished
-      * @param int $id
-      * @return 404 if error
-      */
+     * Notifies the owner of an proposal if it is finished
+     *
+     * @param  int $id
+     * @return 404 if error
+     */
     public static function notifyOwner($id)
     {
         try {
@@ -228,11 +251,9 @@ class ProposalController extends Controller
             $message .= "\npostal code: " . $notification->user->PostalCode;
 
             // (new ProposalController)::sendMail($message, $proposal->user->email);
-
         } catch (QueryException $qe) {
             return response('NOT FOUND', 404);
         }
-
     }
 
     public static function notifyProponent($id,Request $request)
@@ -264,23 +285,21 @@ class ProposalController extends Controller
             $message .= "\npostal code: " . $notification->user->PostalCode;
 
             // (new ProposalController)::sendMail($message, $proposal->user->email);
-
         } catch (QueryException $qe) {
             return response('NOT FOUND', 404);
         }
 
         return redirect('/proposal/' . $id);
-
     }
-
-
 
     public function sendMail($message, $email)
     {
-        $client = new Client([
+        $client = new Client(
+            [
             'base_uri' => 'https://api.mailgun.net/v3',
             'verify' => false,
-        ]);
+            ]
+        );
         $adapter = new \Http\Adapter\Guzzle6\Client($client);
         $domain = "sandboxeb3d0437da8c4b4f8d5a428ed93f64cc.mailgun.org";
         $mailgun = new \Mailgun\Mailgun('key-44a6c35045fe3c3add9fcf0a018e654e', $adapter);
@@ -298,13 +317,14 @@ class ProposalController extends Controller
     }
 
     /**
-      * Notifies winner and sends an email with purchase info
-      * @param int $id
-      * @return 200 if successful, 404 if not
-      */
+     * Notifies winner and sends an email with purchase info
+     *
+     * @param  int $id
+     * @return 200 if successful, 404 if not
+     */
     public static function notifyWinner($id)
     {
-        try{
+        try {
             $proposal = Proposal::findOrFail($id);
             $winner = $proposal->bids()->where('winner', true)->first();
 
@@ -315,25 +335,25 @@ class ProposalController extends Controller
             $notification->idusers = $winner->team->user->id;
             $notification->idproposal = $proposal->id;
             $notification->save();
-
-        }catch(QueryException $qe){
+        } catch (QueryException $qe) {
             return response('NOT FOUND', 404);
         }
         return response('success', 200);
     }
 
     /**
-      * Notifies all bidders if proposal is finished
-      * @param int $id
-      * @return 200 if ok, 404 if not
-      */
+     * Notifies all bidders if proposal is finished
+     *
+     * @param  int $id
+     * @return 200 if ok, 404 if not
+     */
     public static function notifyBidders($id)
     {
-        try{
+        try {
             $proposal = Proposal::findOrFail($id);
 
-            foreach ($proposal->bids as $bid){
-                if(!$bid->winner){
+            foreach ($proposal->bids as $bid) {
+                if (!$bid->winner) {
                     $text = "You lost the proposal for " . $proposal->title . ".";
 
                     $notification = new Notification;
@@ -343,18 +363,19 @@ class ProposalController extends Controller
                     $notification->save();
                 }
             }
-        }catch(QueryException $qe) {
+        } catch (QueryException $qe) {
             return response('NOT FOUND', 404);
         }
         return response('success', 200);
     }
 
     /**
-      * Creates a timestamp based on a starting date and a duration
-      * @param String $dateCreated
-      * @param int $duration
-      * @return String timestamp
-      */
+     * Creates a timestamp based on a starting date and a duration
+     *
+     * @param  String $dateCreated
+     * @param  int    $duration
+     * @return String timestamp
+     */
     public static function createTimestamp($dateCreated, $duration)
     {
         $start = strtotime($dateCreated);

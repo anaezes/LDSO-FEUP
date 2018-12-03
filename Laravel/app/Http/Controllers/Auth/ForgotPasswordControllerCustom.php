@@ -43,7 +43,8 @@ class ForgotPasswordControllerCustom extends Controller
         $this->validate($request, ['email' => 'required|email']);
 
         $response = $this->broker()->sendResetLink(
-            $request->only('email'), $this->resetNotifier()
+            $request->only('email'),
+            $this->resetNotifier()
         );
 
         switch ($response) {
@@ -61,10 +62,8 @@ class ForgotPasswordControllerCustom extends Controller
       */
     protected function resetNotifier()
     {
-        return function($token)
-        {
+        return function ($token) {
             new ResetPasswordNotification($token);
         };
     }
-
 }

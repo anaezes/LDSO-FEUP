@@ -30,7 +30,7 @@ class Image extends Model
         return $this->belongsTo('App\Proposal', 'idproposal', 'id');
     }
 
-    public function proposal_modification()
+    public function proposalModification()
     {
         return $this->belongsTo('App\ProposalModification', 'idproposalModification', 'id');
     }
