@@ -6,25 +6,58 @@
 
 <!-- proposal Content -->
 <main  data-id="{{$proposal, $facultyName, $timestamp, $bids}}">
-    <div class="container p-5">
-    <div id="bidResult" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-            <h4 id="bidResultHeader" class="modal-title align-self-center">.</h4>
-            </div>
-            <div class="modal-body">
-                <p id="bidResultBody" class="alert alert-danger"></p>
-            </div>
-            <div class="modal-footer">
-            <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+    <div class="container mb-5 mt-5">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1><strong>{{ $proposal->title }}</strong></h1>
             </div>
         </div>
 
+        <div style="border: 1px solid gray" class="mt-1"></div>
+
+        <div class="row mt-3 d-flex align-items-center">
+            <div class="col-lg-3">
+               <h3>
+                   <strong>
+                       Faculty
+                   </strong>
+               </h3>
+            </div>
+            <div class="col-lg-9">
+                @foreach($proposal->faculty as $faculties)
+                    <h4>
+                        {{ $faculties->facultyname }}
+                    </h4>
+                @endforeach
+            </div>
         </div>
-    </div>
+
+        <div style="border: 1px solid gray" class="mt-1"></div>
+
+        <div class="row mt-3">
+            <div class="col-lg-3">
+                <h3>
+                    <strong>
+                        Description
+                    </strong>
+                </h3>
+            </div>
+            <div class="col-lg-9" style="word-wrap: break-word">
+                <h4>
+                    {{ $proposal->description }}
+                </h4>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="">
+
+            </div>
+            <div>
+
+            </div>
+        </div>
+
     <table class="table" style="border: none">
         <tbody style="border: none">
             <tr>
