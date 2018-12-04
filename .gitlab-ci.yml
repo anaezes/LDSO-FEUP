@@ -4,7 +4,14 @@ before_script:
   - export SSHPASS=$USER_PASS
 
 stages:
+  - linter
   - deploy
+
+lint:
+  sate: linter
+  script:
+    - php phpcs ./Laravel/app --standard=PSR2 --exclude=Generic.Files.LineLength
+    - php phpcs ./Laravel/routes --standard=PSR2 --exclude=Generic.Files.LineLength
 
 deploy-staging:
   stage: deploy
