@@ -8,9 +8,20 @@
 <main  data-id="{{$proposal, $facultyName, $timestamp, $bids}}">
     <div class="container mb-5 mt-5">
         <div class="row">
-            <div class="col-lg-12">
-                <h1><strong>{{ $proposal->title }}</strong></h1>
+            <div class="col-lg-11">
+                <h1>
+                    <strong>
+                        {{ $proposal->title }}
+                    </strong>
+                </h1>
             </div>
+            @if(Auth::check() && $proposal->idproponent == Auth::id())
+                <div class="col-lg-1">
+                    <h3>
+                        <a href="{{ route('proposal.edit', $proposal->id) }}" style="color: gray" data-toggle="tooltip" data-placement="bottom" title="Edit proposal"><span class="fas fa-edit"></span></a>
+                    </h3>
+                </div>
+            @endif
         </div>
 
         <div style="border: 1px solid gray" class="mt-1"></div>
@@ -49,155 +60,233 @@
             </div>
         </div>
 
-        <div class="row mt-3">
-            <div class="">
+        <div style="border: 1px solid gray" class="mt-1"></div>
 
+        <div class="row mt-3 d-flex align-items-center">
+            <div class="col-lg-3 mb-2">
+                <h3>
+                    <strong>
+                        Winner announcement date
+                    </strong>
+                </h3>
+                <small>
+                    Date by which a winner must be selected
+                </small>
             </div>
-            <div>
-
+            <div class="col-lg-9">
+                <h4>
+                    {{ $proposal->announcedate }}
+                </h4>
             </div>
         </div>
 
-    <table class="table" style="border: none">
-        <tbody style="border: none">
-            <tr>
-                <td colspan="2" style="border: none" >
-                    <strong style="font-size: xx-large">{{$proposal->title}}</strong>
-                    @if($proposal->proposal_status == "finished")
-                        <strong style="font-size: xx-large">
-                            <span class="badge badge-pill badge-secondary ml-5">Finished</span>
-                        </strong>
-                    @endif
-                </td>
-            </tr>
-            
-            <tr>
-                <td style="border: none; width: 150px;"><strong>Faculty</strong></td>
-                <td style="border: none">{{$facultyName}}</td>
-            </tr>
+        <div style="border: 1px solid gray" class="mt-1"></div>
 
-            <tr>
-                <td><strong>Description</strong></td>
-                <td>{{$proposal->description}}</td>
-            </tr>
+        <div class="row mt-3 d-flex align-items-center">
+            <div class="col-lg-3 mb-2">
+                <h3>
+                    <strong>
+                        Due date
+                    </strong>
+                </h3>
+                <small>
+                    Date by which a team must submit its project
+                </small>
+            </div>
+            <div class="col-lg-9">
+                <h4>
+                    {{ $proposal->duedate }}
+                </h4>
+            </div>
+        </div>
 
-            <tr>
-                <td><strong>Due date</strong></td>
-                <td>{{$proposal->duedate}}</td>
-            </tr>
+        <div style="border: 1px solid gray" class="mt-1"></div>
 
-            <tr>
-                <td><strong>Announce team winner</strong></td>
-                <td>{{$proposal->announcedate}}</td>
-            </tr>
-            <tr>
-                <td><strong>Proponent</strong></td>
-                <td><a class="button btn btn-sm btn-outline-secondary p-2 " href="{{ url("profile/{$proposal->user->id}") }}">
-                    <b>
-                        <i class="fa fa-user"></i>
-                        <p> {{$proposal->user->name}}</p>
-                    </b></a></td>
-            </tr>
-            <tr>
-                <td><strong>Skills</strong></td>
-                <td>
-                @foreach ($proposal->skills as $skill)
-                    {{$skill->skillname}}
-                @endforeach
-                </td>
-            </tr>
-            <tr>
-                <td><strong>Time left: </strong></td>
-                @if($proposal->proposal_status == "finished")
-                <td id="timeLeft" class="text-danger">Proposal has finished</td>
-                @else
-                <td id="timeLeft" class="text-danger">{{$timestamp}}</td>
-                @endif
-            </tr>
-            <tr>
-                <td colspan="2" style="border: none; text-align: right">
-                    @if (Auth::check())
-                        @if ($proposal->idproponent == Auth::user()->id)
+        <div class="row mt-3">
+            <div class="col-lg-3">
+                <h3>
+                    <strong>
+                        Proponent
+                    </strong>
+                </h3>
+            </div>
+            <div class="col-lg-9">
+                <h4>
+                    <a href="{{ route('profile', $proposal->user) }}">
+                        {{ $proposal->user->name }}
+                    </a>
+                </h4>
+            </div>
+        </div>
 
-                            @if($proposal->proposal_status != "finished" && $proposal->proposal_status != "evaluated")
-                                <a id="edit-proposal" href="{{ route('proposal.edit', $proposal->id) }}" class="btn btn-primary col-md-6 mt-3" style="width: 250px">
-                                    Edit the proposal
-                                </a>
-                            @else
-                                <button id="unbiddable" type="submit" disabled class="btn btn-outline-secondary col-md-6 mt-3" style="width: 250px">The proposal has finished</button>
-                            @endif
-                        @elseif ($proposal->proposal_status == "waitingApproval")
-                    <button id="unbiddable" type="submit" disabled class="btn btn-outline-secondary col-md-6 mt-3" style="width: 250px">Unable to bid</button>
-                        @elseif ($proposal->bids()->where('winner', true)->first() != null && $proposal->bids()->where('winner', true)->first()->team->user->id == Auth::user()->id && $proposal->proposal_status != "evaluated")
-                            <a href="{{ route('bid', $proposal->bids()->where('winner', true)->first()->id) }}" class="btn btn-primary btn-lg my-2 mx-3 jumbotron-buttons">Submit Project</a>
-                        @elseif ($proposal->proposal_status != "evaluated")
-                            <a href="{{ route ('createBid', ['id'=>$proposal->id])}}" class="btn btn-primary btn-lg my-2 mx-3 jumbotron-buttons">Bid</a>
+        <div style="border: 1px solid gray" class="mt-1"></div>
+
+        <div class="row mt-3">
+            <div class="col-lg-3">
+                <h3>
+                    <strong>
+                        @if($proposal->skill()->count() > 1)
+                            Skills
+                        @else
+                            Skill
                         @endif
-                    @else
-                    <button id="bid-box" type="submit" disabled class="btn btn-outline-secondary col-md-6 mt-3" style="width: 250px">Login to bid</button>
-                    @endif
-                </td>
-            </tr>
-        </tbody>
-    </table>
-        <table class="table" style= "border : none">
-                <tr>
-                    <td style="border: none" > <strong style="font-size: x-large">Bids</strong></td>
-                </tr>
-
-            @if (Auth::check())
-                @if ($proposal->idproponent == Auth::user()->id || $proposal->bid_public)
-                    <tr>
-                        <td> Bid </td>
-                        <td> Team </td>
-                        <td> Leader </td>
-                        <td> Date  </td>
-                        <?php
-                            $winner = $proposal->bids()->where('winner', true)->first();
-                            if($winner != null) {
-                        ?>
-                            <td> Winner </td>
-                        <?php } ?>
-                    </tr>
-                    @foreach ($bids as $bid)
-                        <tr>
-                            <td>
-                                <a style="border:none" class="button btn btn-sm btn-outline-secondary p-2 "
-                                    href="{{ url("bid/{$bid->id}") }}">
-                                    <b> <p> {{$bid->id}}</p> </b>
-                                </a>
-                            </td>
-                            <td>
-                                <strong>{{$bid->teamname}} </strong>
-                            </td>
-                            <td>
-                                <a style="border:none" class="button btn btn-sm btn-outline-secondary p-2 "
-                                    href="{{ url("profile/{$bid->teamleaderid}") }}">
-                                    <b> <p> {{$bid->teamleadername}}</p> </b>
-                                </a>
-                            </td>
-                            <td>
-                                {{date("d/m/Y H:i", strtotime($bid->biddate))}}
-                            </td>
-                            @if($winner != null && $winner->id == $bid->id)
-                                <td>
-                                    <span class="badge badge-secondary">Winner</span>                                                
-                                </td>
-                            @else
-                                <td>
-                                    <!-- Display nothing but dont break borders and page layout -->
-                                </td>
-                            @endif
-                        </tr>
+                    </strong>
+                </h3>
+            </div>
+            <div class="col-lg-9">
+                <h4>
+                    @foreach($proposal->skill()->limit(20)->get() as $skill)
+                        {{ $skill->skillname }};&nbsp;
                     @endforeach
+                </h4>
+            </div>
+        </div>
+
+        <div style="border: 1px solid gray" class="mt-1"></div>
+
+        <div class="row mt-3">
+            <div class="col-lg-3">
+                <h3>
+                    <strong>
+                        Time left
+                    </strong>
+                </h3>
+            </div>
+            <div class="col-lg-9">
+                    @if($proposal->proposal_status == 'finished')
+                        <h4 id="timeLeft" class="text-danger">Proposal has finished</h4>
+                    @else
+                        <h4 id="timeLeft" class="text-danger">{{ $timestamp }}</h4>
+                    @endif
+            </div>
+        </div>
+
+        <div style="border: 1px solid gray" class="mt-1"></div>
+
+        <div class="row mt-3">
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="col-lg-10">
+                        <h3>
+                            <strong>
+                                Bids
+                            </strong>
+                        </h3>
+                    </div>
+                    <div class="col-lg-2">
+                        <h4>
+                            <?php
+                                $winnerBid = $proposal->bids()->where('winner', true)->first();
+                            ?>
+                            @if($proposal->proposal_status == "finished" || $proposal->proposal_status == 'evaluated')
+                                <button class="btn btn-secondary" disabled>
+                                    <span>
+                                        The proposal has finished
+                                    </span>
+                                </button>
+                            @elseif($proposal->proposal_status == 'waitingApproval')
+                                <button class="btn btn-secondary" disabled>
+                                    <span>
+                                        Proposal waiting approval
+                                    </span>
+                                </button>
+                            @elseif(Auth::check())
+                                @if($proposal->idproponent != Auth::id())
+                                    @if($winnerBid != null && $winnerBid->team->user->id == Auth::id())
+                                        <a href="{{ route ('bid', $winnerBid) }}" class="btn btn-primary">
+                                            <span class="fas fa-paper-plane">
+                                                Submit project
+                                            </span>
+                                        </a>
+                                    @else
+                                        <a href="{{ route ('createBid', $proposal) }}" class="btn btn-primary">
+                                            <span class="fas fa-plus">
+                                                Bid
+                                            </span>
+                                        </a>
+                                    @endif
+                                @endif
+                            @else
+                                <button class="btn btn-secondary" disabled>
+                                    <span>
+                                        Login to Bid
+                                    </span>
+                                </button>
+                            @endif
+                        </h4>
+                    </div>
+                </div>
+                @if(Auth::check())
+                    @if($proposal->idproponent == Auth::id() || $proposal->bid_public)
+                        <div class="row">
+                            <div class="col-lg-2">
+                                <h5>
+                                    ID
+                                </h5>
+                            </div>
+                            <div class="col-lg-4">
+                                <h5>
+                                    Team
+                                </h5>
+                            </div>
+                            <div class="col-lg-4">
+                                <h5>
+                                    Leader
+                                </h5>
+                            </div>
+                            <div class="col-lg-2">
+                                <h5>
+                                    Date
+                                </h5>
+                            </div>
+                        </div>
+                        @foreach($proposal->bids()->paginate(10) as $bid)
+                            <div style="border: 1px solid gray" class="mt-1"></div>
+                            <div class="row mt-3">
+                                <div class="col-lg-2">
+                                    <h5>
+                                        <a href="{{ route('bid', $bid) }}">
+                                            {{ $bid->id }}
+                                        </a>
+                                    </h5>
+                                </div>
+                                <div class="col-lg-4">
+                                    <h5>
+                                        {{ $bid->team->teamname }}
+                                    </h5>
+                                </div>
+                                <div class="col-lg-4">
+                                    <h5>
+                                        {{ $bid->team->user->name }}
+                                    </h5>
+                                </div>
+                                <div class="col-lg-2">
+                                    <h5>
+                                        {{ date('Y-m-d H:i', strtotime($bid->biddate)) }}
+                                    </h5>
+                                </div>
+                            </div>
+                        @endforeach
+                    @else
+                        <div class="row mt-3 d-flex justify-content-center">
+                            <div class="col-lg-12">
+                                <h4>
+                                    Bids to this proposal are not public
+                                </h4>
+                            </div>
+                        </div>
+                    @endif
                 @else
-                <tr>
-                    <td> Bids not available!</td>
-                </tr>
+                    <div class="row mt-3 d-flex justify-content-center">
+                        <div class="col-lg-12">
+                            <h4>
+                                Login to see the bids to this proposal
+                            </h4>
+                        </div>
+                    </div>
                 @endif
-            @endif
-            </tbody>
-        </table>
+            </div>
+        </div>
     </div>
 </main>
 
