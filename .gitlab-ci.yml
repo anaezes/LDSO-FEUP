@@ -8,7 +8,7 @@ stages:
   - deploy
 
 lint:
-  sate: linter
+  stage: linter
   script:
     - php phpcs ./Laravel/app --standard=PSR2 --exclude=Generic.Files.LineLength
     - php phpcs ./Laravel/routes --standard=PSR2 --exclude=Generic.Files.LineLength
