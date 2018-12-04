@@ -83,6 +83,5 @@ class ListController extends Controller
         $action = "TEAMS";
 
         return view('pages.list', ['action' => $action]);
-    }
-    
+    }    
 }
