@@ -84,4 +84,5 @@ class ListController extends Controller
 
         return view('pages.list', ['action' => $action]);
     }
+    
 }
