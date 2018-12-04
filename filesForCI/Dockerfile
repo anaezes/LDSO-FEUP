@@ -5,6 +5,8 @@ RUN apk update
 RUN apk add docker
 RUN apk add sshpass
 RUN apk add openssh-client
+RUN apk add php7 php7-simplexml php7-tokenizer php7-xmlwriter
+RUN apk add composer
 
 # Run docker daemon
 RUN apk add openrc
