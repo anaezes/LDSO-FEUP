@@ -118,7 +118,8 @@
                 <td colspan="2" style="border: none; text-align: right">
                     @if (Auth::check())
                         @if ($proposal->idproponent == Auth::user()->id)
-                            @if($proposal->proposal_status != "finished")
+
+                            @if($proposal->proposal_status != "finished" && $proposal->proposal_status != "evaluated")
                                 <a id="edit-proposal" href="{{ route('proposal.edit', $proposal->id) }}" class="btn btn-primary col-md-6 mt-3" style="width: 250px">
                                     Edit the proposal
                                 </a>
@@ -127,10 +128,9 @@
                             @endif
                         @elseif ($proposal->proposal_status == "waitingApproval")
                     <button id="unbiddable" type="submit" disabled class="btn btn-outline-secondary col-md-6 mt-3" style="width: 250px">Unable to bid</button>
-                        @elseif ($proposal->proposal_status == "finished")
-                            <button id="unbiddable" type="submit" disabled class="btn btn-outline-secondary col-md-6 mt-3" style="width: 250px">Unable to bid</button>
-                    <a href="{{ route('proposal.notify', $proposal->id) }}" class="btn btn-primary btn-lg my-2 mx-3 jumbotron-buttons">Submit Project</a>
-                        @else
+                        @elseif ($proposal->bids()->where('winner', true)->first() != null && $proposal->bids()->where('winner', true)->first()->team->user->id == Auth::user()->id && $proposal->proposal_status != "evaluated")
+                            <a href="{{ route('bid', $proposal->bids()->where('winner', true)->first()->id) }}" class="btn btn-primary btn-lg my-2 mx-3 jumbotron-buttons">Submit Project</a>
+                        @elseif ($proposal->proposal_status != "evaluated")
                             <a href="{{ route ('createBid', ['id'=>$proposal->id])}}" class="btn btn-primary btn-lg my-2 mx-3 jumbotron-buttons">Bid</a>
                         @endif
                     @else

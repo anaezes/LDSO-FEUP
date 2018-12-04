@@ -46,7 +46,8 @@ Route::get('proposal/{id}', 'ProposalController@show')->name('proposal');
 Route::get('/proposal', 'ProposalController@updateProposals');
 Route::get('proposal/{id}/edit', 'ProposalController@edit')->name('proposal.edit');
 Route::put('proposal/{id}', 'ProposalController@update')->name('proposal.update');
-Route::get('proposal/{id}/notify', 'ProposalController@notifyProponent')->name('proposal.notify');
+Route::post('proposal/{id}/notify', 'ProposalController@notifyProponent')->name('proposal.notify');
+
 
 // Profile Page
 Route::get('profile/{id}', 'ProfileController@show')->name('profile');
@@ -78,6 +79,7 @@ Route::get('history', 'ListController@history')->name('history');
 Route::get('myproposals', 'ListController@myproposals')->name('myproposals');
 Route::get('proposals_im_in', 'ListController@proposalsImIn')->name('proposals_im_in');
 Route::get('allproposals', 'ListController@allproposals')->name('allproposals');
+Route::get('proposalsIWon', 'ListController@proposalsIWon')->name('proposalsIWon');
 
 //Team
 Route::resource('team', 'TeamController')->except('create');
