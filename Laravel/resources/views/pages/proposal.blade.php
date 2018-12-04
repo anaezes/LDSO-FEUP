@@ -18,13 +18,13 @@
             @if(Auth::check() && $proposal->idproponent == Auth::id())
                 <div class="col-lg-1">
                     <h3>
-                        <a href="{{ route('proposal.edit', $proposal->id) }}" style="color: gray" data-toggle="tooltip" data-placement="bottom" title="Edit proposal"><span class="fas fa-edit"></span></a>
+                        <a href="{{ route('proposal.edit', $proposal->id) }}" style="color: LightSlateGray" data-toggle="tooltip" data-placement="bottom" title="Edit proposal"><span class="fas fa-edit"></span></a>
                     </h3>
                 </div>
             @endif
         </div>
 
-        <div style="border: 1px solid gray" class="mt-1"></div>
+        <div style="border: 1px solid LightGray" class="mt-1"></div>
 
         <div class="row mt-3 d-flex align-items-center">
             <div class="col-lg-3">
@@ -43,7 +43,7 @@
             </div>
         </div>
 
-        <div style="border: 1px solid gray" class="mt-1"></div>
+        <div style="border: 1px solid LightGray" class="mt-1"></div>
 
         <div class="row mt-3">
             <div class="col-lg-3">
@@ -60,7 +60,7 @@
             </div>
         </div>
 
-        <div style="border: 1px solid gray" class="mt-1"></div>
+        <div style="border: 1px solid LightGray" class="mt-1"></div>
 
         <div class="row mt-3 d-flex align-items-center">
             <div class="col-lg-3 mb-2">
@@ -80,7 +80,7 @@
             </div>
         </div>
 
-        <div style="border: 1px solid gray" class="mt-1"></div>
+        <div style="border: 1px solid LightGray" class="mt-1"></div>
 
         <div class="row mt-3 d-flex align-items-center">
             <div class="col-lg-3 mb-2">
@@ -100,7 +100,7 @@
             </div>
         </div>
 
-        <div style="border: 1px solid gray" class="mt-1"></div>
+        <div style="border: 1px solid LightGray" class="mt-1"></div>
 
         <div class="row mt-3">
             <div class="col-lg-3">
@@ -112,14 +112,14 @@
             </div>
             <div class="col-lg-9">
                 <h4>
-                    <a href="{{ route('profile', $proposal->user) }}">
+                    <a href="{{ route('profile', $proposal->user) }}" class="text-dark">
                         {{ $proposal->user->name }}
                     </a>
                 </h4>
             </div>
         </div>
 
-        <div style="border: 1px solid gray" class="mt-1"></div>
+        <div style="border: 1px solid LightGray" class="mt-1"></div>
 
         <div class="row mt-3">
             <div class="col-lg-3">
@@ -142,7 +142,7 @@
             </div>
         </div>
 
-        <div style="border: 1px solid gray" class="mt-1"></div>
+        <div style="border: 1px solid LightGray" class="mt-1"></div>
 
         <div class="row mt-3">
             <div class="col-lg-3">
@@ -161,7 +161,7 @@
             </div>
         </div>
 
-        <div style="border: 1px solid gray" class="mt-1"></div>
+        <div style="border: 1px solid LightGray" class="mt-1"></div>
 
         <div class="row mt-3">
             <div class="col-lg-12">
@@ -244,25 +244,25 @@
                             $bids = $proposal->bids()->paginate(10);
                         ?>
                         @foreach($bids as $bid)
-                            <div style="border: 1px solid gray" class="mt-1"></div>
+                            <div style="border: 1px solid LightGray" class="mt-1"></div>
                             <div class="row mt-3">
                                 <div class="col-lg-2">
                                     <h5>
-                                        <a href="{{ route('bid', $bid) }}">
+                                        <a href="{{ route('bid', $bid) }}" class="text-dark">
                                             {{ $bid->id }}
                                         </a>
                                     </h5>
                                 </div>
                                 <div class="col-lg-4">
                                     <h5>
-                                        <a href="{{ route('team.show', $bid->team) }}">
+                                        <a href="{{ route('team.show', $bid->team) }}" class="text-dark">
                                             {{ $bid->team->teamname }}
                                         </a>
                                     </h5>
                                 </div>
                                 <div class="col-lg-4">
                                     <h5>
-                                        <a href="{{ route('profile', $bid->team->user) }}">
+                                        <a href="{{ route('profile', $bid->team->user) }}" class="text-dark">
                                             {{ $bid->team->user->name }}
                                         </a>
                                     </h5>
