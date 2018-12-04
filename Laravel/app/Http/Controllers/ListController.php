@@ -57,6 +57,20 @@ class ListController extends Controller
         return view('pages.list', ['action' => $action]);
     }
 
+     /**
+      * Gets the list with the proposals the user won
+      * @return page
+      */
+    public function proposalsIWon()
+    {
+        if (!Auth::check()) {
+            return redirect('/home');
+        }
+        $action = "proposalsIWon";
+
+        return view('pages.list', ['action' => $action]);
+    }
+
     /**
       * Gets the proposal history of user
       * @return page
