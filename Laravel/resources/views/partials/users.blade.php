@@ -1,5 +1,5 @@
 <div class="col-lg-2 mb-3">
-    <div class="card" style="width: 18rem;">
+    <div class="card" style="width: 18rem; height: 11rem;">
         <a href="{{ route('profile', $users[$i]) }}" style="text-decoration: none;">
             <div class="card-header">
                 <span>@</span>{{ $users[$i]->username }}

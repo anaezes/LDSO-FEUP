@@ -14,7 +14,7 @@ class PeopleController extends Controller
      */
     public function index()
     {
-        $users = User::paginate(30);
+        $users = User::paginate(2);
 
         return view('pages.people', ['users' => $users]);
     }
