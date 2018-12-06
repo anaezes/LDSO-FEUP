@@ -13,8 +13,6 @@ use App\Http\Controllers\Controller;
 use Validator;
 use App\Http\Controllers\ProposalController;
 
-
-
 class BidController extends Controller
 {
 
@@ -37,7 +35,11 @@ class BidController extends Controller
 
         //members
         $facultys = [];
-        $members = DB::select('SELECT * from users, team_member WHERE team_member.idteam = ? and team_member.iduser = users.id', [$bid->idteam]);
+        $members = DB::select(
+            'SELECT * from users,
+            team_member WHERE team_member.idteam = ? and team_member.iduser = users.id',
+            [$bid->idteam]
+        );
 
         foreach ($members as $member) {
             $aux = Faculty::where('id', $member->idfaculty)->get()->first();
@@ -58,7 +60,7 @@ class BidController extends Controller
 
         //skills
         $skills = [];
-       foreach ($members as $member) {
+        foreach ($members as $member) {
             $skillsMember = DB::select('SELECT * from skill_user WHERE iduser = ? ', [$member->id]);
             foreach ($skillsMember as $skill) {
                 $skillName =  Skill::where('id', $skill->idskill)->get()->first();
@@ -75,7 +77,7 @@ class BidController extends Controller
 
 
         $bid->skills = $skillsTeam;
-        
+
         return view('pages.bid', [ 'bid' => $bid]);
     }
 

@@ -64,12 +64,23 @@ class SearchController extends Controller
                 $res = DB::select("SELECT DISTINCT proposal.id FROM proposal, bid WHERE bid.idproposal = proposal.id and bid.idBuyer = ? and proposal.proposal_status = ? ", [Auth::user()->id, 'approved']);
                 array_push($queryResults, $res);
             }
+            if ($request->input('userBidWinner') !== null && Auth::check()) {
+                $res = DB::table('proposal')
+                    ->join('bid', 'proposal.id', '=', 'bid.idproposal')
+                    ->join('team', 'bid.idteam', '=', 'team.id')
+                    ->where([
+                            ['team.idleader', '=', Auth::user()->id],
+                            ['bid.winner', '=', true],
+                            ['proposal.proposal_status', '!=', 'evaluated'],
+                        ])
+                    ->select('proposal.id')->get();
+                array_push($queryResults, $res);
+            }
             if ($request->input('proposalsAvailableToUser') !== null) { // todo proposal_status fix later
-                if(Auth::check()) {
+                if (Auth::check()) {
                     $res = DB::select("SELECT A.id FROM proposal A iNNER JOIN faculty_proposal B ON A.id = B.idproposal INNER JOIN users C ON (C.idfaculty = B.idfaculty OR A.proposal_public = ? ) WHERE C.id = ? AND (A.proposal_status = ? OR A.proposal_status = ?)", ['true', Auth::user()->id, 'approved', 'waitingApproval']);
                     array_push($queryResults, $res);
-                }
-                else {
+                } else {
                     $res = DB::select("SELECT DISTINCT proposal.id FROM proposal WHERE proposal_public = ? AND (proposal_status = ? OR proposal_status=?)", ['true', 'approved', 'waitingApproval']);
                     array_push($queryResults, $res);
                 }
@@ -79,15 +90,12 @@ class SearchController extends Controller
                 $res = DB::select("SELECT team_member.idteam FROM team_member WHERE iduser = ?", [Auth::user()->id]);
                 array_push($queryResults, $res);
                 $result=[];
-                foreach($queryResults as $r){
+                foreach ($queryResults as $r) {
                     $result = DB::select("SELECT teamname, idleader FROM team WHERE id = ?", [$r])->get();
                     $result = $result->toArray();
                     return response()->json($result);
-
                 }
-
             }
-
 
             $counts = [];
             foreach ($queryResults as $res) {
