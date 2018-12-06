@@ -22,7 +22,7 @@
                 @if($action=="proposalsIWon")
                     <i class="fa fa-clock"></i> Proposals I won
                 @endif
-                @if($action=="HISTORY")
+                @if($action=="history")
                     <i class="fa fa-history"></i> History
                 @endif
                 @if($action=="TEAMS")
