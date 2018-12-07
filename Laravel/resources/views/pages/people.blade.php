@@ -7,16 +7,14 @@
     <div class="container-fluid mb-5 mt-5">
         <div class="row">
             <div class="col-lg-12">
-                <h1>
-                    <strong>
-                        <span class="fas fa-users"></span>
-                        People
-                    </strong>
-                </h1>
+                <h4>
+                    <i class="fas fa-users"></i>
+                    People
+                </h4>
             </div>
         </div>
 
-        <div style="border: 1px solid gray"></div>
+        <hr id="hr_space" class="mt-2">
 
         <div class="row mt-3">
             @for($i = 0; $i < $users->count(); $i++)
