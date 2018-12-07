@@ -274,25 +274,27 @@
                                 </div>
                             </div>
                         @endforeach
-                        <nav aria-label="Page navigation">
-                            <ul class="pagination justify-content-center mt-3">
-                                <li class="page-item @if($bids->currentPage() == 1) disabled @endif">
-                                    <a class="page-link" href="{{ $bids->previousPageUrl() }}" aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                        <span class="sr-only">Previous</span>
-                                    </a>
-                                </li>
-                                @for($i = 0; $i <= $bids->count() / $bids->perPage(); $i++)
-                                <li class="page-item @if($bids->currentPage() == $i+1) active @endif"><a class="page-link" href="{{ $bids->url($i+1) }}">{{ $i+1 }}</a></li>
-                                @endfor
-                                <li class="page-item @if(!$bids->hasMorePages()) disabled @endif">
-                                    <a class="page-link" href="#" aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                        <span class="sr-only">Next</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
+                        @if($bids->total() / $bids->perPage() > 1)
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-center mt-3">
+                                    <li class="page-item @if($bids->currentPage() == 1) disabled @endif">
+                                        <a class="page-link" href="{{ $bids->previousPageUrl() }}" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                    </li>
+                                    @for($i = 0; $i <= $bids->total() / $bids->perPage(); $i++)
+                                        <li class="page-item @if($bids->currentPage() == $i+1) active @endif"><a class="page-link" href="{{ $bids->url($i+1) }}">{{ $i+1 }}</a></li>
+                                    @endfor
+                                    <li class="page-item @if(!($bids->hasMorePages())) disabled @endif">
+                                        <a class="page-link" href="{{ $bids->nextPageUrl() }}" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                            <span class="sr-only">Next</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        @endif
                     @else
                         <div class="row mt-3 d-flex justify-content-center">
                             <div class="col-lg-12">
