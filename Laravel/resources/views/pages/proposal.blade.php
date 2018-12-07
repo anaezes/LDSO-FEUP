@@ -24,7 +24,7 @@
             @endif
         </div>
 
-        <div style="border: 1px solid LightGray" class="mt-1"></div>
+        <hr id="hr_space" class="mt-2">
 
         <div class="row mt-3 d-flex align-items-center">
             <div class="col-lg-3">
@@ -43,7 +43,7 @@
             </div>
         </div>
 
-        <div style="border: 1px solid LightGray" class="mt-1"></div>
+        <hr id="hr_space" class="mt-2">
 
         <div class="row mt-3">
             <div class="col-lg-3">
@@ -60,7 +60,7 @@
             </div>
         </div>
 
-        <div style="border: 1px solid LightGray" class="mt-1"></div>
+        <hr id="hr_space" class="mt-2">
 
         <div class="row mt-3 d-flex align-items-center">
             <div class="col-lg-3 mb-2">
@@ -80,7 +80,7 @@
             </div>
         </div>
 
-        <div style="border: 1px solid LightGray" class="mt-1"></div>
+        <hr id="hr_space" class="mt-2">
 
         <div class="row mt-3 d-flex align-items-center">
             <div class="col-lg-3 mb-2">
@@ -100,7 +100,7 @@
             </div>
         </div>
 
-        <div style="border: 1px solid LightGray" class="mt-1"></div>
+        <hr id="hr_space" class="mt-2">
 
         <div class="row mt-3">
             <div class="col-lg-3">
@@ -119,7 +119,7 @@
             </div>
         </div>
 
-        <div style="border: 1px solid LightGray" class="mt-1"></div>
+        <hr id="hr_space" class="mt-2">
 
         <div class="row mt-3">
             <div class="col-lg-3">
@@ -142,7 +142,7 @@
             </div>
         </div>
 
-        <div style="border: 1px solid LightGray" class="mt-1"></div>
+        <hr id="hr_space" class="mt-2">
 
         <div class="row mt-3">
             <div class="col-lg-3">
@@ -161,7 +161,7 @@
             </div>
         </div>
 
-        <div style="border: 1px solid LightGray" class="mt-1"></div>
+        <hr id="hr_space" class="mt-2">
 
         <div class="row mt-3">
             <div class="col-lg-12">
@@ -244,7 +244,7 @@
                             $bids = $proposal->bids()->paginate(10);
                         ?>
                         @foreach($bids as $bid)
-                            <div style="border: 1px solid LightGray" class="mt-1"></div>
+                            <hr id="hr_space" class="mt-2">
                             <div class="row mt-3">
                                 <div class="col-lg-2">
                                     <h5>
