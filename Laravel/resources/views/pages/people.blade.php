@@ -27,25 +27,27 @@
                 @endif
             @endfor
         </div>
-        <nav aria-label="Page navigation">
-            <ul class="pagination justify-content-center mt-3">
-                <li class="page-item @if($users->currentPage() == 1) disabled @endif">
-                    <a class="page-link" href="{{ $users->previousPageUrl() }}" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                </li>
-                @for($i = 0; $i < $users->total() / $users->perPage(); $i++)
-                    <li class="page-item @if($users->currentPage() == $i+1) active @endif"><a class="page-link" href="{{ $users->url($i+1) }}">{{ $i+1 }}</a></li>
-                @endfor
-                <li class="page-item @if(!($users->hasMorePages())) disabled @endif">
-                    <a class="page-link" href="{{ $users->nextPageUrl() }}" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                        <span class="sr-only">Next</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+        @if($users->total() / $users->perPage() > 1)
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center mt-3">
+                    <li class="page-item @if($users->currentPage() == 1) disabled @endif">
+                        <a class="page-link" href="{{ $users->previousPageUrl() }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+                    @for($i = 0; $i < $users->total() / $users->perPage(); $i++)
+                        <li class="page-item @if($users->currentPage() == $i+1) active @endif"><a class="page-link" href="{{ $users->url($i+1) }}">{{ $i+1 }}</a></li>
+                    @endfor
+                    <li class="page-item @if(!($users->hasMorePages())) disabled @endif">
+                        <a class="page-link" href="{{ $users->nextPageUrl() }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        @endif
     </div>
 </main>
 @endsection
