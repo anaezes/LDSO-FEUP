@@ -43,15 +43,13 @@ class SearchController extends Controller
         $input = $request->all();
         if (isset($input['faculty'])) {
             $faculties = $input['faculty'];
-        }
-        else {
+        } else {
             $faculties = null;
         }
 
         if (isset($input['skill'])) {
             $skills = $input['skill'];
-        }
-        else {
+        } else {
             $skills = null;
         }
 
@@ -70,8 +68,7 @@ class SearchController extends Controller
                         }
                     }
                 }
-            }
-            elseif ($faculties !== null) {
+            } elseif ($faculties !== null) {
                 foreach ($faculties as $faculty) {
                     $f = Faculty::where('facultyname', $faculty)->get()->first();
                     $res = DB::select("SELECT users.id FROM users WHERE idfaculty = ?", [$f->id]);
@@ -87,8 +84,7 @@ class SearchController extends Controller
                         array_push($ids, $entry->id);
                     }
                 }
-            }
-            else {
+            } else {
                 $res = DB::select("SELECT users.id FROM users");
                 foreach ($res as $entry) {
                     array_push($ids, $entry->id);
@@ -103,7 +99,6 @@ class SearchController extends Controller
 
             $query = "SELECT id, username FROM users WHERE users.id IN (" . $parameters . ")";
             $members = DB::select($query, []);
-
         } catch (QueryException $qe) {
             $errors = new MessageBag();
 
