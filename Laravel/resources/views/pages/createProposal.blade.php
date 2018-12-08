@@ -34,7 +34,7 @@
                     <h4>
                         <label for="title">Title</label>
                     </h4>
-                    <input type="text" name="title" id="title" class="form-control" minlength="10" maxlenght="80" placeholder="Proposal's title" required>
+                    <input type="text" name="title" id="title" class="form-control" minlength="8" maxlenght="80" placeholder="Proposal's title" value="{{ old('title') }}" required>
                 </div>
             </div>
 
@@ -45,7 +45,7 @@
                     <h4>
                         <label for="description">Description</label>
                     </h4>
-                    <textarea name="description" id="description" class="form-control" cols="80" rows="8" minlength="20" placeholder="Proposal's description" required></textarea>
+                    <textarea name="description" id="description" class="form-control" cols="80" rows="8" minlength="20" placeholder="Proposal's description" required>{{ old('description') }}</textarea>
                 </div>
             </div>
 
@@ -183,8 +183,8 @@
 
             <div class="form-row">
                 <div class="form-group col-lg-12 d-flex justify-content-end">
-                    <input type="submit" value="Create" class="btn btn-outline-primary btn-lg m-1 w-25">
-                    <input type="reset" value="Clear" class="btn btn-outline-secondary btn-lg m-1">
+                    <input type="submit" value="Create" class="btn btn-outline-primary mr-2 w-25">
+                    <input type="reset" value="Clear" class="btn btn-outline-secondary">
                 </div>
             </div>
         </form>
