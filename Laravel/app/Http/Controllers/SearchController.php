@@ -13,7 +13,6 @@ use App\Faculty;
 use App\Skill;
 use App\Users;
 
-
 class SearchController extends Controller
 {
     /**
@@ -38,56 +37,72 @@ class SearchController extends Controller
         return view('pages.search', ['proposals' => $proposals, 'responseSentence' => $responseSentence]);
     }
 
-    public function simpleSearchMember(Request $request){
+    public function simpleSearchMember(Request $request)
+    {
 
         $input = $request->all();
-        if (isset($input['faculty'])) $faculties = $input['faculty'];
-        else $faculties = null;
+        if (isset($input['faculty']))
+            $faculties = $input['faculty'];
+        else
+            $faculties = null;
 
-        if(isset($input['skill'])) $skills = $input['skill'];
-        else $skills = null;
+        if(isset($input['skill']))
+            $skills = $input['skill'];
+        else
+            $skills = null;
+
         $ids = [];
 
         try {
-            if ($faculties != null && $skills !== null) {
-                foreach ($faculties as $faculty){
+            if ($faculties != null && $skills !== null)
+            {
+                foreach ($faculties as $faculty)
+                {
                     $f = Faculty::where('facultyname', $faculty)->get()->first();
-                    foreach ($skills as $skill) {
+                    foreach ($skills as $skill)
+                    {
                         $s = Skill::where('skillname', $skill)->get()->first();
                         $res = DB::select("SELECT users.id, skill_user.iduser FROM users, skill_user WHERE idfaculty = ? AND skill_user.idskill = ? AND users.id = skill_user.iduser", [$f->id, $s->id]);
-                        foreach ($res as $entry) {
+                        foreach ($res as $entry)
+                        {
                             array_push($ids, $entry->id);
                         }
                     }
                 }
             }
-            else if ($faculties !== null) {
-
-                foreach ($faculties as $faculty){
+            elseif ($faculties !== null)
+            {
+                foreach ($faculties as $faculty)
+                {
                     $f = Faculty::where('facultyname', $faculty)->get()->first();
                     $res = DB::select("SELECT users.id FROM users WHERE idfaculty = ?", [$f->id]);
-                    foreach ($res as $entry) {
+                    foreach ($res as $entry)
+                    {
                         array_push($ids, $entry->id);
                     }
                 }
-
-            } else if ($skills !== null) {
-                foreach ($skills as $skill){
+            } elseif ($skills !== null)
+            {
+                foreach ($skills as $skill)
+                {
                     $s = Skill::where('skillname', $skill)->get()->first();
                     $res = DB::select("SELECT users.id, skill_user.iduser FROM users, skill_user WHERE skill_user.idskill = ? AND users.id = skill_user.iduser", [$s->id]);
-                    foreach ($res as $entry) {
+                    foreach ($res as $entry)
+                    {
                         array_push($ids, $entry->id);
                     }
                 }
             }
-            else{
+            else
+                {
                 $res = DB::select("SELECT users.id FROM users");
                 foreach ($res as $entry) {
                     array_push($ids, $entry->id);
                 }
             }
 
-            if (sizeof($ids) == 0) {
+            if (sizeof($ids) == 0)
+            {
                 return view('pages.searchMember', ['members' => []]);
             }
 
@@ -96,7 +111,8 @@ class SearchController extends Controller
             $query = "SELECT id, username FROM users WHERE users.id IN (" . $parameters . ")";
             $members = DB::select($query, []);
 
-        } catch (QueryException $qe) {
+        } catch (QueryException $qe)
+        {
             $errors = new MessageBag();
 
             $errors->add('An error ocurred', "There was a problem searching for members. Try Again!");
