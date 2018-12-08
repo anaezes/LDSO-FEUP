@@ -130,41 +130,26 @@
                         <input class="form-control" type="email" name="email" placeholder="{{$user->email}}" value="{{ old('email') }}">
                      </div>
 
-                 <!--    <div class="form-group">
+                    <div class="form-group">
                         <label for="Inputidfaculty">faculty</label>
                         <select class="form-control" id="Inputidfaculty" name="idfaculty">
-                           <option selected value> -- select an option -- </option>
-                           <option value="1" {{ old('idfaculty') == 1 ? 'selected' : '' }}>Austria</option>
-                           <option value="2" {{ old('idfaculty') == 2 ? 'selected' : '' }}>Italy</option>
-                           <option value="3" {{ old('idfaculty') == 3 ? 'selected' : '' }}>Belgium</option>
-                           <option value="4" {{ old('idfaculty') == 4 ? 'selected' : '' }}>Latvia</option>
-                           <option value="5" {{ old('idfaculty') == 5 ? 'selected' : '' }}>Bulgaria</option>
-                           <option value="6" {{ old('idfaculty') == 6 ? 'selected' : '' }}>Lithuania</option>
-                           <option value="7" {{ old('idfaculty') == 7 ? 'selected' : '' }}>Croatia</option>
-                           <option value="8" {{ old('idfaculty') == 8 ? 'selected' : '' }}>Luxembourg</option>
-                           <option value="9" {{ old('idfaculty') == 9 ? 'selected' : '' }}>Cyprus</option>
-                           <option value="10" {{ old('idfaculty') == 10 ? 'selected' : '' }}>Malta</option>
-                           <option value="11" {{ old('idfaculty') == 11 ? 'selected' : '' }}>Czech Republic</option>
-                           <option value="12" {{ old('idfaculty') == 12 ? 'selected' : '' }}>Netherlands</option>
-                           <option value="13" {{ old('idfaculty') == 13 ? 'selected' : '' }}>Denmark</option>
-                           <option value="14" {{ old('idfaculty') == 14 ? 'selected' : '' }}>Indonesia</option>
-                           <option value="15" {{ old('idfaculty') == 15 ? 'selected' : '' }}>Poland</option>
-                           <option value="16" {{ old('idfaculty') == 16 ? 'selected' : '' }}>Estonia</option>
-                           <option value="17" {{ old('idfaculty') == 17 ? 'selected' : '' }}>Portugal</option>
-                           <option value="18" {{ old('idfaculty') == 18 ? 'selected' : '' }}>Finland</option>
-                           <option value="19" {{ old('idfaculty') == 19 ? 'selected' : '' }}>Romania</option>
-                           <option value="20" {{ old('idfaculty') == 20 ? 'selected' : '' }}>France</option>
-                           <option value="21" {{ old('idfaculty') == 21 ? 'selected' : '' }}>Slovakia</option>
-                           <option value="22" {{ old('idfaculty') == 22 ? 'selected' : '' }}>Germany</option>
-                           <option value="23" {{ old('idfaculty') == 23 ? 'selected' : '' }}>Slovenia</option>
-                           <option value="24" {{ old('idfaculty') == 24 ? 'selected' : '' }}>Greece</option>
-                           <option value="25" {{ old('idfaculty') == 25 ? 'selected' : '' }}>Spain</option>
-                           <option value="26" {{ old('idfaculty') == 26 ? 'selected' : '' }}>Hungary</option>
-                           <option value="27" {{ old('idfaculty') == 27 ? 'selected' : '' }}>Sweden</option>
-                           <option value="28" {{ old('idfaculty') == 28 ? 'selected' : '' }}>Ireland</option>
-                           <option value="29" {{ old('idfaculty') == 29 ? 'selected' : '' }}>United Kingdom</option>
+                           <option value="1" {{ old('idfaculty') == 1 ? 'selected' : '' }}>Faculty of Architecture</option>
+                           <option value="2" {{ old('idfaculty') == 2 ? 'selected' : '' }}>Faculty of Fine Arts</option>
+                           <option value="3" {{ old('idfaculty') == 3 ? 'selected' : '' }}>Faculty of Sciences</option>
+                           <option value="4" {{ old('idfaculty') == 4 ? 'selected' : '' }}>Faculty of Nutrition and Food Science</option>
+                           <option value="5" {{ old('idfaculty') == 5 ? 'selected' : '' }}>Faculty of Sports</option>
+                           <option value="6" {{ old('idfaculty') == 6 ? 'selected' : '' }}>Faculty of Law</option>
+                           <option value="7" {{ old('idfaculty') == 7 ? 'selected' : '' }}>Faculty of Economics</option>
+                           <option value="8" {{ old('idfaculty') == 8 ? 'selected' : '' }}>Faculty of Engineering</option>
+                           <option value="9" {{ old('idfaculty') == 9 ? 'selected' : '' }}>Faculty of Pharmacy</option>
+                           <option value="10" {{ old('idfaculty') == 10 ? 'selected' : '' }}>Faculty of Arts</option>
+                           <option value="11" {{ old('idfaculty') == 11 ? 'selected' : '' }}>Faculty of Medicine</option>
+                           <option value="12" {{ old('idfaculty') == 12 ? 'selected' : '' }}>Faculty of Dental Medicine</option>
+                           <option value="13" {{ old('idfaculty') == 13 ? 'selected' : '' }}>Faculty of Psychology and Education Science</option>
+                           <option value="14" {{ old('idfaculty') == 14 ? 'selected' : '' }}>Abel Salazar Institute of Biomedical Science</option>
+                           <option value="15" {{ old('idfaculty') == 15 ? 'selected' : '' }}>Porto Business School</option>
                         </select>
-                     </div>-->
+                     </div>
                      <div class="form-group">
                         <label for="phone1">Phone Number</label>
                         <input class="form-control" id="phone1" name="phone" type="tel" placeholder="{{$user->phone}}" value="{{ old('phone') }}">

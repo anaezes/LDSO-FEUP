@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\User;
+use App\Image;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -72,6 +73,7 @@ class ProfileController extends Controller
             'name' => 'nullable|string|max:255',
             'email' => 'nullable|string|email|max:255|unique:users',
             'idfaculty' => 'nullable|integer',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -99,13 +101,12 @@ class ProfileController extends Controller
             if ($input['phone'] !== null) {
                 DB::update('update users set phone = ? where id = ?', [$input['phone'], $id]);
             }
-
             $image = $request->file('image');
             if ($image !== null) {
-                $input['imagename'] = time() . $image->getClientOriginalName();
+                $input['imagename'] = time().$image->getClientOriginalName();
                 $image->move('img', $input['imagename']);
-                if (sizeof(DB::select('select * FROM image WHERE idusers = ?', [$id])) > 0) {
-                    DB::update('update image set source = ? where idusers = ?', [$input['imagename'], $id]);
+                if (sizeof(DB::select('SELECT * FROM image WHERE idusers = ?', [$id])) > 0) {
+                    DB::update('UPDATE image SET source = ? WHERE idusers = ?', [$input['imagename'], $id]);
                 } else {
                     DB::insert('INSERT INTO image (source,idusers) VALUES(?,?)', [$input['imagename'], $id]);
                 }
