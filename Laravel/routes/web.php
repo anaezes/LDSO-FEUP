@@ -30,8 +30,8 @@ Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('passw
 Route::get('home', 'HomeController@show')->name('home');
 
 // Create Proposal
-Route::get('create', 'CreateProposalController@show')->name('create');
-Route::post('create', 'CreateProposalController@create');
+Route::get('create', 'ProposalController@create')->name('create');
+Route::post('create', 'ProposalController@store');
 
 // Create Bid
 Route::get('createBid/{id}', 'CreateBidController@show')->name('createBid');

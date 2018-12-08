@@ -101,6 +101,81 @@ class ProposalController extends Controller
     }
 
     /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        if(Auth::check()){
+            return view('pages.create');
+        }
+        return redirect('/home');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $created = strtotime("now");
+        $day = 86400;
+        $month = $day * 30;
+        $year = $day * 365;
+
+        $validator = Validator::make(
+            $request->all(),
+            [
+            'title' => 'required|string|unique:proposal,title',
+            'description' => 'required|string|min:20',
+            'skill' => 'array|exists:skill,id',
+            'faculty' => 'array|exists:faculty,id',
+            'days' => 'required|integer|min:0|max:13',
+            'hours' => 'required|integer|min:0|max:23',
+            'minutes' => 'required|integer|min:0|max:59',
+            'due' => 'required|date|after:announce',
+            'announce' => 'required|date|after_or_equal:'.date('Y-m-d', $created + $request->days * 86400 + $request->hours * 3600 + $request->minutes * 60).
+                                       "|before_or_equal:".date('Y-m-d', $created + 3 * $month + $request->days * 86400 + $request->hours * 3600 + $request->minutes * 60)
+            ]
+        );
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $duration = $request->input('days') * 86400
+                  + $request->input('hours') * 3600
+                  + $request->input('minutes') * 60;
+
+        if($duration < 300) {
+            return redirect()->back()
+                ->withErrors("Duration must be higher than 5 minutes")
+                ->withInput();
+        }
+
+        $proposal = new Proposal;
+        $proposal->title = $request->input('title');
+        $proposal->description = $request->input('description');
+        $proposal->proposal_public = $request->has('public_prop');
+        $proposal->bid_public = $request->has('public_bid');
+        $proposal->duration = $duration;
+        $proposal->duedate = date('Y-m-d H:i:s', strtotime($request->input('due')));
+        $proposal->announcedate = date('Y-m-d H:i:s', strtotime($request->input('announce')));
+        $proposal->idproponent = Auth::id();
+        $proposal->save();
+
+        $proposal->faculty()->attach($request->input('faculty'));
+        $proposal->skill()->attach($request->input('skill'));
+
+        return redirect()->route('proposal', $proposal);
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  int $id
