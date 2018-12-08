@@ -85,3 +85,6 @@ Route::get('proposalsIWon', 'ListController@proposalsIWon')->name('proposalsIWon
 Route::resource('team', 'TeamController')->except('create');
 Route::post('team/{id}/addMember', 'TeamController@addMember')->name('team.addMember');
 Route::delete('team/{id}/removeMember', 'TeamController@removeMember')->name('team.removeMember');
+
+//People
+Route::get('people', 'PeopleController@index')->name('people');

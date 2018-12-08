@@ -35,7 +35,7 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav hidden-p-md-down">
             <a class="nav-item nav-link" href={{ url("allproposals") }}>Proposals</a>
-            <a class="nav-item nav-link" href="#">People</a>
+            <a class="nav-item nav-link" href="{{ route('people') }}">People</a>
         </div>
 
         <div class="navbar-collapse collapse">
