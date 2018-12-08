@@ -636,35 +636,7 @@ function commentsHandler(response)
     }
 }
 
-function setLike()
-{
-    like = true;
-    console.log(like);
-}
 
-function setUnlike()
-{
-    like = false;
-    console.log(like);
-}
-
-function postFeedback(senderID)
-{
-    let feedback = document.querySelector('#left-feedback').value;
-    console.log(feedback);
-    if (feedback !== null)
-    {
-        let params = {
-            "id_sender": senderID,
-            "text": feedback,
-            "id_receiver": getProfileID(),
-            "liked": like,
-            "id_parent": null
-        };
-        ajaxCallPost('/users/{id}', params, null);
-        window.location.reload();
-    }
-}
 
 function getProfileID()
 {
@@ -946,6 +918,10 @@ function advSearchHandler()
     header.innerHTML = sentence;
     htmlAlbum = makeSearchAlbum(answer);
     album.innerHTML = htmlAlbum;
+}
+
+function searchMember(){
+
 }
 
 /**
