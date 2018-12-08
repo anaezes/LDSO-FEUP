@@ -6,6 +6,16 @@
 <!-- Content create proposal -->
 <div class="container mt-5 mb-5">
     <main>
+        @if ($errors->any())
+            <div class="alert alert-danger d-flex align-itens-center">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <div class="row">
             <div class="col-lg-12">
                 <h4>
@@ -18,12 +28,13 @@
         <hr id="hr_space" class="mt-2">
 
         <form action="{{ route('create') }}" method="POST" enctype="multipart/form-data">
+            {{ csrf_field() }}
             <div class="form-row">
                 <div class="form-group col-lg-12">
                     <h4>
                         <label for="title">Title</label>
                     </h4>
-                    <input type="text" name="title" class="form-control" minlength="10" maxlenght="80" placeholder="Proposal's title" required>
+                    <input type="text" name="title" id="title" class="form-control" minlength="10" maxlenght="80" placeholder="Proposal's title" required>
                 </div>
             </div>
 
@@ -34,7 +45,7 @@
                     <h4>
                         <label for="description">Description</label>
                     </h4>
-                    <textarea name="description" class="form-control" cols="80" rows="5" minlength="20" placeholder="Proposal's description" required></textarea>
+                    <textarea name="description" id="description" class="form-control" cols="80" rows="8" minlength="20" placeholder="Proposal's description" required></textarea>
                 </div>
             </div>
 
@@ -43,9 +54,9 @@
             <div class="form-row">
                 <div class="form-group col-lg-12">
                     <h4>
-                        <label for="skills">Skills</label>
+                        <label for="skill">Skills</label>
                     </h4>
-                    <select name="skills" class="form-control" size="8"  multiple>
+                    <select name="skill[]" id="skill" class="form-control" size="8"  multiple>
                         @foreach(App\Skill::orderBy('skillname')->get() as $skill)
                             <option value="{{ $skill->id }}" class="p-1">{{ $skill->skillname }}</option>
                         @endforeach
@@ -58,9 +69,9 @@
             <div class="form-row">
                 <div class="form-group col-lg-12">
                     <h4>
-                        <label for="faculties">Faculties</label>
+                        <label for="faculty">Faculties</label>
                     </h4>
-                    <select name="faculties" class="form-control" size="8" multiple>
+                    <select name="faculty[]" id="faculty" class="form-control" size="8" multiple>
                         @foreach(App\Faculty::orderBy('facultyname')->get() as $faculty)
                             <option value="{{ $faculty->id }}" class="p-1">{{ $faculty->facultyname }}</option>
                         @endforeach
@@ -83,19 +94,19 @@
                             <h5>
                                 <label for="days">Days</label>
                             </h5>
-                            <input type="number" name="days" class="form-control" min="0" max="13" value="0">
+                            <input type="number" id="days" name="days" class="form-control" min="0" max="13" value="0">
                         </div>
                         <div class="form-group col-lg-4">
                             <h5>
                                 <label for="hours">Hours</label>
                             </h5>
-                            <input type="number" name="hours" class="form-control" min="0" max="23" value="0">
+                            <input type="number" id="hours" name="hours" class="form-control" min="0" max="23" value="0">
                         </div>
                         <div class="form-group col-lg-4">
                             <h5>
                                 <label for="minutes">Minutes</label>
                             </h5>
-                            <input type="number" name="minutes" class="form-control" min="0" max="59" value="0">
+                            <input type="number" id="minutes" name="minutes" class="form-control" min="0" max="59" value="0">
                         </div>
                     </div>
                 </div>
@@ -111,12 +122,12 @@
                     <div class="form-row mt-3">
                         <div class="form-group col-lg-5">
                             <h5>
-                                <label for="annoucement">Winner annoucement date</label>
+                                <label for="announce">Winner annoucement date</label>
                             </h5>
                             <small>
                                 Date by which a winner must be selected.
                             </small>
-                            <input type="date" name="annoucement" class="form-control mt-3">
+                            <input type="date" name="announce" class="form-control mt-3">
                         </div>
                         <div class="col-lg-2"></div>
                         <div class="form-group col-lg-5">
@@ -172,7 +183,7 @@
 
             <div class="form-row">
                 <div class="form-group col-lg-12 d-flex justify-content-end">
-                    <input type="submit" value="Create" class="btn btn-outline-primary btn-lg m-1">
+                    <input type="submit" value="Create" class="btn btn-outline-primary btn-lg m-1 w-25">
                     <input type="reset" value="Clear" class="btn btn-outline-secondary btn-lg m-1">
                 </div>
             </div>
