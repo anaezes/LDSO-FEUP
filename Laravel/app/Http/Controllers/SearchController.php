@@ -42,14 +42,23 @@ class SearchController extends Controller
 
         $input = $request->all();
         if (isset($input['faculty']))
+        {
             $faculties = $input['faculty'];
+        }
         else
+        {
             $faculties = null;
+        }
 
-        if(isset($input['skill']))
+        if (isset($input['skill']))
+        {
             $skills = $input['skill'];
+        }
         else
+        {
             $skills = null;
+        }
+
 
         $ids = [];
 
