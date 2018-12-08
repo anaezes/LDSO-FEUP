@@ -23,8 +23,6 @@ use Illuminate\Validation\Rule;
 
 class ProposalController extends Controller
 {
-    private static $lastUpdate = 0;
-
     /**
      * Create a new controller instance.
      *
@@ -45,9 +43,6 @@ class ProposalController extends Controller
     {
         $proposal = Proposal::find($id);
 
-        $proposal->duedate = date('Y-m-d', strtotime($proposal->duedate));
-        $proposal->announcedate = date('Y-m-d', strtotime($proposal->announcedate));
-
         $timestamp = ProposalController::createTimestamp($proposal->datecreated, $proposal->duration);
 
         if ($timestamp === "Proposal has ended!" && $proposal->proposal_status != "evaluated") {
@@ -60,42 +55,9 @@ class ProposalController extends Controller
 
         $update = ProposalController::updateProposals();
 
-        $facultyNumber = FacultyProposal::where('idproposal', $proposal->id)->get()->first();
-        if ($facultyNumber != null) {
-            $facultyName = Faculty::where('id', $facultyNumber->idfaculty)->get()->first();
-            if ($facultyName != null) {
-                $facultyName = $facultyName->facultyname;
-            } else {
-                $facultyName = "No faculty";
-            }
-        } else {
-            $facultyName = "No faculty";
-        }
-
-        $skills = DB::select(
-            'SELECT skillname from skill, skill_proposal
-                  WHERE skill.id = skill_proposal.idSkill
-                  AND skill_proposal.idProposal = ?',
-            [$proposal->id]
-        );
-
-        $proposal->skills = $skills;
-
-        $bids = DB::select('SELECT id, idteam, biddate from bid WHERE  bid.idProposal = ?', [$proposal->id]);
-
-        foreach ($bids as $bid) {
-            $team = Team::where('id', $bid->idteam)->get()->first();
-            $bid->teamname = $team->teamname;
-            $leader = User::where('id', $team->idleader)->get()->first();
-            $bid->teamleaderid = $leader->id;
-            $bid->teamleadername = "$leader->username";
-        }
-
         return view(
             'pages.proposal',
             ['proposal' => $proposal,
-            'facultyName' => $facultyName,
-            'bids' => $bids,
             'timestamp' => $timestamp]
         );
     }
@@ -108,7 +70,7 @@ class ProposalController extends Controller
     public function create()
     {
         if(Auth::check()){
-            return view('pages.create');
+            return view('pages.createProposal');
         }
         return redirect('/home');
     }
@@ -122,6 +84,8 @@ class ProposalController extends Controller
     public function store(Request $request)
     {
         $created = strtotime("now");
+        $minute = 60;
+        $hour = 3600;
         $day = 86400;
         $month = $day * 30;
         $year = $day * 365;
@@ -137,8 +101,7 @@ class ProposalController extends Controller
             'hours' => 'required|integer|min:0|max:23',
             'minutes' => 'required|integer|min:0|max:59',
             'due' => 'required|date|after:announce',
-            'announce' => 'required|date|after_or_equal:'.date('Y-m-d', $created + $request->days * 86400 + $request->hours * 3600 + $request->minutes * 60).
-                                       "|before_or_equal:".date('Y-m-d', $created + 3 * $month + $request->days * 86400 + $request->hours * 3600 + $request->minutes * 60)
+            'announce' => 'required|date|after_or_equal:'.date('Y-m-d', $created + $request->days * $day + $request->hours * $hour + $request->minutes * $minute)."|before_or_equal:".date('Y-m-d', $created + 3 * $month + $request->days * $day + $request->hours * $hour + $request->minutes * $minute)
             ]
         );
 
@@ -148,9 +111,9 @@ class ProposalController extends Controller
                 ->withInput();
         }
 
-        $duration = $request->input('days') * 86400
-                  + $request->input('hours') * 3600
-                  + $request->input('minutes') * 60;
+        $duration = $request->input('days') * $day
+                  + $request->input('hours') * $hour
+                  + $request->input('minutes') * $minute;
 
         if($duration < 300) {
             return redirect()->back()
@@ -164,15 +127,15 @@ class ProposalController extends Controller
         $proposal->proposal_public = $request->has('public_prop');
         $proposal->bid_public = $request->has('public_bid');
         $proposal->duration = $duration;
-        $proposal->duedate = date('Y-m-d H:i:s', strtotime($request->input('due')));
-        $proposal->announcedate = date('Y-m-d H:i:s', strtotime($request->input('announce')));
+        $proposal->duedate = date('Y-m-d', strtotime($request->input('due')));
+        $proposal->announcedate = date('Y-m-d', strtotime($request->input('announce')));
         $proposal->idproponent = Auth::id();
         $proposal->save();
 
         $proposal->faculty()->attach($request->input('faculty'));
         $proposal->skill()->attach($request->input('skill'));
 
-        return redirect()->route('proposal', $proposal);
+        return redirect()->action('ProposalController@show', $proposal);
     }
 
     /**
