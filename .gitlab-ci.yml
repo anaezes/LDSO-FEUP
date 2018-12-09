@@ -22,7 +22,7 @@ testing:
     - cd Laravel
     - composer install
     - php ./vendor/bin/codecept build
-    - php ./vendor/bin/codecept run
+    - php ./vendor/bin/codecept run acceptance
     - php ./vendor/bin/phpunit
 
 deploy-staging:
