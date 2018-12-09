@@ -16,15 +16,17 @@
                         <div class="panel panel-default py-2">
                             <div class="panel-heading accordion-toggle question-toggle collapsed" data-toggle="collapse" data-parent="#faqAccordion" data-target="#question0">
                                 <h4 class="panel-title">
-                                    <a href="#question0" class="ing">What is BookHub?</a>
+                                    <a href="#question0" class="ing">What is U.Openlab?</a>
                                 </h4>
                             </div>
-
                             <div id="question0" class="panel-collapse collapse" style="height: 0px;">
                                 <div class="panel-body">
-
-                                    <p>BookHub is a web platform that allows EU residents to register and pariticipate in online book auctions. The auctions are limited to literary items and can last from 5 minutes to 7 days. The payment is processed through
-                                        Paypal.
+                                    <p class="text-justify">
+                                        The U.Openlab concept is developed at the University of Porto (U.Porto) in the context of the teaching/learning process and is assumed to be an interaction facilitator platform between real-world needs and practical works topics. The aim is to provide innovative answers and the effective use of assessment results, the credits recognition for future professional or scientific careers and a sustainable process oriented for, among others, universities heritage services' needs.
+                                        <br>
+                                        The pilot-project in course at the University of Porto, focusing on the U.Porto Digital Museum, includes a technological infrastructure with three main components: several collections, an information and services management platform, with its corresponding digital repository; the U.Porto community contributions management platform (U.Porto OpenLab); and an adaptive framework that will support various interface applications with non-specific audiences.
+                                        <br>
+                                        The U.Porto OpenLab considers two main areas: the bidding management area / calls for contributions and a  contributions personal management area. The professor, the student and the “client” are the actors in the process. As for main tasks we point out the reception, selection and distribution of real needs / problems. Having concluded the assessment process, results were selected and an online publication was submitted. The inherent credits are recorded in a contributors' digital portfolio management and in the professional social networks profiles. The methodology will be presented and discussed as well as the process along with the obstacles and other factors contributing to the success and future replication of this experience.
                                     </p>
                                 </div>
                             </div>
@@ -34,15 +36,17 @@
                         <div class="panel panel-default py-2">
                             <div class="panel-heading accordion-toggle collapsed question-toggle" data-toggle="collapse" data-parent="#faqAccordion" data-target="#question1">
                                 <h4 class="panel-title">
-                                    <a href="#question1" class="ing">What should I know before I start participating in book auctions?</a>
+                                    <a href="#question1" class="ing">What should I know before I create a proposal or a bid?</a>
                                 </h4>
                             </div>
-
                             <div id="question1" class="panel-collapse collapse" style="height: 0px;">
                                 <div class="panel-body">
 
-                                    <p>After registration, you can participate in book auctions as a buyer and as a seller. You must follow the rules concerning each of these roles described in this FAQ or you may subjected to a ban by the moderating team.
-                                        Only one registred account is allowed per person. </p>
+                                    <p class="text-justify">
+                                        Before creating a proposal, make sure that you have all the information you need well organized. Incomprehensible proposals will not be approved, as well as fraudulent-like proposals.
+                                        <br>
+                                        Before creating a bid, you must create or join a team. Notice that after creating a team, you can delete or edit it, but after bidding on a proposal, you will not be able to delete the team anymore.
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -52,14 +56,14 @@
                         <div class="panel panel-default py-2">
                             <div class="panel-heading accordion-toggle collapsed question-toggle" data-toggle="collapse" data-parent="#faqAccordion" data-target="#question2">
                                 <h4 class="panel-title">
-                                    <a href="#question2" class="ing">What should I do if I want to participate in an auction as a buyer?</a>
+                                    <a href="#question2" class="ing">How can I create a proposal?</a>
                                 </h4>
                             </div>
-
                             <div id="question2" class="panel-collapse collapse" style="height: 0px;">
                                 <div class="panel-body">
 
-                                    <p>As a buyer you are allowed to bid in other user's auctions. If you win the auction, you are charged immediately through your associated PayPal account. Any misbehavior regarding PayPal may result in a permanent ban.
+                                    <p class="text-justify">
+                                        To create a proposal, you must first sign in to your account. Then click on '<i class="fas fa-plus"></i>' button or go to 'Create auction' located in the menu under your username, both located on the top right corner of the window.
                                     </p>
                                 </div>
                             </div>
@@ -69,17 +73,15 @@
                         <div class="panel panel-default py-2">
                             <div class="panel-heading accordion-toggle collapsed question-toggle" data-toggle="collapse" data-parent="#faqAccordion" data-target="#question3">
                                 <h4 class="panel-title">
-                                    <a href="#question3" class="ing">What should I do if I want to create an auction and participate as a seller?</a>
+                                    <a href="#question3" class="ing">How can I create a team?</a>
                                 </h4>
                             </div>
 
                             <div id="question3" class="panel-collapse collapse" style="height: 0px;">
                                 <div class="panel-body">
-
-                                    <p>As a seller you are allowed to create new auctions and wait for other users biddings until the auction ends. You are not allowed to bid your own auctions. A new auction will only be made public after it's been aproved
-                                        by the moderator team. After the auction closes, you should ship the item using a method that provides tracking information. All shipping costs will have to be covered by you, and you must ensure that the item reaches
-                                        the buyer in 40 or less days. You will receive the buyer's shipping address through a notification. You should receive the payment to your Paypal account within 48h. The buyer is allowed to leave a feedback in your
-                                        profile regarding his experience.</p>
+                                    <p class="text-justify">
+                                        To create a team, you must first sign in to your account. Then click on your username on the top right corner of the window and go to 'My Teams'. Click on '<i class="fas fa-plus"></i> Create Team' link.
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -89,15 +91,16 @@
                         <div class="panel panel-default py-2">
                             <div class="panel-heading accordion-toggle collapsed question-toggle" data-toggle="collapse" data-parent="#faqAccordion" data-target="#question4">
                                 <h4 class="panel-title">
-                                    <a href="#question4" class="ing">What should I do if I bought a book but it never came?</a>
+                                    <a href="#question4" class="ing">How can I join a team?</a>
                                 </h4>
                             </div>
 
                             <div id="question4" class="panel-collapse collapse" style="height: 0px;">
                                 <div class="panel-body">
 
-                                    <p> You must give 40 full days after the shipping of the book. After that time, if you still haven't receive the book, <a href="contact.html">message</a> the moderating team about your issue and you will be contacted within
-                                        48 hours through your specified e-mail address. Alternatively, contact the seller directly.</p>
+                                    <p class="text-justify">
+                                        To join a team, you must first sign up. Then, contact the team leader providing your username and asking him/her to invite you.
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -107,15 +110,16 @@
                         <div class="panel panel-default py-2">
                             <div class="panel-heading accordion-toggle collapsed question-toggle" data-toggle="collapse" data-parent="#faqAccordion" data-target="#question5">
                                 <h4 class="panel-title">
-                                    <a href="#question5" class="ing">The auction of my book has ended but the winner didn't pay, what should I do?</a>
+                                    <a href="#question5" class="ing">How can I make a bid to a proposal?</a>
                                 </h4>
                             </div>
 
                             <div id="question5" class="panel-collapse collapse" style="height: 0px;">
                                 <div class="panel-body">
 
-                                    <p>You should give 48h after the auction is over. Payments are done via PayPal and are automatic, but it is not guaranteed that the transaction will be successfully finished. If after 48h the you haven't yet received your
-                                        payment, message us, and we will find out the reason. If it happens to be the work of a fraudulent user and/or PayPal account, you will be allowed to create a new auction for the same item. </p>
+                                    <p class="text-justify">
+                                        To make a bid to a proposal, you must first be in a team. Then, go to the page of the proposal you want to bid and click '<i class="fas fa-plus"></i> Bid'.
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -125,15 +129,15 @@
                         <div class="panel panel-default py-2">
                             <div class="panel-heading accordion-toggle collapsed question-toggle" data-toggle="collapse" data-parent="#faqAccordion" data-target="#question6">
                                 <h4 class="panel-title">
-                                    <a href="#question6" class="ing">What information should I leave as a feedback?</a>
+                                    <a href="#question6" class="ing">I can not make a bid, what is wrong?</a>
                                 </h4>
                             </div>
 
                             <div id="question6" class="panel-collapse collapse" style="height: 0px;">
                                 <div class="panel-body">
-
-                                    <p>As a buyer, after a purchase, you are expected to express your apreciation or depreciation related to your purchase experience. After the positive or negative feedback choice you can leave a customized message that
-                                        can detail the experience related to the shipping, packaging, resemblence of the item to the decription and communication with the seller. </p>
+                                    <p>
+                                        
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -180,11 +184,11 @@
                                         <a href="#question10" class="ing">Where can i see the auctions i'm related to?</a>
                                     </h4>
                                 </div>
-    
+
                                 <div id="question10" class="panel-collapse collapse" style="height: 0px;">
                                     <div class="panel-body">
-                                        
-                                        <p>If you're logged in, in the upper right corner there's your username. Click there and choose beetween all the options we have at your disposal.  
+
+                                        <p>If you're logged in, in the upper right corner there's your username. Click there and choose beetween all the options we have at your disposal.
                                         </p>
                                     </div>
                                 </div>
