@@ -20,6 +20,7 @@ testing:
   stage: testing
   script:
     - cd Laravel
+    - wget https://pastebin.com/raw/EmMfU0UA --output-document=.env
     - composer install
     - php ./vendor/bin/codecept build
     - php ./vendor/bin/codecept run acceptance
