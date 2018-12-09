@@ -10,7 +10,7 @@ stages:
 lint:
   stage: linter
   script:
-    - cd filesForCI
+    - cd Laravel
     - composer install
     - php ./vendor/bin/phpcs ../Laravel/app --standard=PSR2 --exclude=Generic.Files.LineLength
     - php ./vendor/bin/phpcs ../Laravel/routes --standard=PSR2 --exclude=Generic.Files.LineLength
