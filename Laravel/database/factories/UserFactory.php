@@ -13,9 +13,14 @@ use Faker\Generator as Faker;
 |
 */
 
+$e = 0;
+
 $factory->define(App\User::class, function (Faker $faker) {
+    global $e;
+    $e++;
 
     return [
+        'id' => $e, //$faker->unique()->randomNumber(),
         'name' => $faker->name,
         'username' => $faker->unique()->userName,
         'email' => $faker->unique()->safeEmail,

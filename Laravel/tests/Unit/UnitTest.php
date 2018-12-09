@@ -39,7 +39,7 @@ class UnitTest extends TestCase
      *
      * @return void
      */
-    public function testRouteRegisterUser()
+    public function testRouteRegisterUserPost()
     {
         $user = factory(\App\User::class)->create();
         $this->be($user);
@@ -50,20 +50,35 @@ class UnitTest extends TestCase
     }
 
     /**
+     * Test resgister user route
+     *
+     * @return void
+     */
+    public function testRouteRegisterUserGet()
+    {
+        $this->route('GET', 'register');
+        $this->followRedirects('register');
+        $this->assertResponseOk();
+    }
+
+    /**
      * Test logout user route
      *
      * @return void
      */
-    public function testRouteLogout()
+    public function testRouteLogoutGet()
     {
-        //register
         $user = factory(\App\User::class)->create();
         $this->be($user);
-        $this->post(route('register'), $user->toArray());
+        $response = $this->post(route('register'), $user->toArray())
+            ->seeInDatabase('users', ['username' => $user->username]);
+        $response->followRedirects('faq');
+        $this->assertTrue(Auth::check());
 
-        $response = $this->get(route('logout'));
-        $response->dontSee($user->username);
-        $response->followRedirects('home');
+
+        $this->route('GET', 'logout');
+        $this->followRedirects('logout');
+        $this->assertFalse(Auth::check());
     }
 
     /**
@@ -72,18 +87,20 @@ class UnitTest extends TestCase
      * @return void
      */
 
-    public function testRouteLogin()
+    public function testRouteLoginPost()
     {
-        //register
         $user = factory(\App\User::class)->create();
-        $this->post(route('register'), $user->toArray());
+        $this->be($user);
+        $response = $this->post(route('register'), $user->toArray())
+            ->seeInDatabase('users', ['username' => $user->username]);
+        $response->followRedirects('faq');
+        $this->assertTrue(Auth::check());
 
-        //logout
-        $this->get(route('logout'));
+        $this->route('GET', 'logout');
+        $this->assertFalse(Auth::check());
 
         $response = $this->post(route('login'), $user->toArray());
         $this->be($user);
-        $response->see($user->username, true);
         $this->assertTrue(Auth::check());
         $response->followRedirects('home');
     }
@@ -94,7 +111,7 @@ class UnitTest extends TestCase
      * @return void
      */
 
-    public function testAddProposal()
+    public function testRouteLoginGet()
     {
         $this->route('GET', 'login');
         $this->followRedirects('login');
@@ -111,7 +128,10 @@ class UnitTest extends TestCase
     {
 
         $user = factory(\App\User::class)->create();
-        $this->post(route('register'), $user->toArray());
+        $this->be($user);
+        $this->post(route('register'), $user->toArray())
+            ->seeInDatabase('users', ['username' => $user->username]);
+        $this->assertTrue(Auth::check());
 
         $proposal = factory(\App\Proposal::class)->create();
 
@@ -203,5 +223,54 @@ class UnitTest extends TestCase
     }
 
 
+    public function testRouteProposalUpdatePut()
+    {
+        //Route::put('proposal/{id}', 'ProposalController@update')->name('proposal.update');
+        $proposal = factory(\App\Proposal::class)->create([
+            "proposal_status" => 'finished'
+        ]);
+        $this->route('PUT', 'proposal.update', ['id' => $proposal->id]);
+        $this->seeInDatabase('proposal', ['description' => $proposal->description, 'proposal_status' => 'finished']);
+    }
+
+
+    public function testRouteProfileGet()
+    {
+        $user = factory(\App\User::class)->create();
+        $this->be($user);
+        $this->post(route('register'), $user->toArray())
+            ->seeInDatabase('users', ['username' => $user->username]);
+        $this->assertTrue(Auth::check());
+
+        $this->route('GET', 'profile',  [$user->id]);
+        $this->followRedirects('profile'.$user->id);
+        $this->assertResponseOk();
+    }
+
+   public function testRouteProfilePost()
+    {
+        //Route::post('profile/{id}/edit', 'ProfileController@editUser')->name('profile.edit');
+        $user = factory(\App\User::class)->create();
+        $this->be($user);
+        $this->post(route('register'), $user->toArray())
+            ->seeInDatabase('users', ['username' => $user->username]);
+        $this->assertTrue(Auth::check());
+
+        $response = $this->post(route('profile.edit', $user->id), $user->toArray());
+        //$this->assertResponseOk(); fixme
+    }
+
+    public function testRouteContactGet()
+    {
+        $this->route('GET', 'contact');
+        $this->followRedirects('contact');
+        $this->assertResponseOk();
+    }
+
+    public function testRouteAboutGet()
+    {
+        $this->route('GET', 'about');
+        $this->followRedirects('about');
+        $this->assertResponseOk();
     }
 }
