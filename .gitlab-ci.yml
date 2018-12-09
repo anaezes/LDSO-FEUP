@@ -1,6 +1,14 @@
 image: registry.gitlab.com/feup-tbs/ldso18-19/t2g4/ci-image
 
+services:
+- docker:dind
+
+variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
+
 before_script:
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
   - export SSHPASS=$USER_PASS
 
 stages:
@@ -21,10 +29,10 @@ testing:
   script:
     - cd Laravel
     - wget https://pastebin.com/raw/EmMfU0UA --output-document=.env
-    - composer install
-    - php ./vendor/bin/codecept build
-    - php ./vendor/bin/codecept run acceptance
-    - php ./vendor/bin/phpunit
+    - docker-compose up --build
+    - docker exec -t laravel_web_1 php ./vendor/bin/codecept build
+    - docker exec -t laravel_web_1 php ./vendor/bin/codecept run acceptance
+    - docker exec -t laravel_web_1 php ./vendor/bin/phpunit
 
 deploy-staging:
   stage: deploy
