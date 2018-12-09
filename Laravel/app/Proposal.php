@@ -24,6 +24,16 @@ class Proposal extends Model
     public $primaryKey = "id";
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'id', 'description', 'duration', 'title', 'proposal_status','proposal_public', 'bid_public',  'dateapproved',
+        'duedate', 'announcedate', 'idproponent'
+    ];
+
+    /**
      *
      * The user that created this proposal
      *

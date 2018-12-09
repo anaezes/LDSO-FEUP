@@ -96,44 +96,50 @@ class UnitTest extends TestCase
 
     public function testAddProposal()
     {
-        //register
+        $this->route('GET', 'login');
+        $this->followRedirects('login');
+        $this->assertResponseOk();
+    }
+
+    /**
+     * Test login user route
+     *
+     * @return void
+     */
+
+    public function testAddProposalPost()
+    {
+
         $user = factory(\App\User::class)->create();
         $this->post(route('register'), $user->toArray());
 
-       $proposal = factory(\App\Proposal::class)->create([
-            'idproponent' => $user->id
-        ]);
+        $proposal = factory(\App\Proposal::class)->create();
 
-       /*
-       $timestamp1 = mt_rand(1, time());
-       $timestamp2 = mt_rand(1, time()+$timestamp1);
+        $this->be($user);
+        $response = $this->post(route('create'), $proposal->toArray()) //fixme
+            ->seeInDatabase('proposal', ['title' => $proposal->title]);
+        $response->followRedirects('create');
+    }
 
-       $data[] = array(
-            'title' => 'blablabla',
-            'duration' => array(
-                'days' => rand(0,14),
-                'hours' => rand(0,23),
-                'minuts' =>  rand(0,59),
-            ),
-            'announce' =>  date("d M Y", $timestamp1),
-            'description' => 'blablabla',
-            'due' => date("d M Y", $timestamp2),
-            'public_prop' => 'on',
-            'public_bid' => 'on',
-            'faculty' => array(1,2),
-            'skill' => array(1,2)
-        );
-        */
+    public function testRouteCreateProposalGet()
+    {
+        $user = factory(\App\User::class)->create();
+        $this->be($user);
+        $this->post(route('register'), $user->toArray())
+            ->seeInDatabase('users', ['username' => $user->username]);
+        $this->assertTrue(Auth::check());
 
+        $this->route('GET', 'create');
+        $this->followRedirects('create');
+        $this->assertResponseOk();
+    }
 
-        $response = $this->post(route('create'), $proposal->toArray())
-            ->assertRedirectedTo('home') //fixme
-            ->seeInDatabase('proposal', ['title' => $proposal->title])
-            ->seeInDatabase('proposal', ['idproponent' => $user->id]);
-
-     //   $response->assertRedirectedTo('');
-/*
-
+    public function testRouteCreateBidGet()
+    {
+        $user = factory(\App\User::class)->create();
+        $this->be($user);
+        $response = $this->post(route('register'), $user->toArray())
+            ->seeInDatabase('users', ['username' => $user->username]);
         $response->followRedirects('faq');
         $this->assertTrue(Auth::check());
 
