@@ -69,7 +69,7 @@ class ProposalController extends Controller
      */
     public function create()
     {
-        if(Auth::check()){
+        if (Auth::check()) {
             return view('pages.createProposal');
         }
         return redirect('/home');
@@ -115,7 +115,7 @@ class ProposalController extends Controller
                   + $request->input('hours') * $hour
                   + $request->input('minutes') * $minute;
 
-        if($duration < 300) {
+        if ($duration < 300) {
             return redirect()->back()
                 ->withErrors("Duration must be higher than 5 minutes")
                 ->withInput();
