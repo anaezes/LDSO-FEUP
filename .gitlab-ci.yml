@@ -27,9 +27,9 @@ lint:
 testing:
   stage: testing
   script:
-    - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "docker exec -t laravel-testing_web_1 php ./vendor/bin/codecept build"
-    - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "docker exec -t laravel-testing_web_1 php ./vendor/bin/codecept run acceptance"
-    - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "docker exec -t laravel-testing_web_1 php ./vendor/bin/phpunit"
+    - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "docker exec -t laravel-test_web_1 php ./vendor/bin/codecept build"
+    - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "docker exec -t laravel-test_web_1 php ./vendor/bin/codecept run acceptance"
+    - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "docker exec -t laravel-test_web_1 php ./vendor/bin/phpunit"
 
 deploy-staging:
   stage: deploy
