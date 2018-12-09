@@ -20,6 +20,7 @@ class UnitTest extends TestCase
     public function testRouteHome()
     {
         $this->route('GET', 'home');
+        $this->followRedirects('home');
         $this->assertResponseOk();
     }
 
@@ -31,6 +32,7 @@ class UnitTest extends TestCase
     public function testRouteAllProposals()
     {
         $this->route('GET', 'allproposals');
+        $this->followRedirects('allproposals');
         $this->assertResponseOk();
     }
 
