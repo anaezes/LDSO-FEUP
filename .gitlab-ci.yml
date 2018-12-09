@@ -12,8 +12,8 @@ before_script:
   - export SSHPASS=$USER_PASS
 
 stages:
-  - linter
   - testing
+  - linter
   - deploy
 
 lint:
@@ -27,12 +27,9 @@ lint:
 testing:
   stage: testing
   script:
-    - cd Laravel
-    - wget https://pastebin.com/raw/EmMfU0UA --output-document=.env
-    - docker-compose up --build
-    - docker exec -t laravel_web_1 php ./vendor/bin/codecept build
-    - docker exec -t laravel_web_1 php ./vendor/bin/codecept run acceptance
-    - docker exec -t laravel_web_1 php ./vendor/bin/phpunit
+    - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "docker exec -t laravel-staging_web_1 php ./vendor/bin/codecept build"
+    - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "docker exec -t laravel-staging_web_1 php ./vendor/bin/codecept run acceptance"
+    - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "docker exec -t laravel-staging_web_1 php ./vendor/bin/phpunit"
 
 deploy-staging:
   stage: deploy
