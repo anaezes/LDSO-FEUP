@@ -19,14 +19,14 @@ class Team extends Model
     *
     * @var string
     */
-    protected $table = 'team';
+    public $table = 'team';
 
     /**
     * The primary key associated with the model
     *
     * @var string
     */
-    protected $primaryKey = "id";
+    public $primaryKey = "id";
 
     /**
     * The attributes that are mass assignable.
