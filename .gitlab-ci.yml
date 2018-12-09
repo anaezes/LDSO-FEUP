@@ -5,15 +5,25 @@ before_script:
 
 stages:
   - linter
+  - testing
   - deploy
 
 lint:
   stage: linter
   script:
-    - cd Laravel
+    - cd filesForCI
     - composer install
     - php ./vendor/bin/phpcs ../Laravel/app --standard=PSR2 --exclude=Generic.Files.LineLength
     - php ./vendor/bin/phpcs ../Laravel/routes --standard=PSR2 --exclude=Generic.Files.LineLength
+
+testing:
+  stage: testing
+  script:
+    - cd Laravel
+    - composer install
+    - php ./vendor/bin/codecept build
+    - php ./vendor/bin/codecept run
+    - php ./vendor/bin/phpunit
 
 deploy-staging:
   stage: deploy
