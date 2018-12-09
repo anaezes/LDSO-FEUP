@@ -22,6 +22,15 @@ class Bid extends Model
 
     public $primaryKey = 'id';
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'id', 'idproposal', 'idteam','description', 'submissiondate'
+    ];
+
     public function team()
     {
         return $this->belongsTo('App\Team', 'idteam', 'id');
