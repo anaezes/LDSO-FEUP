@@ -7,8 +7,8 @@
 <div class="container mt-5 mb-5">
     <main>
         @if ($errors->any())
-            <div class="alert alert-danger d-flex align-itens-center">
-                <ul>
+            <div class="alert alert-danger">
+                <ul class="d-flex align-items-center">
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
@@ -94,19 +94,19 @@
                             <h5>
                                 <label for="days">Days</label>
                             </h5>
-                            <input type="number" id="days" name="days" class="form-control" min="0" max="13" value="0">
+                            <input type="number" id="days" name="days" class="form-control" min="0" max="13" value="0" placeholder="Days" required>
                         </div>
                         <div class="form-group col-lg-4">
                             <h5>
                                 <label for="hours">Hours</label>
                             </h5>
-                            <input type="number" id="hours" name="hours" class="form-control" min="0" max="23" value="0">
+                            <input type="number" id="hours" name="hours" class="form-control" min="0" max="23" value="0" placeholder="Hours" required>
                         </div>
                         <div class="form-group col-lg-4">
                             <h5>
                                 <label for="minutes">Minutes</label>
                             </h5>
-                            <input type="number" id="minutes" name="minutes" class="form-control" min="0" max="59" value="0">
+                            <input type="number" id="minutes" name="minutes" class="form-control" min="0" max="59" value="0" placeholder="Minutes" required>
                         </div>
                     </div>
                 </div>
@@ -127,7 +127,7 @@
                             <small>
                                 Date by which a winner must be selected.
                             </small>
-                            <input type="date" name="announce" class="form-control mt-3">
+                            <input type="date" name="announce" class="form-control mt-3" min="{{ date('Y-m-d', strtotime('+1 day')) }}" max="{{ date('Y-m-d', strtotime('+3 month')) }}" required>
                         </div>
                         <div class="col-lg-2"></div>
                         <div class="form-group col-lg-5">
@@ -137,7 +137,7 @@
                             <small>
                                 Date by which a team must submit its project.
                             </small>
-                            <input type="date" name="due" class="form-control mt-3">
+                            <input type="date" name="due" class="form-control mt-3" min="{{ date('Y-m-d', strtotime('+1 day')) }}" max="{{ date('Y-m-d', strtotime('+1 year')) }}" required>
                         </div>
                     </div>
                 </div>
@@ -184,7 +184,10 @@
             <div class="form-row">
                 <div class="form-group col-lg-12 d-flex justify-content-end">
                     <input type="submit" value="Create" class="btn btn-outline-primary mr-2 w-25">
-                    <input type="reset" value="Clear" class="btn btn-outline-secondary">
+                    <input type="reset" value="Clear" class="btn btn-outline-secondary mr-2">
+                    <script>
+                        document.write('<a href="'+document.referrer+'" class="btn btn-outline-danger">Back</a>')
+                    </script>
                 </div>
             </div>
         </form>
