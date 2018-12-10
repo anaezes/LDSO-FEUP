@@ -211,6 +211,7 @@ function historyAlbumHandler()
 
 function historyAlbum()
 {
+    console.log(proposals);
     let htmlproposal = `<div class="row">`;
     let max = i + 12;
 
@@ -221,28 +222,25 @@ function historyAlbum()
         {
             htmlproposal += `</div><div class="row">`;
         }
+        console.log(element);
         htmlproposal += `<div class="col-md-3 proposalItem"  data-id="${element.id}">
         <a href="proposal/${element.id}" class="list-group-item-action">
             <div class="card mb-4 box-shadow">
-                <div class="col-md-6 img-fluid media-object align-self-center ">
-                    <!--<img class="width100" src="../img/book.png" alt="cover image">-->
-                    <img class="width100" src="../img/${element.image}" alt="book image">
-                </div>
                 <div class="card-body">
-                    <p class="card-text text-center hidden-p-md-down font-weight-bold" style="font-size: larger"> ${element.title} </p>
-                    <p class="card-text text-center hidden-p-md-down">By ${element.author} </p>
-                    <div class="text-center align-items-center">
-                        <small class="text-success">Sold for ${element.bidMsg} </small>
+                    <p class="card-text text-center hidden-p-sm-down font-weight-bold" style="font-size: larger"> ${element.title} </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-success">${element.bidMsg} </small>
+                        <small class="text-danger">
+                                ${proposalStatus(element.proposal_status)}</small>
                     </div>
                 </div>
             </div>
         </a>
     </div>`;
     };
-
+    htmlproposal += `</div>`;
     if (i == proposals.length)
         showmorebutton.parentNode.removeChild(showmorebutton);
-    htmlproposal += `</div>`;
     return htmlproposal;
 }
 
@@ -266,15 +264,16 @@ function myproposalsAlbum()
         {
             htmlproposal += `</div><div class="row">`;
         }
+        console.log(element);
         htmlproposal += `<div class="col-md-3 proposalItem"  data-id="${element.id}">
         <a href="proposal/${element.id}" class="list-group-item-action">
             <div class="card mb-4 box-shadow">
                 <div class="card-body">
                     <p class="card-text text-center hidden-p-sm-down font-weight-bold" style="font-size: larger"> ${element.title} </p>
                     <div class="d-flex justify-content-between align-items-center">
-                        <small class="text-success">${element.bidMsg} </small>
+                        <small class="text-success">${element.nBids} bids </small>
                         <small class="text-danger">
-                                ${element.time}</small>
+                                ${proposalStatus(element.proposal_status)}</small>
                     </div>
                 </div>
             </div>
@@ -315,7 +314,7 @@ function allproposalsAlbum()
                     <div class="d-flex justify-content-between align-items-center">
                         <small class="text-success">${element.bidMsg} </small>
                         <small class="text-danger">
-                                ${element.time}</small>
+                            ${proposalStatus(element.proposal_status)}</small>
                     </div>
                 </div>
             </div>
@@ -352,9 +351,9 @@ function proposalsIWonAlbum(){
                 <div class="card-body">
                     <p class="card-text text-center hidden-p-sm-down font-weight-bold" style="font-size: larger"> ${element.title} </p>
                     <div class="d-flex justify-content-between align-items-center">
-                        <small class="text-success">${element.bidMsg} </small>
+                        <small class="text-success">${element.bidMsg}</small>
                         <small class="text-danger">
-                                ${element.time}</small>
+                            ${proposalStatus(element.proposal_status)}</small>
                     </div>
                 </div>
             </div>
@@ -453,6 +452,26 @@ function makeSearchAlbum(proposals)
     });
     htmlproposal += `</div>`;
     return htmlproposal;
+}
+
+function proposalStatus(e) {
+    switch (e) {
+        case 'waitingApproval':
+            return 'Waiting Approval';
+            break;
+        case 'approved':
+            return 'Approved'
+            break;
+        case 'finished':
+            return 'Finished'
+            break;
+        case 'evaluated':
+            return 'Evaluated'
+            break;
+        default:
+            return 'Error'
+            break;
+    }
 }
 
 /**
