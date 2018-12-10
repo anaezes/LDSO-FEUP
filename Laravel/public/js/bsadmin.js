@@ -113,7 +113,7 @@ if (showmorebutton != null)
                 break;
             case "/proposalsIWon":
                 album.innerHTML += proposalsIWonAlbum();
-            break;
+                break;
             case "/teams":
                 album.innerHTML += teamsAlbum();
                 break;
@@ -205,6 +205,7 @@ function teamsAlbum()
 
 function historyAlbumHandler()
 {
+    console.log(this.responseText);
     proposals = JSON.parse(this.responseText);
     album.innerHTML = historyAlbum();
 }

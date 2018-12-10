@@ -80,7 +80,7 @@ class ListController extends Controller
         if (!Auth::check()) {
             return redirect('/home');
         }
-        $action = "HISTORY";
+        $action = "history";
 
         return view('pages.list', ['action' => $action]);
     }

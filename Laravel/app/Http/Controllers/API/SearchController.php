@@ -51,11 +51,24 @@ class SearchController extends Controller
 
 
             if ($request->input('history') !== null && Auth::check()) {
-                $res = DB::select("SELECT DISTINCT proposal.id FROM proposal, bid WHERE bid.idproposal = proposal.id and bid.idBuyer = ? AND proposal_status = ?", [Auth::user()->id, 'finished']);
-                $res1 = DB::select("SELECT DISTINCT proposal.id FROM proposal WHERE idproponent = ? AND proposal_status = ?", [Auth::user()->id, 'finished']);
+                $res = DB::table('proposal')
+                    ->join('bid', 'proposal.id', '=', 'bid.idproposal')
+                    ->join('team', 'bid.idteam', '=', 'team.id')
+                    ->join('team_member', 'team.id', '=', 'team_member.idteam')
+                    ->where([
+                        ['proposal.proposal_status', '=', 'evaluated'],
+                        ['bid.winner', '=', true],
+                        ['team.idleader', '=', Auth::user()->id],
+                    ])
+                    ->orWhere([
+                        ['proposal.proposal_status', '=', 'evaluated'],
+                        ['bid.winner', '=', true],
+                        ['team_member.iduser', '=', Auth::user()->id],
+                    ])
+                    ->select('proposal.id')->get();
                 array_push($queryResults, $res);
-                array_push($queryResults, $res1);
             }
+
             if ($request->input('proposalsOfUser') !== null && Auth::check()) {
                 $res = DB::select("SELECT DISTINCT proposal.id FROM proposal WHERE idproponent = ?", [Auth::user()->id]);
                 array_push($queryResults, $res);
