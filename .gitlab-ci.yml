@@ -1,14 +1,6 @@
 image: registry.gitlab.com/feup-tbs/ldso18-19/t2g4/ci-image
 
-services:
-- docker:dind
-
-variables:
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_DRIVER: overlay2
-
 before_script:
-  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
   - export SSHPASS=$USER_PASS
 
 stages:
@@ -24,9 +16,14 @@ lint:
     - php ./vendor/bin/phpcs ../Laravel/app --standard=PSR2 --exclude=Generic.Files.LineLength
     - php ./vendor/bin/phpcs ../Laravel/routes --standard=PSR2 --exclude=Generic.Files.LineLength
 
-testing:
+deploy-testing:
   stage: testing
+  environment:
+    name: testing
+    url: http://46.101.156.192:8200
   script:
+    - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "cd ~/testing && chmod 777 script.sh && ./script.sh"
+    - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "cd ~/testing && chmod 777 wait-for-it.sh && bash wait-for-it.sh -t 600 localhost:8200"
     - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "docker exec -t laravel-test_web-prod_1 php ./vendor/bin/codecept build"
     - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "docker exec -t laravel-test_web-prod_1 php ./vendor/bin/codecept run acceptance"
     - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "docker exec -t laravel-test_web-prod_1 php ./vendor/bin/phpunit"
