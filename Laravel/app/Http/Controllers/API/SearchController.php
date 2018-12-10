@@ -53,7 +53,7 @@ class SearchController extends Controller
                 $res = DB::select(
                     "SELECT DISTINCT p.id 
                     FROM proposal p 
-                    WHERE p.proposal_status = ?", 
+                    WHERE p.proposal_status = ?",
                     [$request->input('proposalStatus')]
                 );
                 array_push($queryResults, $res);
@@ -99,7 +99,7 @@ class SearchController extends Controller
                         tm.iduser = ?) AND 
                         p.proposal_status IN ('approved', 'finished') AND
                         b.winner = FALSE",
-                [Auth::id(), Auth::id()]
+                    [Auth::id(), Auth::id()]
                 );
                 array_push($queryResults, $res);
             }
@@ -116,7 +116,7 @@ class SearchController extends Controller
                 array_push($queryResults, $res);
             }
             if ($request->input('proposalsAvailableToUser') !== null) { // todo proposal_status fix later
-                if(Auth::check()) {
+                if (Auth::check()) {
                     $res = DB::select(
                         "SELECT DISTINCT p.id
                         FROM proposal p
@@ -127,8 +127,7 @@ class SearchController extends Controller
                         [Auth::id()]
                     );
                     array_push($queryResults, $res);
-                }
-                else {
+                } else {
                     $res = DB::select(
                         "SELECT DISTINCT p.id 
                         FROM proposal p 
