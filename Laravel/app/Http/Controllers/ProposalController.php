@@ -236,7 +236,6 @@ class ProposalController extends Controller
                 $proposal->save();
 
                 $this->notifyOwner($proposal->id);
-                $this->notifyBidders($proposal->id);
             }
         }
     }
