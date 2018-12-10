@@ -45,8 +45,8 @@ class AcceptanceTests extends TestCase
      * Test for access profile page.
      *  Member-Profile page
      * @return void
+*/
 
-         Not working!
     public function testAccessProfile()
     {
 
@@ -56,29 +56,29 @@ class AcceptanceTests extends TestCase
             ->type('123456', 'password')
             ->press('LOGIN')
             ->visit('Profile')
-            ->seePageIs('/profile/1');
+            ->seePageIs('/home');
 
     }
-     */
+
 
     /**
      * Test for edit profile page.
      *
      * @return void
-
+    */
 
     public function testEditProfile()
     {
         $this->visit('/profile/1')
-            ->press('Edit Info')
+            ->visit('Edit Info')
             ->type('Teste1', 'name')
             ->type('teste1@fe.up.pt', 'email')
-            ->press('Save any new changes')
-            ->seePageIs('');
+            ->visit('Save any new changes')
+            ->seePageIs('home');
 
 
     }
-     */
+
     /**
      * Test for logout.
      *  Member-Logout
@@ -125,6 +125,81 @@ class AcceptanceTests extends TestCase
             ->visit('allproposals')
             ->seePageIs('/allproposals');
 
+    }
+
+
+
+
+    /**
+     * Test Team Pages
+     *
+     * @return void
+    */
+
+    public function testTeamPage()
+    {
+        $this->visit('/home')
+              ->visit('team')
+              ->seePageIs('/home');
+
+    }
+
+
+    /**
+     * Test History Page
+     *
+     * @return void
+     */
+
+    public function testHistoryPage()
+    {
+        $this->visit('/home')
+            ->visit('/history')
+            ->seePageIs('/home');
+
+    }
+
+
+    /**
+     * Test Proposals I won Page
+     *
+     * @return void
+     */
+
+    public function testProposalsIWonPage()
+    {
+        $this->visit('/home')
+            ->visit('/proposalsIWon')
+            ->seePageIs('/home');
+
+    }
+
+
+    /**
+     * Test Proposals I'm in page
+     *
+     * @return void
+     */
+
+    public function testProposalsImInPage()
+    {
+        $this->visit('/home')
+            ->visit('/proposals_im_in')
+            ->seePageIs('/home');
+
+    }
+
+    /**
+     * Test MyProposals page
+     *
+     * @return void
+     */
+
+    public function testMyProposalsPage()
+    {
+        $this->visit('/home')
+            ->visit('/myproposals')
+            ->seePageIs('/home');
 
     }
 
