@@ -148,6 +148,7 @@ class SearchController extends Controller
 
             // }
 
+
             $counts = [];
             foreach ($queryResults as $res) {
                 foreach ($res as $id) {
@@ -170,13 +171,18 @@ class SearchController extends Controller
             $response = DB::select($query, []);
 
             foreach ($response as $proposal) {
-                if ($proposal->proposal_status == "waitingApproval") {
+                /*if ($proposal->proposal_status == "waitingApproval") {
                     $proposal->time = "Not yet started";
                 } elseif ($proposal->proposal_status == "approved") {
                     $proposal->time = ProposalController::createTimestamp($proposal->datecreated, $proposal->duration);
                 } elseif ($proposal->proposal_status == "finished") {
                     $proposal->time = "Finished";
-                }
+                }*/
+                $proposal->nBids = DB::table('proposal')
+                ->join('bid', 'proposal.id', '=', 'bid.idproposal')
+                ->where([
+                    ['proposal.id','=', $proposal->id],
+                ])->count();
             }
         } catch (Exception $e) {
             $this->error($e);
