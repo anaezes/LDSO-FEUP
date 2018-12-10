@@ -4,8 +4,8 @@ before_script:
   - export SSHPASS=$USER_PASS
 
 stages:
-  - testing
   - linter
+  - testing
   - deploy
 
 lint:
@@ -23,7 +23,7 @@ deploy-testing:
     url: http://46.101.156.192:8200
   script:
     - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "cd ~/testing && chmod 777 script.sh && ./script.sh"
-    - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "cd ~/testing && chmod 777 wait-for-it.sh && ./wait-for-it.sh -t 600 localhost:8200"
+    - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "cd ~/testing && chmod 777 wait-on-health.sh && sh wait-on-health.sh"
     - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "docker exec -t laravel-test_web-prod_1 php ./vendor/bin/codecept build"
     - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "docker exec -t laravel-test_web-prod_1 php ./vendor/bin/codecept run acceptance"
     - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "docker exec -t laravel-test_web-prod_1 php ./vendor/bin/phpunit"
