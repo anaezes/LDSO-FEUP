@@ -46,8 +46,9 @@ class ProposalController extends Controller
         $timestamp = ProposalController::createTimestamp($proposal->datecreated, $proposal->duration);
         ProposalController::updateProposals();
 
-        return view('pages.proposal',
-            ['proposal' => $proposal, 
+        return view(
+            'pages.proposal',
+            ['proposal' => $proposal,
             'timestamp' => $timestamp]
         );
     }

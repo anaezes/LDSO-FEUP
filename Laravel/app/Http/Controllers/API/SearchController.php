@@ -39,9 +39,10 @@ class SearchController extends Controller
             $queryResults = [];
 
             if ($request->input('title') != null) {
-                $res = DB::select("SELECT DISTINCT p.id 
-                                   FROM proposal p 
-                                   WHERE p.title @@ plainto_tsquery('english',?)", 
+                $res = DB::select(
+                                  "SELECT DISTINCT p.id 
+                                    FROM proposal p
+                                    WHERE p.title @@ plainto_tsquery('english',?)", 
                                 [$request->input('title')]
                                 );
                 array_push($queryResults, $res);
@@ -49,7 +50,8 @@ class SearchController extends Controller
 
 
             if ($request->input('proposalStatus') != null) {
-                $res = DB::select("SELECT DISTINCT p.id 
+                $res = DB::select(
+                                  "SELECT DISTINCT p.id 
                                    FROM proposal p 
                                    WHERE p.proposal_status = ?", 
                                 [$request->input('proposalStatus')]
@@ -78,7 +80,8 @@ class SearchController extends Controller
             }
 
             if ($request->input('proposalsOfUser') !== null && Auth::check()) {
-                $res = DB::select("SELECT DISTINCT p.id
+                $res = DB::select(
+                                  "SELECT DISTINCT p.id
                                    FROM proposal p
                                    WHERE p.idproponent = ?",
                                    [Auth::id()]
@@ -86,7 +89,8 @@ class SearchController extends Controller
                 array_push($queryResults, $res);
             }
             if ($request->input('userBidOn') !== null && Auth::check()) {
-                $res = DB::select("SELECT DISTINCT p.id
+                $res = DB::select(
+                                  "SELECT DISTINCT p.id
                                    FROM proposal p
                                    INNER JOIN bid b ON b.idproposal = p.id
                                    INNER JOIN team t ON b.idteam = t.id
@@ -113,7 +117,8 @@ class SearchController extends Controller
             }
             if ($request->input('proposalsAvailableToUser') !== null) { // todo proposal_status fix later
                 if(Auth::check()) {
-                    $res = DB::select("SELECT DISTINCT p.id
+                    $res = DB::select(
+                                      "SELECT DISTINCT p.id
                                        FROM proposal p
                                        INNER JOIN faculty_proposal fp ON fp.idproposal = p.id
                                        INNER JOIN users u ON (u.idfaculty = fp.idfaculty OR p.proposal_public = true)
@@ -124,7 +129,8 @@ class SearchController extends Controller
                     array_push($queryResults, $res);
                 }
                 else {
-                    $res = DB::select("SELECT DISTINCT p.id 
+                    $res = DB::select(
+                                      "SELECT DISTINCT p.id 
                                        FROM proposal p 
                                        WHERE p.proposal_public = true AND 
                                              p.proposal_status IN ('approved', 'waitingApproval')",
