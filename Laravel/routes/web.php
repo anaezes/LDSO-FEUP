@@ -30,8 +30,8 @@ Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('passw
 Route::get('home', 'HomeController@show')->name('home');
 
 // Create Proposal
-Route::get('create', 'CreateProposalController@show')->name('create');
-Route::post('create', 'CreateProposalController@create');
+Route::get('create', 'ProposalController@create')->name('create');
+Route::post('create', 'ProposalController@store');
 
 // Create Bid
 Route::get('createBid/{id}', 'CreateBidController@show')->name('createBid');
@@ -74,7 +74,7 @@ Route::post('/notifications/{id}', 'API\NotificationsController@markAsSeen');
 Route::get('search', 'SearchController@show')->name('search');
 Route::post('search', 'SearchController@simpleSearch')->name('search');
 Route::post('searchMember', 'SearchController@simpleSearchMember')->name('searchMember');
-//ListPages
+
 Route::get('history', 'ListController@history')->name('history');
 Route::get('myproposals', 'ListController@myproposals')->name('myproposals');
 Route::get('proposals_im_in', 'ListController@proposalsImIn')->name('proposals_im_in');
@@ -85,3 +85,6 @@ Route::get('proposalsIWon', 'ListController@proposalsIWon')->name('proposalsIWon
 Route::resource('team', 'TeamController')->except('create');
 Route::post('team/{id}/addMember', 'TeamController@addMember')->name('team.addMember');
 Route::delete('team/{id}/removeMember', 'TeamController@removeMember')->name('team.removeMember');
+
+//People
+Route::get('people', 'PeopleController@index')->name('people');

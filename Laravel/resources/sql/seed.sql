@@ -118,19 +118,19 @@ CREATE TABLE faculty_proposal (
 CREATE TABLE team (
      id SERIAL PRIMARY KEY,
      teamName TEXT NOT NULL UNIQUE,
-     idLeader INTEGER NOT NULL REFERENCES users(id),
+     idLeader INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
      teamDescription TEXT NOT NULL
 );
 
 CREATE TABLE team_member(
-      idTeam INTEGER NOT NULL REFERENCES team(id),
-      idUser INTEGER NOT NULL REFERENCES users(id),
+      idTeam INTEGER NOT NULL REFERENCES team(id) ON DELETE CASCADE,
+      idUser INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
       PRIMARY KEY (idTeam,idUser)
 );
 
 CREATE TABLE team_faculty (
-      idTeam INTEGER NOT NULL REFERENCES team(id),
-      idFaculty INTEGER NOT NULL REFERENCES faculty(id),
+      idTeam INTEGER NOT NULL REFERENCES team(id) ON DELETE CASCADE,
+      idFaculty INTEGER NOT NULL REFERENCES faculty(id) ON DELETE CASCADE,
       PRIMARY KEY (idTeam, idFaculty)
 );
 
@@ -335,22 +335,22 @@ CREATE TRIGGER tr_change_proposal_modification_is_approved
         FOR EACH ROW
 		      EXECUTE PROCEDURE change_proposal_modification_is_approved();
 
-CREATE FUNCTION image_proposal_or_users() RETURNS TRIGGER AS
-$BODY$
-BEGIN
-
-	IF (NEW.idusers!=NULL) AND (NEW.idproposal!=NULL OR NEW.idproposalModification!= NULL) THEN
-        RAISE EXCEPTION 'An image cant belong to an proposal and an user';
-    END IF;
-	RETURN NEW;
-END
-$BODY$
-LANGUAGE plpgsql;
-
-CREATE TRIGGER tr_image_proposal_or_users
-     BEFORE INSERT OR UPDATE ON image
-        FOR EACH ROW
-		      EXECUTE PROCEDURE image_proposal_or_users();
+--CREATE FUNCTION image_proposal_or_users() RETURNS TRIGGER AS
+--$BODY$
+--BEGIN
+--
+--	IF (NEW.idusers!=NULL) AND (NEW.idproposal!=NULL OR NEW.idproposalModification!= NULL) THEN
+        --RAISE EXCEPTION 'An image cant belong to an proposal and an user';
+    --END IF;
+	--RETURN NEW;
+--END
+--$BODY$
+--LANGUAGE plpgsql;
+--
+--CREATE TRIGGER tr_image_proposal_or_users
+  --   BEFORE INSERT OR UPDATE ON image
+  --      FOR EACH ROW
+		      --EXECUTE PROCEDURE image_proposal_or_users();
 
 
 --1
