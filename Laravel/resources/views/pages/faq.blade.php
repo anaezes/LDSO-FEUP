@@ -118,7 +118,7 @@
                     <div class="panel panel-default py-2">
                         <div class="panel-heading accordion-toggle collapsed question-toggle" data-toggle="collapse" data-parent="#faqAccordion" data-target="#question7">
                             <h4 class="panel-title">
-                                <a href="#question7" class="ing">7 - Why I can not see the bids in a proposal?</a>
+                                <a href="#question7" class="ing">7 - Why can I not see the bids in a proposal?</a>
                             </h4>
                         </div>
                         <div id="question7" class="panel-collapse collapse" style="height: 0px;">
@@ -134,13 +134,13 @@
                     <div class="panel panel-default py-2">
                         <div class="panel-heading accordion-toggle collapsed question-toggle" data-toggle="collapse" data-parent="#faqAccordion" data-target="#question8">
                             <h4 class="panel-title">
-                                <a href="#question8" class="ing">8 - What does <i>'The proposal has finished'</i> means?</a>
+                                <a href="#question8" class="ing">8 - What does <i>'The proposal has finished'</i> mean?</a>
                             </h4>
                         </div>
                         <div id="question8" class="panel-collapse collapse" style="height: 0px;">
                             <div class="panel-body">
                                 <p class="text-justify">
-                                    A proposal is set to finished either when a team submit its project or when the proposal expires, i.e., the current date is higher than the proposal's due date.
+                                    A proposal is set to finished either when a team submits its project or when the proposal expires, i.e., the current date is higher than the proposal's due date.
                                 </p>
                             </div>
                         </div>
@@ -150,13 +150,13 @@
                     <div class="panel panel-default py-2">
                         <div class="panel-heading accordion-toggle collapsed question-toggle" data-toggle="collapse" data-parent="#faqAccordion" data-target="#question9">
                             <h4 class="panel-title">
-                                <a href="#question9" class="ing">9 - Why I can not see some proposals?</a>
+                                <a href="#question9" class="ing">9 - Why can I not see some proposals?</a>
                             </h4>
                         </div>
                         <div id="question9" class="panel-collapse collapse" style="height: 0px;">
                             <div class="panel-body">
                                 <p class="text-justify">
-                                    The proposals a user can see are those which are public or that is associated with the faculty of the user. If you can not see a proposal, it probably means that it is not public, it is not associated to your faculty, or it has finished. 
+                                    The proposals a user can see are those which are public or those that are associated with the faculty of the user. If you can not see a proposal, it probably means that it is not public, it is not associated to your faculty, or it has finished.
                                 </p>
                             </div>
                         </div>
@@ -166,13 +166,13 @@
                     <div class="panel panel-default py-2">
                         <div class="panel-heading accordion-toggle question-toggle collapsed" data-toggle="collapse" data-parent="#faqAccordion" data-target="#question10">
                             <h4 class="panel-title">
-                                <a href="#question10" class="ing">10 - Where can i see the proposals I'm related to?</a>
+                                <a href="#question10" class="ing">10 - Where can I see the proposals I'm related to?</a>
                             </h4>
                         </div>
                         <div id="question10" class="panel-collapse collapse" style="height: 0px;">
                             <div class="panel-body">
                                 <p class="text-justify">
-                                    To see the proposals you are related to you must first sign in to your account. Then you can see the proposals you bid in by clicking on your username in the top right corner of the window and selecting "Proposals I'm in". You can also see the proposals you won by clicking instead in "Proposals I won".
+                                    To see the proposals you are related to you must first sign in to your account. Then you can see the proposals you bid on by clicking on your username in the top right corner of the window and selecting "Proposals I'm in". You can also see the proposals you won by clicking on "Proposals I won" instead.
                                 </p>
                             </div>
                         </div>
@@ -182,7 +182,7 @@
                     <div class="panel panel-default py-2">
                         <div class="panel-heading accordion-toggle question-toggle collapsed" data-toggle="collapse" data-parent="#faqAccordion" data-target="#question11">
                             <h4 class="panel-title">
-                                <a href="#question11" class="ing">11 - Where can i see the proposals I created?</a>
+                                <a href="#question11" class="ing">11 - Where can I see the proposals I created?</a>
                             </h4>
                         </div>
                         <div id="question11" class="panel-collapse collapse" style="height: 0px;">
