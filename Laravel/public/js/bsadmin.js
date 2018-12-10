@@ -229,7 +229,7 @@ function historyAlbum()
                 <div class="card-body">
                     <p class="card-text text-center hidden-p-sm-down font-weight-bold" style="font-size: larger"> ${element.title} </p>
                     <div class="d-flex justify-content-between align-items-center">
-                        <small class="text-success">${element.bidMsg} </small>
+                        <small class="text-success">${element.nBids} </small>
                         <small class="text-danger">
                                 ${proposalStatus(element.proposal_status)}</small>
                     </div>
@@ -312,7 +312,7 @@ function allproposalsAlbum()
                 <div class="card-body">
                     <p class="card-text text-center hidden-p-sm-down font-weight-bold" style="font-size: larger"> ${element.title} </p>
                     <div class="d-flex justify-content-between align-items-center">
-                        <small class="text-success">${element.bidMsg} </small>
+                        <small class="text-success">${element.nBids} </small>
                         <small class="text-danger">
                             ${proposalStatus(element.proposal_status)}</small>
                     </div>
@@ -351,7 +351,7 @@ function proposalsIWonAlbum(){
                 <div class="card-body">
                     <p class="card-text text-center hidden-p-sm-down font-weight-bold" style="font-size: larger"> ${element.title} </p>
                     <div class="d-flex justify-content-between align-items-center">
-                        <small class="text-success">${element.bidMsg}</small>
+                        <small class="text-success">${element.nBids}</small>
                         <small class="text-danger">
                             ${proposalStatus(element.proposal_status)}</small>
                     </div>
