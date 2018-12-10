@@ -1,8 +1,8 @@
 image: registry.gitlab.com/feup-tbs/ldso18-19/t2g4/ci-image
 
 before_script:
-  - BRANCH_NAME=$(git branch | grep \* | cut -d ' ' -f2)
-  - cat | git branch | grep \* | cut -d ' ' -f2
+  - BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+  - cat | git rev-parse --abbrev-ref HEAD
   - cat $BRANCH_NAME
   - export SSHPASS=$USER_PASS
 
@@ -25,6 +25,7 @@ deploy-testing:
     name: testing
     url: http://46.101.156.192:8200
   script:
+    - cat git rev-parse --abbrev-ref HEAD
     - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "cd ~/testing && chmod 777 script.sh && ./script.sh $BRANCH_NAME"
     - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "cd ~/testing && chmod 777 wait-on-health.sh && sh wait-on-health.sh"
     - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "docker exec -t laravel-test_web-prod_1 php ./vendor/bin/codecept build"
