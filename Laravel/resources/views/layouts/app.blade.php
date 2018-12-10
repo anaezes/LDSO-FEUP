@@ -36,6 +36,7 @@
         <div class="navbar-nav hidden-p-md-down">
             <a class="nav-item nav-link" href={{ url("allproposals") }}>Proposals</a>
             <a class="nav-item nav-link" href="{{ route('people') }}">People</a>
+            <a class="nav-item nav-link" href="{{ route('faq') }}">FAQ</a>
         </div>
 
         <div class="navbar-collapse collapse">
@@ -262,7 +263,7 @@
 <!-- Footer -->
 <footer class="footer footer-offset py-2 bg-dark">
     <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; BookHub 2018</p>
+        <p class="m-0 text-center text-white">Copyright &copy; U.Openlab 2018</p>
         <p class="m-0 text-center text-white">
             <a class="text-white" href="{{ url('about/') }}"> About</a> &nbsp; | &nbsp;
             <a class="text-white" href="{{ url('contact/') }}"> Contact</a>
