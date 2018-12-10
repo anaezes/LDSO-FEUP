@@ -94,7 +94,7 @@ class UnitTest extends TestCase
      * @return void
      */
 
-    public function testAddProposal()
+/*    public function testAddProposal()
     {
         //register
         $user = factory(\App\User::class)->create();
@@ -123,7 +123,7 @@ class UnitTest extends TestCase
             'faculty' => array(1,2),
             'skill' => array(1,2)
         );
-        */
+
 
 
         $response = $this->post(route('create'), $proposal->toArray())
@@ -132,12 +132,12 @@ class UnitTest extends TestCase
             ->seeInDatabase('proposal', ['idproponent' => $user->id]);
 
      //   $response->assertRedirectedTo('');
-/*
+
 
         $response->followRedirects('faq');
         $this->be($user);
-        $this->assertTrue(Auth::check());*/
+        $this->assertTrue(Auth::check());
 
 
-    }
+    }*/
 }
