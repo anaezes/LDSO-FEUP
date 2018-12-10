@@ -90,9 +90,12 @@ class SearchController extends Controller
                                    FROM proposal p
                                    INNER JOIN bid b ON b.idproposal = p.id
                                    INNER JOIN team t ON b.idteam = t.id
-                                   WHERE t.idLeader = ? AND
-                                        p.duedate >= CURRENT_TIMESTAMP",
-                                [Auth::id()]
+                                   INNER JOIN team_member tm ON t.id = tm.idteam
+                                   WHERE (t.idLeader = ? OR
+                                        tm.iduser = ?) AND 
+                                        p.proposal_status IN ('approved', 'finished') AND
+                                        b.winner = FALSE",
+                                [Auth::id(), Auth::id()]
                                 );
                 array_push($queryResults, $res);
             }
@@ -130,24 +133,6 @@ class SearchController extends Controller
                     array_push($queryResults, $res);
                 }
             }
-
-            // if ($request->input('teamsOfUser') !== null && Auth::check()) {
-            //     $res = DB::select("SELECT DISTINCT tm.idteam 
-            //                        FROM team_member tm 
-            //                        WHERE tm.iduser = ?", 
-            //                     [Auth::user()->id]
-            //                     );
-            //     array_push($queryResults, $res);
-            //     $result=[];
-            //     foreach($queryResults as $r){
-            //         $result = DB::select("SELECT teamname, idleader FROM team WHERE id = ?", [$r])->get();
-            //         $result = $result->toArray();
-            //         return response()->json($result);
-
-            //     }
-
-            // }
-
 
             $counts = [];
             foreach ($queryResults as $res) {
