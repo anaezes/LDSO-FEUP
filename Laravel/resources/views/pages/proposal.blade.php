@@ -5,7 +5,7 @@
 @section('content')
 
 <!-- proposal Content -->
-<main  data-id="{{$proposal, $facultyName, $timestamp, $bids}}">
+<main>
     <div class="container mb-5 mt-5">
         <div class="row">
             <div class="col-lg-11">
@@ -35,11 +35,13 @@
                </h3>
             </div>
             <div class="col-lg-9">
-                @foreach($proposal->faculty as $faculties)
-                    <h4>
+                <h4>
+                    @forelse($proposal->faculty as $faculties)
                         {{ $faculties->facultyname }}
-                    </h4>
-                @endforeach
+                    @empty
+                        No associated faculties
+                    @endforelse
+                </h4>
             </div>
         </div>
 
@@ -75,7 +77,7 @@
             </div>
             <div class="col-lg-9">
                 <h4>
-                    {{ $proposal->announcedate }}
+                    {{ date('Y-m-d', strtotime($proposal->announcedate)) }}
                 </h4>
             </div>
         </div>
@@ -95,7 +97,7 @@
             </div>
             <div class="col-lg-9">
                 <h4>
-                    {{ $proposal->duedate }}
+                    {{ date('Y-m-d', strtotime($proposal->duedate)) }}
                 </h4>
             </div>
         </div>
@@ -135,9 +137,11 @@
             </div>
             <div class="col-lg-9">
                 <h4>
-                    @foreach($proposal->skill()->limit(20)->get() as $skill)
+                    @forelse($proposal->skill()->limit(20)->get() as $skill)
                         {{ $skill->skillname }};&nbsp;
-                    @endforeach
+                    @empty
+                        No skills needed
+                    @endforelse
                 </h4>
             </div>
         </div>
