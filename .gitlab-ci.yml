@@ -1,8 +1,8 @@
 image: registry.gitlab.com/feup-tbs/ldso18-19/t2g4/ci-image
 
 before_script:
-  - BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
-  - cat | git rev-parse --abbrev-ref HEAD
+  - BRANCH_NAME=$CI_COMMIT_REF_NAME
+  - echo $BRANCH_NAME
   - export SSHPASS=$USER_PASS
 
 stages:
