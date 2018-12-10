@@ -22,7 +22,7 @@ deploy-testing:
     name: testing
     url: http://46.101.156.192:8200
   script:
-    - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "cd ~/testing && chmod 777 script.sh && ./script.sh"
+    - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "cd ~/testing && chmod 777 script.sh && ./script.sh $CI_COMMIT_REF_NAME"
     - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "cd ~/testing && chmod 777 wait-on-health.sh && sh wait-on-health.sh"
     - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "docker exec -t laravel-test_web-prod_1 php ./vendor/bin/codecept build"
     - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "docker exec -t laravel-test_web-prod_1 php ./vendor/bin/codecept run acceptance"
