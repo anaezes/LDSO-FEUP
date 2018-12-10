@@ -39,13 +39,21 @@ class SearchController extends Controller
             $queryResults = [];
 
             if ($request->input('title') != null) {
-                $res = DB::select("SELECT id FROM proposal WHERE title @@ plainto_tsquery('english',?)", [$request->input('title')]);
+                $res = DB::select("SELECT DISTINCT p.id 
+                                   FROM proposal p 
+                                   WHERE p.title @@ plainto_tsquery('english',?)", 
+                                [$request->input('title')]
+                                );
                 array_push($queryResults, $res);
             }
 
 
             if ($request->input('proposalStatus') != null) {
-                $res = DB::select("SELECT id FROM proposal WHERE proposal_status = ?", [$request->input('proposalStatus')]);
+                $res = DB::select("SELECT DISTINCT p.id 
+                                   FROM proposal p 
+                                   WHERE p.proposal_status = ?", 
+                                [$request->input('proposalStatus')]
+                                );
                 array_push($queryResults, $res);
             }
 
@@ -70,11 +78,22 @@ class SearchController extends Controller
             }
 
             if ($request->input('proposalsOfUser') !== null && Auth::check()) {
-                $res = DB::select("SELECT DISTINCT proposal.id FROM proposal WHERE idproponent = ?", [Auth::user()->id]);
+                $res = DB::select("SELECT DISTINCT p.id
+                                   FROM proposal p
+                                   WHERE p.idproponent = ?",
+                                   [Auth::id()]
+                                );
                 array_push($queryResults, $res);
             }
             if ($request->input('userBidOn') !== null && Auth::check()) {
-                $res = DB::select("SELECT DISTINCT proposal.id FROM proposal, bid WHERE bid.idproposal = proposal.id and bid.idBuyer = ? and proposal.proposal_status = ? ", [Auth::user()->id, 'approved']);
+                $res = DB::select("SELECT DISTINCT p.id
+                                   FROM proposal p
+                                   INNER JOIN bid b ON b.idproposal = p.id
+                                   INNER JOIN team t ON b.idteam = t.id
+                                   WHERE t.idLeader = ? AND
+                                        p.duedate >= CURRENT_TIMESTAMP",
+                                [Auth::id()]
+                                );
                 array_push($queryResults, $res);
             }
             if ($request->input('userBidWinner') !== null && Auth::check()) {
@@ -90,25 +109,44 @@ class SearchController extends Controller
                 array_push($queryResults, $res);
             }
             if ($request->input('proposalsAvailableToUser') !== null) { // todo proposal_status fix later
-                if (Auth::check()) {
-                    $res = DB::select("SELECT A.id FROM proposal A iNNER JOIN faculty_proposal B ON A.id = B.idproposal INNER JOIN users C ON (C.idfaculty = B.idfaculty OR A.proposal_public = ? ) WHERE C.id = ? AND (A.proposal_status = ? OR A.proposal_status = ?)", ['true', Auth::user()->id, 'approved', 'waitingApproval']);
+                if(Auth::check()) {
+                    $res = DB::select("SELECT DISTINCT p.id
+                                       FROM proposal p
+                                       INNER JOIN faculty_proposal fp ON fp.idproposal = p.id
+                                       INNER JOIN users u ON (u.idfaculty = fp.idfaculty OR p.proposal_public = true)
+                                       WHERE u.id = ? AND 
+                                             p.proposal_status IN ('approved', 'waitingApproval')",
+                                       [Auth::id()]
+                                    );
                     array_push($queryResults, $res);
-                } else {
-                    $res = DB::select("SELECT DISTINCT proposal.id FROM proposal WHERE proposal_public = ? AND (proposal_status = ? OR proposal_status=?)", ['true', 'approved', 'waitingApproval']);
+                }
+                else {
+                    $res = DB::select("SELECT DISTINCT p.id 
+                                       FROM proposal p 
+                                       WHERE p.proposal_public = true AND 
+                                             p.proposal_status IN ('approved', 'waitingApproval')",
+                                    []
+                                    );
                     array_push($queryResults, $res);
                 }
             }
 
-            if ($request->input('teamsOfUser') !== null && Auth::check()) {
-                $res = DB::select("SELECT team_member.idteam FROM team_member WHERE iduser = ?", [Auth::user()->id]);
-                array_push($queryResults, $res);
-                $result=[];
-                foreach ($queryResults as $r) {
-                    $result = DB::select("SELECT teamname, idleader FROM team WHERE id = ?", [$r])->get();
-                    $result = $result->toArray();
-                    return response()->json($result);
-                }
-            }
+            // if ($request->input('teamsOfUser') !== null && Auth::check()) {
+            //     $res = DB::select("SELECT DISTINCT tm.idteam 
+            //                        FROM team_member tm 
+            //                        WHERE tm.iduser = ?", 
+            //                     [Auth::user()->id]
+            //                     );
+            //     array_push($queryResults, $res);
+            //     $result=[];
+            //     foreach($queryResults as $r){
+            //         $result = DB::select("SELECT teamname, idleader FROM team WHERE id = ?", [$r])->get();
+            //         $result = $result->toArray();
+            //         return response()->json($result);
+
+            //     }
+
+            // }
 
             $counts = [];
             foreach ($queryResults as $res) {
@@ -128,7 +166,7 @@ class SearchController extends Controller
             if ($ids === "") {
                 $ids = "-1";
             }
-            $query = "SELECT proposal.id, title, duration, dateApproved, proposal_status FROM proposal WHERE proposal.id IN (" . $ids . ")";
+            $query = "SELECT proposal.id, title, duration, dateApproved, proposal_status, datecreated FROM proposal WHERE proposal.id IN (" . $ids . ")";
             $response = DB::select($query, []);
 
             foreach ($response as $proposal) {
