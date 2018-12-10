@@ -129,18 +129,17 @@ class AcceptanceTests extends TestCase
 
 
 
-
     /**
      * Test Team Pages
      *
      * @return void
-    */
+     */
 
     public function testTeamPage()
     {
         $this->visit('/home')
-              ->visit('team')
-              ->seePageIs('/home');
+            ->visit('team')
+            ->seePageIs('/home');
 
     }
 
@@ -160,48 +159,7 @@ class AcceptanceTests extends TestCase
     }
 
 
-    /**
-     * Test Proposals I won Page
-     *
-     * @return void
-     */
 
-    public function testProposalsIWonPage()
-    {
-        $this->visit('/home')
-            ->visit('/proposalsIWon')
-            ->seePageIs('/home');
-
-    }
-
-
-    /**
-     * Test Proposals I'm in page
-     *
-     * @return void
-     */
-
-    public function testProposalsImInPage()
-    {
-        $this->visit('/home')
-            ->visit('/proposals_im_in')
-            ->seePageIs('/home');
-
-    }
-
-    /**
-     * Test MyProposals page
-     *
-     * @return void
-     */
-
-    public function testMyProposalsPage()
-    {
-        $this->visit('/home')
-            ->visit('/myproposals')
-            ->seePageIs('/home');
-
-    }
 
 
 
