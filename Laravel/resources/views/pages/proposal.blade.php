@@ -252,6 +252,9 @@
                             <div class="row mt-3">
                                 <div class="col-lg-2">
                                     <h5>
+                                        @if($bid->winner)
+                                            <i class="fas fa-trophy text-warning"></i>
+                                        @endif
                                         <a href="{{ route('bid', $bid) }}" class="text-dark">
                                             {{ $bid->id }}
                                         </a>
