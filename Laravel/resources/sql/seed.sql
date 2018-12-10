@@ -335,22 +335,22 @@ CREATE TRIGGER tr_change_proposal_modification_is_approved
         FOR EACH ROW
 		      EXECUTE PROCEDURE change_proposal_modification_is_approved();
 
-CREATE FUNCTION image_proposal_or_users() RETURNS TRIGGER AS
-$BODY$
-BEGIN
-
-	IF (NEW.idusers!=NULL) AND (NEW.idproposal!=NULL OR NEW.idproposalModification!= NULL) THEN
-        RAISE EXCEPTION 'An image cant belong to an proposal and an user';
-    END IF;
-	RETURN NEW;
-END
-$BODY$
-LANGUAGE plpgsql;
-
-CREATE TRIGGER tr_image_proposal_or_users
-     BEFORE INSERT OR UPDATE ON image
-        FOR EACH ROW
-		      EXECUTE PROCEDURE image_proposal_or_users();
+--CREATE FUNCTION image_proposal_or_users() RETURNS TRIGGER AS
+--$BODY$
+--BEGIN
+--
+--	IF (NEW.idusers!=NULL) AND (NEW.idproposal!=NULL OR NEW.idproposalModification!= NULL) THEN
+        --RAISE EXCEPTION 'An image cant belong to an proposal and an user';
+    --END IF;
+	--RETURN NEW;
+--END
+--$BODY$
+--LANGUAGE plpgsql;
+--
+--CREATE TRIGGER tr_image_proposal_or_users
+  --   BEFORE INSERT OR UPDATE ON image
+  --      FOR EACH ROW
+		      --EXECUTE PROCEDURE image_proposal_or_users();
 
 
 --1
