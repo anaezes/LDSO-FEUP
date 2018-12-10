@@ -124,6 +124,7 @@ class ProposalController extends Controller
         $proposal = new Proposal;
         $proposal->title = $request->input('title');
         $proposal->description = $request->input('description');
+        $proposal->proposal_status = 'approved';
         $proposal->proposal_public = $request->has('public_prop');
         $proposal->bid_public = $request->has('public_bid');
         $proposal->duration = $duration;
