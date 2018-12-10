@@ -27,6 +27,7 @@ deploy-testing:
     - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "docker exec -t laravel-test_web-prod_1 php ./vendor/bin/codecept build"
     - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "docker exec -t laravel-test_web-prod_1 php ./vendor/bin/codecept run acceptance"
     - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "docker exec -t laravel-test_web-prod_1 php ./vendor/bin/phpunit"
+    - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "cd ~/testing/t2g4/Laravel && rm -rf /var/www/html && mv report /var/www/html"
 
 deploy-staging:
   stage: deploy
