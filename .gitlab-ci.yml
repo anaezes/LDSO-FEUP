@@ -2,11 +2,13 @@ image: registry.gitlab.com/feup-tbs/ldso18-19/t2g4/ci-image
 
 before_script:
   - BRANCH_NAME=$(git branch | grep \* | cut -d ' ' -f2)
+  - cat git branch | grep \* | cut -d ' ' -f2
+  - cat $BRANCH_NAME
   - export SSHPASS=$USER_PASS
 
 stages:
-  - linter
   - testing
+  - linter
   - deploy
 
 lint:
