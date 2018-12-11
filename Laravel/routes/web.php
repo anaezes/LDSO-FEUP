@@ -73,7 +73,7 @@ Route::post('/notifications/{id}', 'API\NotificationsController@markAsSeen');
 //Search Page
 Route::get('search', 'SearchController@show')->name('search');
 Route::post('search', 'API\SearchController@generalSearch')->name('search');
-Route::post('searchMember', 'SearchController@simpleSearchMember')->name('searchMember');
+Route::post('searchMember', 'API\SearchController@searchMember')->name('searchMember');
 
 Route::get('history', 'ListController@history')->name('history');
 Route::get('myproposals', 'ListController@myproposals')->name('myproposals');
