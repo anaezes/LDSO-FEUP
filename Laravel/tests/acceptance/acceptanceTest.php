@@ -3,9 +3,19 @@
 namespace Tests\acceptance;
 
 use Tests\TestCase;
+use database\factories;
+use Illuminate\Contracts\Auth\Authenticatable;
+use App\Http\Controllers\Auth\RegisterController;
+use Illuminate\Support\Facades\Auth;
+use App\User;
+use Illuminate\Database\Eloquent\Model;
+
 
 class AcceptanceTests extends TestCase
 {
+
+
+   protected $user;
 
 
     /**
@@ -16,8 +26,8 @@ class AcceptanceTests extends TestCase
     public function testHomepage()
     {
         $this->visit('/home')
-            ->see('Welcome to U.OPENLAB!')
-            ->dontSee('Rails');
+             ->see('Welcome to U.OPENLAB!')
+             ->dontSee('Rails');
     }
 
     /**
@@ -28,68 +38,21 @@ class AcceptanceTests extends TestCase
      */
     public function testNewUserRegistration()
     {
-        $this->visit('/register')
-            ->type('Teste', 'name')
-            ->type('teste', 'username')
-            ->type('teste@fe.up.pt', 'email')
-            ->select('2','idfaculty')
-            ->type('919191919', 'phone')
-            ->type('123456', 'password')
-            ->type('123456', 'password_confirmation')
-            ->press('REGISTER')
-            ->seePageIs('/faq');
-    }
 
 
-    /**
-     * Test for access profile page.
-     *  Member-Profile page
-     * @return void
-*/
-
-    public function testAccessProfile()
-    {
-
-        $this->visit('/home')
-            ->visit('Login')
-            ->type('teste', 'username')
-            ->type('123456', 'password')
-            ->press('LOGIN')
-            ->visit('Profile')
-            ->seePageIs('/home');
-
-    }
-
-
-    /**
-     * Test for edit profile page.
-     *
-     * @return void
-    */
-
-    public function testEditProfile()
-    {
-        $this->visit('/profile/1')
-            ->visit('Edit Info')
-            ->type('Teste1', 'name')
-            ->type('teste1@fe.up.pt', 'email')
-            ->visit('Save any new changes')
-            ->seePageIs('home');
-
-
-    }
-
-    /**
-     * Test for logout.
-     *  Member-Logout
-     * @return void
-     */
-
-    public function testLogoutUser()
-    {
-        $this->visit('/home')
-            ->visit('Logout')
-            ->seePageIs('/home');
+            $this->visit('/home')
+                ->click('Register')
+                ->type('Teste', 'name')
+                ->type('teste', 'username')
+                ->type('teste@fe.up.pt', 'email')
+                ->select('2','idfaculty')
+                ->type('919191919', 'phone')
+                ->type('123456', 'password')
+                ->type('123456', 'password_confirmation')
+                ->press('REGISTER')
+                ->click('navbarDropdownMenuLink2')
+                ->click('Profile')
+                ->seePageIs('/profile/1');
 
 
     }
@@ -103,15 +66,98 @@ class AcceptanceTests extends TestCase
 
     public function testLoginUser()
     {
-        $this->visit('/home')
-            ->visit('Login')
-            ->type('teste', 'username')
-            ->type('123456', 'password')
-            ->press('LOGIN')
-            ->seePageIs('/home');
+
+        $user = factory(\App\User::class)->create();
+
+
+          $this->actingAs($user)
+              ->visit('/home')
+              ->type($user->username, 'username')
+              ->type($user->password, 'password')
+              ->press('LOGIN')
+              ->click('navbarDropdownMenuLink2')
+              ->click('Profile')
+              ->seePageIs('/profile/'.$user->id);
+
 
 
     }
+
+    /**
+     * Test for logout.
+     *  Member-Logout
+     * @return void
+     */
+
+    public function testLogoutUser()
+    {
+
+        $user = factory(\App\User::class)->create();
+
+        $this->actingAs($user)
+            ->visit('/home')
+            ->click('Logout')
+            ->seePageIs('/home');
+
+    }
+
+
+    /**
+     * Test for access profile page.
+     *  Member-Profile page
+     * @return void
+     */
+    public function testAccessProfile()
+    {
+        $user = factory(\App\User::class)->create();
+        $this->actingAs($user)
+            ->visit('/home')
+            ->click('navbarDropdownMenuLink2')
+            ->click('Profile')
+            ->seePageIs('/profile/'.$user->id);
+
+    }
+
+
+    /**
+     * Test for edit profile page.
+     *
+     * @return void
+    */
+
+    public function testEditProfile()
+    {   $user = factory(\App\User::class)->create();
+
+        $this->actingAs($user)
+            ->visit('/home')
+            ->click('navbarDropdownMenuLink2')
+            ->click('Profile')
+            ->click('Edit Info')
+            ->type('Teste1', 'name')
+            ->press('Save any new changes')
+            ->assertEquals("Teste1", $user->username);
+
+
+    }
+
+
+
+    /**
+     * Test for New proposal page
+     * User-Auctions page
+     * @return void
+     */
+
+    public function testProposalPage()
+    {
+
+        $user = factory(\App\User::class)->create();
+        $this->actingAs($user)
+            ->visit('/home')
+            ->click('create_proposal')
+            ->seePageIs('/create');
+
+               }
 
     /**
      * Test for Auctions page
@@ -121,9 +167,44 @@ class AcceptanceTests extends TestCase
 
     public function testAuctionsPage()
     {
-        $this->visit('/home')
-            ->visit('allproposals')
-            ->seePageIs('/allproposals');
+        $user = factory(\App\User::class)->create();
+        $this->actingAs($user)
+            ->visit('/home')
+            ->click('navbarDropdownMenuLink2')
+            ->click('Create auction')
+            ->seePageIs('/create');
+
+    }
+
+    /**
+     * Test for Create Auction
+     * User-Auctions page
+     * @return void
+     */
+
+    public function testCreateAuction()
+    {
+        $user = factory(\App\User::class)->create();
+        $this->actingAs($user)
+            ->visit('/home')
+            ->click('navbarDropdownMenuLink2')
+            ->click('Create auction')
+            ->type('Auctfwafawfawf1', 'title')
+            ->type('blabdwadwafwafwafwwafwafwadwafwagggwafawwala', 'description')
+            ->select('1 ','skill')
+            ->select('1 ','faculty')
+            ->type('1', 'days')
+            ->type('1', 'hours')
+            ->type('1', 'minutes')
+
+            ->type('20181220', 'announce')
+            ->type('20181224', 'due')
+           // ->key('#due', '20181224')
+
+            ->check('public_prop')
+            ->check('public_bid')
+            ->press('Create')
+            ->seePageIs('/proposal/1');
 
     }
 
@@ -137,9 +218,12 @@ class AcceptanceTests extends TestCase
 
     public function testTeamPage()
     {
-        $this->visit('/home')
-            ->visit('team')
-            ->seePageIs('/home');
+        $user = factory(\App\User::class)->create();
+        $this->actingAs($user)
+            ->visit('/home')
+            ->click('navbarDropdownMenuLink2')
+            ->click('My Teams')
+            ->seePageIs('/team');
 
     }
 
@@ -152,9 +236,12 @@ class AcceptanceTests extends TestCase
 
     public function testHistoryPage()
     {
-        $this->visit('/home')
-            ->visit('/history')
-            ->seePageIs('/home');
+        $user = factory(\App\User::class)->create();
+        $this->actingAs($user)
+            ->visit('/home')
+            ->click('navbarDropdownMenuLink2')
+            ->click('History')
+            ->seePageIs('/history');
 
     }
 
@@ -166,9 +253,12 @@ class AcceptanceTests extends TestCase
 
     public function testProposalsIWonPage()
     {
-        $this->visit('/home')
-            ->visit('/proposalsIWon')
-            ->seePageIs('/home');
+        $user = factory(\App\User::class)->create();
+        $this->actingAs($user)
+            ->visit('/home')
+            ->click('navbarDropdownMenuLink2')
+            ->click('Proposals I won')
+            ->seePageIs('/proposalsIWon');
 
     }
 
@@ -181,9 +271,12 @@ class AcceptanceTests extends TestCase
 
     public function testProposalsImInPage()
     {
-        $this->visit('/home')
-            ->visit('/proposals_im_in')
-            ->seePageIs('/home');
+        $user = factory(\App\User::class)->create();
+        $this->actingAs($user)
+            ->visit('/home')
+            ->click('navbarDropdownMenuLink2')
+            ->click('Proposals I\'m in')
+            ->seePageIs('/proposals_im_in');
 
     }
 
@@ -195,13 +288,33 @@ class AcceptanceTests extends TestCase
 
     public function testMyProposalsPage()
     {
-        $this->visit('/home')
-            ->visit('/myproposals')
-            ->seePageIs('/home');
+        $user = factory(\App\User::class)->create();
+        $this->actingAs($user)
+            ->visit('/home')
+            ->click('navbarDropdownMenuLink2')
+            ->click('My Proposals')
+            ->seePageIs('/myproposals');
 
     }
 
 
+    /**
+     * Test see all proposals page
+     *
+     * @return void
+     */
+
+    public function testAllProposals()
+    {
+        $user = factory(\App\User::class)->create();
+        $this->actingAs($user)
+            ->visit('/home')
+            ->click('Proposals')
+            ->seePageIs('/allproposals');
+
+    }
+
+    
 
 
 
