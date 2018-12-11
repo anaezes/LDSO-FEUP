@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Proposal extends Model
 {
@@ -67,7 +68,17 @@ class Proposal extends Model
             return $query;
         }
 
-        return $query->whereRaw("searchtext @@ plainto_tsquery('english', ?)", [$search])
+        return $query->join('faculty_proposal', 'proposal.id', '=', 'faculty_proposal.idproposal')
+                     ->where(function ($query) {
+                        if (Auth::check()) {
+                            $query->where('proposal.proposal_public', 'true')
+                                  ->orWhere('faculty_proposal.idfaculty', Auth::user()->faculty->id);
+                        } else {
+                             $query->where('proposal.proposal_public', 'true');
+                        }
+                               
+                     })
+                     ->whereRaw("searchtext @@ plainto_tsquery('english', ?)", [$search])
                      ->orderByRaw("ts_rank(searchtext, plainto_tsquery('english', ?)) DESC", [$search]);
     }
 }
