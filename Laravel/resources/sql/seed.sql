@@ -1,3 +1,4 @@
+DROP TRIGGER IF EXISTS tsvector_update_trigger ON users;
 DROP TRIGGER IF EXISTS  tr_check_number_off_row_admin ON users CASCADE;
 DROP TRIGGER IF EXISTS  tr_change_users_status ON users CASCADE;
 DROP TRIGGER IF EXISTS  tr_change_proposal_status ON proposal CASCADE;
@@ -11,6 +12,8 @@ DROP FUNCTION IF EXISTS  change_proposal_status() CASCADE;
 DROP FUNCTION IF EXISTS  check_approved_proposal() CASCADE;
 DROP FUNCTION IF EXISTS  change_proposal_modification_is_approved() CASCADE;
 DROP FUNCTION IF EXISTS image_proposal_or_users() CASCADE;
+
+DROP INDEX IF EXISTS searchtext_gin;
 
 DROP TABLE IF EXISTS public.password_resets CASCADE;
 DROP TABLE IF EXISTS image CASCADE;
@@ -57,6 +60,8 @@ CREATE TABLE users (
     CONSTRAINT status_ck CHECK ((users_status = ANY (ARRAY['moderator'::text, 'banned'::text, 'normal'::text, 'terminated'::text,'admin'::text])))
 );
 
+ALTER TABLE users ADD COLUMN searchtext TSVECTOR;
+UPDATE users SET searchtext = to_tsvector('english', name || '' || username);
 
 
 --4
@@ -213,12 +218,13 @@ CREATE INDEX image_index ON image USING hash (id);
 
 CREATE INDEX title_index ON proposal USING GIST (to_tsvector('english', title));
 
---CREATE INDEX author_index ON proposal USING GIST (to_tsvector('english', author));
-
+CREATE INDEX searchtext_gin ON users USING GIN(searchtext);
 
 -----------------------------------------------------
  --TRIGGERS AND UDFs
 ----------------------------------------------------
+
+CREATE TRIGGER ts_searchtext BEFORE INSERT OR UPDATE ON users FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('searchtext', 'pg_catalog.english', 'name', 'username'); 
 
 CREATE FUNCTION check_number_of_row_admin() RETURNS TRIGGER AS
 $BODY$

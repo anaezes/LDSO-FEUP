@@ -114,10 +114,9 @@
 
             <li class="nav-item hidden-p-md-down">
                 <form class="form-inline my-2 my-lg-0 mr-lg-2 searchNav" method="POST" action="{{ route('search') }}">
+                    {{ csrf_field() }}
                     <div class="input-group">
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                        <input type="hidden" name="category" value="All">
-                        <input name="searchTerm" class="form-control" type="text" placeholder="Search for...">
+                        <input name="words" class="form-control" type="text" placeholder="Search for..." required>
                         <span class="input-group-append">
                             <button class="btn btn-primary" type="submit">
                                 <i class="fa fa-search"></i>
