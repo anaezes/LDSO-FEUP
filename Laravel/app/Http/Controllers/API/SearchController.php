@@ -181,6 +181,13 @@ class SearchController extends Controller
         $proposals = Proposal::search($words)->get();
         $teams = Team::search($words)->get();
 
-        return view('pages.search', ['users' => $users]);
+        foreach ($proposals as $proposal) {
+            $proposal->timestamp = ProposalController::createTimestamp($proposal->datecreated, $proposal->duration);
+        }
+
+        return view('pages.search',
+            ['users' => $users,
+            'proposals' => $proposals]
+        );
     }
 }

@@ -26,10 +26,10 @@
             </li>
         </ul>
         <div class="tab-content" id="pills-tabContent">
-            @php
-                $i = 0;
-            @endphp
             <div class="tab-pane fade show active" id="pills-users" role="tabpanel" aria-labelledby="pills-users-tab">
+                @php
+                    $i = 0;
+                @endphp
                 <div class="row">
                     @forelse ($users as $user)
                         @if ($i != 0 && !($i % 4))
@@ -54,13 +54,53 @@
                             </a>
                         </div>
                     @empty
-                        <h5 class="text-center text-muted mt-5">
+                        <h5 class="col-lg-12 text-center text-muted mt-5">
                             No results found.
                         </h5>
                     @endforelse
                 </div>
             </div>
-            <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">...</div>
+            <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                @php
+                    $i = 0;
+                @endphp
+                <div class="row">
+                    @forelse ($proposals as $proposal)
+                        @if ($i != 0 && !($i % 4))
+                            </div>
+                            <div class="row">
+                        @else
+                            @php
+                                $i++;
+                            @endphp
+                        @endif
+                        <div class="col-lg-3 mb-3">
+                            <a href="{{ route('proposal', $proposal) }}" style="text-decoration: none;">
+                                <div class="card" style="width: 17rem;">
+                                    <div class="card-header">
+                                        {{ $proposal->title }}
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title text-dark">
+                                            {{ substr($proposal->description, 0, 100) }}
+                                        </h5>
+                                        <h6 class="card-subtitle mt-3 text-muted">
+                                            {{ $proposal->user->name }}
+                                        </h6>
+                                        <h6 class="text-danger mt-3">
+                                            {{ $proposal->timestamp }}
+                                        </h6>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    @empty
+                        <h5 class="col-lg-12 text-center text-muted mt-5">
+                            No results found.
+                        </h5>
+                    @endforelse
+                </div>
+            </div>
             <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">...</div>
         </div>
     </div>
