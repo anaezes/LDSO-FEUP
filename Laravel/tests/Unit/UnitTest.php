@@ -34,6 +34,65 @@ class UnitTest extends TestCase
         $this->assertResponseOk();
     }
 
+
+    /**
+     * Test history proposals route
+     *
+     * @return void
+     */
+    public function testRouteHistory()
+    {
+        $user = factory(\App\User::class)->create();
+        $this->be($user);
+        $response = $this->post(route('register'), $user->toArray())
+            ->seeInDatabase('users', ['username' => $user->username]);
+        $response->followRedirects('faq');
+        $this->assertTrue(Auth::check());
+
+        $this->route('GET', 'history');
+        $this->followRedirects('history');
+        $this->assertResponseOk();
+    }
+
+    /**
+     * Test history proposals route
+     *
+     * @return void
+     */
+    public function testRouteProposalsIWon()
+    {
+        $user = factory(\App\User::class)->create();
+        $this->be($user);
+        $response = $this->post(route('register'), $user->toArray())
+            ->seeInDatabase('users', ['username' => $user->username]);
+        $response->followRedirects('faq');
+        $this->assertTrue(Auth::check());
+
+        $this->route('GET', 'proposalsIWon');
+        $this->followRedirects('proposalsIWon');
+        $this->assertResponseOk();
+    }
+
+    /**
+     * Test my proposals route
+     *
+     * @return void
+     */
+    public function testRouteMyProposals()
+    {
+        $user = factory(\App\User::class)->create();
+        $this->be($user);
+        $response = $this->post(route('register'), $user->toArray())
+            ->seeInDatabase('users', ['username' => $user->username]);
+        $response->followRedirects('faq');
+        $this->assertTrue(Auth::check());
+
+        $this->route('GET', 'myproposals');
+        $this->followRedirects('myproposals');
+        $this->assertResponseOk();
+    }
+
+
     /**
      * Test resgister user route
      *
