@@ -383,7 +383,7 @@ class AcceptanceTests extends TestCase
     }
 
     /**
-     * Test send msg to contact 
+     * Test send msg to contact
      *
      * @return void
      */
@@ -400,6 +400,75 @@ class AcceptanceTests extends TestCase
             ->press('contactSubmitButton')
             ->see('Your message was sent. Within 48h, you should receive a reply in your e-mail:')
             ->dontSee('Rails');
+
+    }
+
+    /**
+     * Test add new team
+     *
+     * @return void
+     */
+
+    public function testAddTeam()
+    {
+        $user = factory(\App\User::class)->create();
+        $this->actingAs($user)
+            ->visit('/home')
+            ->click('navbarDropdownMenuLink2')
+            ->click('My Teams')
+            ->click('New Team')
+            ->type('Teste', 'teamName')
+            ->select('1', 'teamFaculty[]')
+            ->type('dwfesfsegesgsegsgegs','teamDescription')
+            ->press('Create team')
+            ->seePageIs('/team/1');
+
+    }
+
+    public function testDeleteTeam()
+    {
+        $user = factory(\App\User::class)->create();
+        $this->actingAs($user)
+            ->visit('/home')
+            ->click('navbarDropdownMenuLink2')
+            ->click('My Teams')
+            ->click('New Team')
+            ->type('Teste2', 'teamName')
+            ->select('1', 'teamFaculty[]')
+            ->type('dwfesfsegesgsegsgegs','teamDescription')
+            ->press('Create team')
+            ->click('Delete team')
+            ->press('Delete')
+            ->seePageIs('/team');
+
+    }
+
+    /**
+     * Test add member to team
+     *
+     * @return void
+     */
+
+    public function testAddMemberTeam()
+    {
+        $user = factory(\App\User::class)->create();
+        $user2 = factory(\App\User::class)->create();
+        $this->actingAs($user)
+            ->visit('/home')
+            ->click('navbarDropdownMenuLink2')
+            ->click('My Teams')
+            ->click('New Team')
+            ->type('Teste3', 'teamName')
+            ->select('1', 'teamFaculty[]')
+            ->type('dwfesfsegesgsdegsgegs','teamDescription')
+            ->press('Create team')
+            ->click('Add member')
+            ->type(''.$user2->username,'username')
+            ->press('Add')
+            ->see(''.$user2->username);
+
+
+
 
     }
 
