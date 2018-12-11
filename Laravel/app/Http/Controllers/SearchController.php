@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag;
+use App\Faculty;
+use App\Skill;
+use App\Users;
 
 class SearchController extends Controller
 {
@@ -34,6 +37,80 @@ class SearchController extends Controller
         return view('pages.search', ['proposals' => $proposals, 'responseSentence' => $responseSentence]);
     }
 
+    public function simpleSearchMember(Request $request)
+    {
+
+        $input = $request->all();
+        if (isset($input['faculty'])) {
+            $faculties = $input['faculty'];
+        } else {
+            $faculties = null;
+        }
+
+        if (isset($input['skill'])) {
+            $skills = $input['skill'];
+        } else {
+            $skills = null;
+        }
+
+
+        $ids = [];
+
+        try {
+            if ($faculties != null && $skills !== null) {
+                foreach ($faculties as $faculty) {
+                    $f = Faculty::where('facultyname', $faculty)->get()->first();
+                    foreach ($skills as $skill) {
+                        $s = Skill::where('skillname', $skill)->get()->first();
+                        $res = DB::select("SELECT users.id, skill_user.iduser FROM users, skill_user WHERE idfaculty = ? AND skill_user.idskill = ? AND users.id = skill_user.iduser", [$f->id, $s->id]);
+                        foreach ($res as $entry) {
+                            array_push($ids, $entry->id);
+                        }
+                    }
+                }
+            } elseif ($faculties !== null) {
+                foreach ($faculties as $faculty) {
+                    $f = Faculty::where('facultyname', $faculty)->get()->first();
+                    $res = DB::select("SELECT users.id FROM users WHERE idfaculty = ?", [$f->id]);
+                    foreach ($res as $entry) {
+                        array_push($ids, $entry->id);
+                    }
+                }
+            } elseif ($skills !== null) {
+                foreach ($skills as $skill) {
+                    $s = Skill::where('skillname', $skill)->get()->first();
+                    $res = DB::select("SELECT users.id, skill_user.iduser FROM users, skill_user WHERE skill_user.idskill = ? AND users.id = skill_user.iduser", [$s->id]);
+                    foreach ($res as $entry) {
+                        array_push($ids, $entry->id);
+                    }
+                }
+            } else {
+                $res = DB::select("SELECT users.id FROM users");
+                foreach ($res as $entry) {
+                    array_push($ids, $entry->id);
+                }
+            }
+
+            if (sizeof($ids) == 0) {
+                return view('pages.searchMember', ['members' => []]);
+            }
+
+            $parameters = implode(",", $ids);
+
+            $query = "SELECT id, username FROM users WHERE users.id IN (" . $parameters . ")";
+            $members = DB::select($query, []);
+        } catch (QueryException $qe) {
+            $errors = new MessageBag();
+
+            $errors->add('An error ocurred', "There was a problem searching for members. Try Again!");
+            $this->warn($qe);
+            return redirect()
+                ->route('searchMember')
+                ->withErrors($errors);
+        }
+
+        return view('pages.searchMember', ['members' => $members]);
+    }
     /**
       * does a simpel search request
       * @param Request $request

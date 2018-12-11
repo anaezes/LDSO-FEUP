@@ -10,8 +10,6 @@ use database\factories;
 
 class UnitTest extends TestCase
 {
-
-
     /**
      * Test homepage route
      *
@@ -136,7 +134,6 @@ class UnitTest extends TestCase
         $this->assertTrue(Auth::check());
 
         $proposal = factory(\App\Proposal::class)->create();
-
         $this->be($user);
         $response = $this->post(route('create'), $proposal->toArray()) //fixme
             ->seeInDatabase('proposal', ['title' => $proposal->title]);

@@ -20,6 +20,8 @@ class Image extends Model
      */
     protected $table = 'image';
 
+    protected $primaryKey = 'id';
+
     public function user()
     {
         return $this->belongsTo('App\User', 'idusers', 'id');
