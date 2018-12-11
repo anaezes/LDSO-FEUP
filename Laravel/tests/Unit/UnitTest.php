@@ -564,7 +564,37 @@ class UnitTest extends TestCase
         $this->assertResponseOk();
     }
 
-   public function testRouteProfilePost()
+    /**
+     * Test profile post route - valid
+     *
+     * @return void
+     */
+   public function testRouteProfilePost1()
+    {
+        $user = factory(\App\User::class)->create();
+        $this->be($user);
+        $this->post(route('register'), $user->toArray())
+            ->seeInDatabase('users', ['username' => $user->username]);
+        $this->assertTrue(Auth::check());
+
+        $data = array(
+            'name' => null,
+            'phone' => "934713336",
+            'email' => null,
+            'idfaculty' => null
+        );
+
+        $this->be($user);
+        $this->post(route('profile.edit', ['id' => $user->id]), $data);
+        $this->followRedirects('profile/'.$user->id);
+    }
+
+    /**
+     * Test profile poste route - not valid
+     *
+     * @return void
+     */
+    public function testRouteProfilePost2()
     {
         //Route::post('profile/{id}/edit', 'ProfileController@editUser')->name('profile.edit');
         $user = factory(\App\User::class)->create();
@@ -573,10 +603,20 @@ class UnitTest extends TestCase
             ->seeInDatabase('users', ['username' => $user->username]);
         $this->assertTrue(Auth::check());
 
-        $response = $this->post(route('profile.edit', $user->id), $user->toArray());
-        //$this->assertResponseOk(); fixme
+        $data = array(
+            'name' => 33827382,
+        );
+
+        $this->be($user);
+        $response = $this->post(route('profile.edit', ['id' => $user->id]), $data);
+        $this->followRedirects('profile/'.$user->id);
     }
 
+    /**
+     * Test contact get route
+     *
+     * @return void
+     */
     public function testRouteContactGet()
     {
         $this->route('GET', 'contact');
@@ -584,10 +624,44 @@ class UnitTest extends TestCase
         $this->assertResponseOk();
     }
 
+    /**
+     * Test contact post route
+     *
+     * @return void
+     */
+    public function testRouteContactPost()
+    {
+        $message = array(
+            'name' => 'ana santos',
+            'email' => 'ana@gmail.com',
+            'message' => 'bla bla bla'
+        );
+        $this->route('POST', 'contact', $message);
+        $this->followRedirects('contact');
+        $this->assertResponseOk();
+    }
+
+    /**
+     * Test about get route
+     *
+     * @return void
+     */
     public function testRouteAboutGet()
     {
         $this->route('GET', 'about');
         $this->followRedirects('about');
+        $this->assertResponseOk();
+    }
+
+    /**
+     * Test faq get route
+     *
+     * @return void
+     */
+    public function testRouteFaqGet()
+    {
+        $this->route('GET', 'faq');
+        $this->followRedirects('faq');
         $this->assertResponseOk();
     }
 }
