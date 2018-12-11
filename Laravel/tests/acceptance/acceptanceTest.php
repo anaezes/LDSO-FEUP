@@ -314,7 +314,38 @@ class AcceptanceTests extends TestCase
 
     }
 
-    
+    /**
+     * Test see all people page
+     *
+     * @return void
+     */
+
+    public function testAllPeople()
+    {
+        $user = factory(\App\User::class)->create();
+        $this->actingAs($user)
+            ->visit('/home')
+            ->click('People')
+            ->seePageIs('/people');
+
+    }
+
+
+    /**
+     * Test see faq page
+     *
+     * @return void
+     */
+
+    public function testFaqPage()
+    {
+        $user = factory(\App\User::class)->create();
+        $this->actingAs($user)
+            ->visit('/home')
+            ->click('FAQ')
+            ->seePageIs('/faq');
+
+    }
 
 
 
