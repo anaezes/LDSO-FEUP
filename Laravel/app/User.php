@@ -144,7 +144,7 @@ class User extends Authenticatable
             return $query;
         }
 
-        return $query->whereRaw("searchtext @@ to_tsquery('english', ?)", [$search])
-                     ->orderByRaw("ts_rank(searchtext, to_tsquery('english', ?)) DESC", [$search]);
+        return $query->whereRaw("searchtext @@ plainto_tsquery('english', ?)", [$search])
+                     ->orderByRaw("ts_rank(searchtext, plainto_tsquery('english', ?)) DESC", [$search]);
     }
 }
