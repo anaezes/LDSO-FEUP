@@ -25,18 +25,6 @@ class SearchController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    /**
-      * gets the advanced search page
-      * @return page
-      */
-    public function show()
-    {
-        $proposals = [];
-        $responseSentence = "Use the advanced search options above to find proposals";
-
-        return view('pages.search', ['proposals' => $proposals, 'responseSentence' => $responseSentence]);
-    }
-
     public function simpleSearchMember(Request $request)
     {
 
