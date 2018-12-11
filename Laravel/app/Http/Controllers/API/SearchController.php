@@ -185,7 +185,8 @@ class SearchController extends Controller
             $proposal->timestamp = ProposalController::createTimestamp($proposal->datecreated, $proposal->duration);
         }
 
-        return view('pages.search',
+        return view(
+            'pages.search',
             ['users' => $users,
             'proposals' => $proposals,
             'teams' => $teams]

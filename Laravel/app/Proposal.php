@@ -75,8 +75,7 @@ class Proposal extends Model
                                   ->orWhere('faculty_proposal.idfaculty', Auth::user()->faculty->id);
                         } else {
                              $query->where('proposal.proposal_public', 'true');
-                        }
-                               
+                        }        
                      })
                      ->whereRaw("searchtext @@ plainto_tsquery('english', ?)", [$search])
                      ->orderByRaw("ts_rank(searchtext, plainto_tsquery('english', ?)) DESC", [$search]);
