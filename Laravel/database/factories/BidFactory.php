@@ -1,6 +1,7 @@
 <?php
 
 use Faker\Generator as Faker;
+use database\factories;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,22 +13,15 @@ use Faker\Generator as Faker;
 | model instances for testing / seeding your application's database.
 |
 */
-
-$c = 0;
-
 $factory->define(App\Bid::class, function (Faker $faker) {
-    global $c;
-    $c++;
-
     return [
-        'id' => $c, //$faker->unique()->randomNumber(),
         'idproposal' => function () {
             return factory(App\Proposal::class)->create()->id;
         },
         'idteam' => function () {
             return factory(App\Team::class)->create()->id;
         },
-        'description' => $faker->title,
+        'description' => $faker->text(500),
         'submissiondate' => $faker->date('2019-01-01')
     ];
 });
