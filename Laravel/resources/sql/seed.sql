@@ -1,5 +1,6 @@
 DROP TRIGGER IF EXISTS ts_searchtext_users ON users;
 DROP TRIGGER IF EXISTS ts_searchtext_team ON team;
+DROP TRIGGER IF EXISTS ts_searchtext_proposal ON proposal;
 DROP TRIGGER IF EXISTS  tr_check_number_off_row_admin ON users CASCADE;
 DROP TRIGGER IF EXISTS  tr_change_users_status ON users CASCADE;
 DROP TRIGGER IF EXISTS  tr_change_proposal_status ON proposal CASCADE;
@@ -16,6 +17,7 @@ DROP FUNCTION IF EXISTS image_proposal_or_users() CASCADE;
 
 DROP INDEX IF EXISTS users_searchtext_gin;
 DROP INDEX IF EXISTS team_searchtext_gin;
+DROP INDEX IF EXISTS proposal_searchtext_gin;
 
 DROP TABLE IF EXISTS public.password_resets CASCADE;
 DROP TABLE IF EXISTS image CASCADE;
@@ -94,6 +96,9 @@ CREATE TABLE proposal (
     CONSTRAINT proposal_status_ck CHECK ((proposal_status = ANY (ARRAY['approved'::text, 'removed'::text, 'waitingApproval'::text, 'finished'::text, 'evaluated'::text]))),
     CONSTRAINT duration_ck CHECK (duration >= 300)
 );
+
+ALTER TABLE proposal ADD COLUMN searchtext TSVECTOR;
+UPDATE proposal SET searchtext = to_tsvector('english', title || '' || description);
 
 CREATE TABLE skill (
   id SERIAL PRIMARY KEY,
@@ -226,6 +231,7 @@ CREATE INDEX title_index ON proposal USING GIST (to_tsvector('english', title));
 
 CREATE INDEX users_searchtext_gin ON users USING GIN(searchtext);
 CREATE INDEX team_searchtext_gin ON team USING GIN(searchtext);
+CREATE INDEX proposal_searchtext_gin ON proposal USING GIN(searchtext);
 
 
 -----------------------------------------------------
@@ -235,6 +241,8 @@ CREATE INDEX team_searchtext_gin ON team USING GIN(searchtext);
 CREATE TRIGGER ts_searchtext_users BEFORE INSERT OR UPDATE ON users FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('searchtext', 'pg_catalog.english', 'name', 'username'); 
 
 CREATE TRIGGER ts_searchtext_team BEFORE INSERT OR UPDATE ON team FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('searchtext', 'pg_catalog.english', 'teamname', 'teamdescription'); 
+
+CREATE TRIGGER ts_searchtext_proposal BEFORE INSERT OR UPDATE ON proposal FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('searchtext', 'pg_catalog.english', 'title', 'description'); 
 
 CREATE FUNCTION check_number_of_row_admin() RETURNS TRIGGER AS
 $BODY$
