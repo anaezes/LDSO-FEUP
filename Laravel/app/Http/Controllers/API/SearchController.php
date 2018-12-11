@@ -175,6 +175,12 @@ class SearchController extends Controller
                              ->withInput();
         }
 
-        return Proposal::search($request->input('words'))->get();
+        $words = $request->input('words');
+
+        $users = User::search($words)->get();
+        $proposals = Proposal::search($words)->get();
+        $teams = Team::search($words)->get();
+
+        return view('pages.search', ['users' => $users]);
     }
 }
