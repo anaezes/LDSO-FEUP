@@ -2,8 +2,6 @@
 
 namespace Tests\Unit;
 
-use App\Team;
-use App\User;
 use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 use database\factories;
@@ -33,7 +31,6 @@ class UnitTest extends TestCase
         $this->followRedirects('allproposals');
         $this->assertResponseOk();
     }
-
 
     /**
      * Test history proposals route
@@ -134,7 +131,6 @@ class UnitTest extends TestCase
         $response->followRedirects('faq');
         $this->assertTrue(Auth::check());
 
-
         $this->route('GET', 'logout');
         $this->followRedirects('logout');
         $this->assertFalse(Auth::check());
@@ -145,7 +141,6 @@ class UnitTest extends TestCase
      *
      * @return void
      */
-
     public function testRouteLoginPost()
     {
         $user = factory(\App\User::class)->create();
@@ -169,7 +164,6 @@ class UnitTest extends TestCase
      *
      * @return void
      */
-
     public function testRouteLoginGet()
     {
         $this->route('GET', 'login');
