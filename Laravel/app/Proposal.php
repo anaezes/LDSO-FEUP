@@ -29,7 +29,7 @@ class Proposal extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'description', 'duration', 'title', 'proposal_status','proposal_public', 'bid_public',  'dateapproved',
+        'id', 'description', 'duration', 'title', 'datecreated', 'proposal_status','proposal_public', 'bid_public',  'dateapproved',
         'duedate', 'announcedate', 'idproponent'
     ];
 

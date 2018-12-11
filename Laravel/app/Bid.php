@@ -28,7 +28,7 @@ class Bid extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'idproposal', 'idteam','description', 'submissiondate'
+        'idproposal', 'idteam', 'biddate', 'description', 'submissiondate', 'winner', 'selfevaluation'
     ];
 
     public function team()
