@@ -182,21 +182,55 @@ class UnitTest extends TestCase
      *
      * @return void
      */
-
-    public function testAddProposalPost()
+    public function testRouteCreateProposalGet()
     {
-
         $user = factory(\App\User::class)->create();
         $this->be($user);
         $this->post(route('register'), $user->toArray())
             ->seeInDatabase('users', ['username' => $user->username]);
         $this->assertTrue(Auth::check());
 
-        $proposal = factory(\App\Proposal::class)->create();
         $this->be($user);
-        $response = $this->post(route('create'), $proposal->toArray()) //fixme
+        $this->route('GET', 'create');
+        $this->followRedirects('create');
+        $this->assertResponseOk();
+    }
+
+    /**
+     * Test create proposal post
+     *
+     * @return void
+     */
+    public function testRouteCreateProposalPost()
+    {
+        $user = factory(\App\User::class)->create();
+        $this->be($user);
+        $this->post(route('register'), $user->toArray())
+            ->seeInDatabase('users', ['username' => $user->username]);
+        $this->assertTrue(Auth::check());
+
+        $proposal = factory(\App\Proposal::class)->make();
+        $id = $proposal->id;
+
+        $this->refreshApplication();
+
+        $data = array(
+            'title' => $proposal->title,
+            'description' => $proposal->description,
+            'skill' => array(1,2),
+            'faculty' => array(1),
+            'days' => 0,
+            'hours' =>  1,
+            'minutes' =>  3,
+            'due' => $proposal->duedate,
+            'announce' => $proposal->announcedate
+        );
+
+        $this->be($user);
+        $response = $this->post(route('create'), $data)
             ->seeInDatabase('proposal', ['title' => $proposal->title]);
-        $response->followRedirects('create');
+        $response->followRedirects('proposal'.$id);
+        $response->assertResponseOk();
     }
 
     public function testRouteCreateProposalGet()
