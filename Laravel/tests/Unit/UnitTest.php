@@ -233,19 +233,38 @@ class UnitTest extends TestCase
         $response->assertResponseOk();
     }
 
-    public function testRouteCreateProposalGet()
+    /**
+     * Test route notify proposal
+     *
+     * @return void
+     */
+    public function testRouteProposalNotifyProponent()
     {
+
+        //proposal/{id}/notify
+
         $user = factory(\App\User::class)->create();
         $this->be($user);
         $this->post(route('register'), $user->toArray())
             ->seeInDatabase('users', ['username' => $user->username]);
         $this->assertTrue(Auth::check());
 
-        $this->route('GET', 'create');
-        $this->followRedirects('create');
-        $this->assertResponseOk();
+        $bid = factory(\App\Bid::class)->make();
+
+        $data = array(
+            'selfevaluation' => 4
+        );
+
+        $this->be($user);
+        $response = $this->post(route('proposal.notify', ['id'=>$bid->idproposal]), $data);
+        $response->followRedirects('proposal/'.$bid->idproposal);
     }
 
+    /**
+     * Test create bid get route
+     *
+     * @return void
+     */
     public function testRouteCreateBidGet()
     {
         $user = factory(\App\User::class)->create();
