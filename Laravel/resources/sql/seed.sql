@@ -1,4 +1,5 @@
-DROP TRIGGER IF EXISTS tsvector_update_trigger ON users;
+DROP TRIGGER IF EXISTS ts_searchtext_users ON users;
+DROP TRIGGER IF EXISTS ts_searchtext_team ON team;
 DROP TRIGGER IF EXISTS  tr_check_number_off_row_admin ON users CASCADE;
 DROP TRIGGER IF EXISTS  tr_change_users_status ON users CASCADE;
 DROP TRIGGER IF EXISTS  tr_change_proposal_status ON proposal CASCADE;
@@ -13,7 +14,8 @@ DROP FUNCTION IF EXISTS  check_approved_proposal() CASCADE;
 DROP FUNCTION IF EXISTS  change_proposal_modification_is_approved() CASCADE;
 DROP FUNCTION IF EXISTS image_proposal_or_users() CASCADE;
 
-DROP INDEX IF EXISTS searchtext_gin;
+DROP INDEX IF EXISTS users_searchtext_gin;
+DROP INDEX IF EXISTS team_searchtext_gin;
 
 DROP TABLE IF EXISTS public.password_resets CASCADE;
 DROP TABLE IF EXISTS image CASCADE;
@@ -127,6 +129,10 @@ CREATE TABLE team (
      teamDescription TEXT NOT NULL
 );
 
+ALTER TABLE team ADD COLUMN searchtext TSVECTOR;
+UPDATE team SET searchtext = to_tsvector('english', teamname || '' || teamdescription);
+
+
 CREATE TABLE team_member(
       idTeam INTEGER NOT NULL REFERENCES team(id) ON DELETE CASCADE,
       idUser INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -218,13 +224,17 @@ CREATE INDEX image_index ON image USING hash (id);
 
 CREATE INDEX title_index ON proposal USING GIST (to_tsvector('english', title));
 
-CREATE INDEX searchtext_gin ON users USING GIN(searchtext);
+CREATE INDEX users_searchtext_gin ON users USING GIN(searchtext);
+CREATE INDEX team_searchtext_gin ON team USING GIN(searchtext);
+
 
 -----------------------------------------------------
  --TRIGGERS AND UDFs
 ----------------------------------------------------
 
-CREATE TRIGGER ts_searchtext BEFORE INSERT OR UPDATE ON users FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('searchtext', 'pg_catalog.english', 'name', 'username'); 
+CREATE TRIGGER ts_searchtext_users BEFORE INSERT OR UPDATE ON users FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('searchtext', 'pg_catalog.english', 'name', 'username'); 
+
+CREATE TRIGGER ts_searchtext_team BEFORE INSERT OR UPDATE ON team FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('searchtext', 'pg_catalog.english', 'teamname', 'teamdescription'); 
 
 CREATE FUNCTION check_number_of_row_admin() RETURNS TRIGGER AS
 $BODY$

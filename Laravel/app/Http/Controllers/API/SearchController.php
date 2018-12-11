@@ -8,6 +8,7 @@ use App\Http\Controllers\TeamMemberController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\Controller;
 use App\User;
+use App\Team;
 use Validator;
 use Exception;
 use Illuminate\Http\Request;
@@ -173,6 +174,6 @@ class SearchController extends Controller
                              ->withInput();
         }
 
-        return User::search($request->input('words'))->get();
+        return Team::search($request->input('words'))->get();
     }
 }

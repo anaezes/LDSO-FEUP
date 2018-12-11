@@ -61,4 +61,21 @@ class Team extends Model
     {
         return $this->belongsToMany('App\Faculty', 'team_faculty', 'idteam', 'idfaculty');
     }
+
+    /**
+     * Scope a query to search teams based on their name.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  mixed $text
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSearch($query, $search)
+    {
+        if (!$search) {
+            return $query;
+        }
+
+        return $query->whereRaw("searchtext @@ to_tsquery('english', ?)", [$search])
+                     ->orderByRaw("ts_rank(searchtext, to_tsquery('english', ?)) DESC", [$search]);
+    }
 }
