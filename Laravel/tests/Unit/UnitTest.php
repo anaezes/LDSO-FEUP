@@ -427,27 +427,80 @@ class UnitTest extends TestCase
     {
         $user = factory(\App\User::class)->create();
         $this->be($user);
-        $response = $this->post(route('register'), $user->toArray())
+        $this->post(route('register'), $user->toArray())
             ->seeInDatabase('users', ['username' => $user->username]);
-        $response->followRedirects('faq');
         $this->assertTrue(Auth::check());
 
-        $bid = factory(\App\Bid::class)->create();
+        $proposal= factory(\App\Proposal::class)->create();
+        $bid= factory(\App\Bid::class)->make();
 
-        //$this->route('POST', 'createBid', [$bid->idproposal, $bid->toArray()]); fixme ?
-        //$this->seeInDatabase('bid', ['description' => $bid->description]);
+        $this->refreshApplication();
+
+        $data = array(
+            'team' => $bid->idteam,
+            'descriptionBid' => $bid->description,
+            'submissionDate' => $bid->submissiondate
+        );
+
+        $this->be($user);
+        $response = $this->post(route('createBid', ['id'=>$proposal->id]), $data)
+            ->seeInDatabase('bid', ['description' => $bid->description]);
+        $response->followRedirects('createBid'.$proposal->id);
     }
 
+    /**
+     * Test bid get route
+     *
+     * @return void
+     */
+    public function testRouteBidGet()
+    {
+        $bid = factory(\App\Bid::class)->create();
+        $this->route('GET', 'bid', ['id' => $bid->id]);
+        $this->followRedirects('bid'.$bid->id);
+        $this->assertResponseOk();
+    }
 
+    /**
+     * Test route bid put
+     *
+     * @return void
+     */
     public function testRouteBidPut()
     {
-        $bid = factory(\App\Bid::class)->create([
-            "winner" => true
-        ]);
-        $this->route('PUT', 'bid.winner', ['id' => $bid->id]);
-        $this->seeInDatabase('bid', ['description' => $bid->description, 'winner' => 'true']);
+        $user = factory(\App\User::class)->create();
+        $this->be($user);
+        $this->post(route('register'), $user->toArray())
+            ->seeInDatabase('users', ['username' => $user->username]);
+        $this->assertTrue(Auth::check());
+
+        $proposal= factory(\App\Proposal::class)->create();
+        $bid= factory(\App\Bid::class)->create();
+
+        $data = array(
+            'team' => $bid->idteam,
+            'descriptionBid' => $bid->description,
+            'submissionDate' => $bid->submissiondate
+        );
+
+        $this->be($user);
+        $response = $this->post(route('createBid', ['id'=>$proposal->id]), $data)
+            ->seeInDatabase('bid', ['description' => $bid->description]);
+        $response->followRedirects('createBid'.$proposal->id);
+
+        $data = array (
+            'bidid' => $bid->id
+        );
+
+        $this->put(route('bid.winner', ['id'=>$bid->id]), $data);
+        $this->seeInDatabase('bid', ['id'=> $bid->id, 'winner' => true]);
     }
 
+    /**
+     * Test proposal get route
+     *
+     * @return void
+     */
     public function testRouteProposalGet()
     {
         $user = factory(\App\User::class)->create();
@@ -456,37 +509,48 @@ class UnitTest extends TestCase
             ->seeInDatabase('users', ['username' => $user->username]);
         $this->assertTrue(Auth::check());
 
-        $proposal = factory(\App\Proposal::class)->create();
+        $proposal = factory(\App\Proposal::class)->create( );
 
-        $this->route('GET', 'proposal', [$proposal->id]);
+        $this->route('GET', 'proposal', ['id'=>$proposal->id]);
         $this->followRedirects('proposal'.$proposal->id);
         $this->assertResponseOk();
     }
 
+    /**
+     * Test proposal edit get route
+     *
+     * @return void
+     */
     public function testRouteProposalEditGet()
     {
-        //Route::get('/proposal', 'ProposalController@updateProposals');
-        $proposal = factory(\App\Proposal::class)->create([
-            "proposal_status" => 'finished'
-        ]);
+        $proposal = factory(\App\Proposal::class)->create();
 
-        $this->route('GET', 'proposal.edit',  ['id' => $proposal->id]);
-        $this->followRedirects('proposal'.$proposal->id);
+        $this->route('GET', 'proposal.edit', ['id' => $proposal->id])
+            ->isRedirect('proposalEdit');
+        $this->followRedirects('proposalEdit');
         $this->assertResponseOk();
     }
 
-
+    /**
+     * Test proposal update put route
+     *
+     * @return void
+     */
     public function testRouteProposalUpdatePut()
     {
-        //Route::put('proposal/{id}', 'ProposalController@update')->name('proposal.update');
         $proposal = factory(\App\Proposal::class)->create([
             "proposal_status" => 'finished'
         ]);
-        $this->route('PUT', 'proposal.update', ['id' => $proposal->id]);
-        $this->seeInDatabase('proposal', ['description' => $proposal->description, 'proposal_status' => 'finished']);
+        $response = $this->put(route('proposal.update', ['id' => $proposal->id]), $proposal->toArray());
+        $this->seeInDatabase('proposal', ['description' => $proposal->description,
+            'proposal_status' => 'finished']);
     }
 
-
+    /**
+     * Test profile get route
+     *
+     * @return void
+     */
     public function testRouteProfileGet()
     {
         $user = factory(\App\User::class)->create();
