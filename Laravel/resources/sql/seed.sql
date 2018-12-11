@@ -380,6 +380,8 @@ INSERT INTO "skill" (skillName) VALUES ('Skill4');
 
 
 
+
+
 ----admin
 --INSERT INTO "users" (email, name, password, phone, username, users_status, idfaculty) VALUES ('admin@fe.up.pt', 'admin', '$2y$10$c1H9bNvOoNdOtoDAJDfrNOooEt7UPWTW6eeD9XTnfOL7BUGzjSpW6', '111111111','admin', 'admin', 8);
 ----others

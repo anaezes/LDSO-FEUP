@@ -111,6 +111,10 @@
                   <div class="modal-body">
                     <label for="usernameATM">Username</label>
                     <input type="text" name="username" id="usernameATM" class="w-100" placeholder="User's username" required>
+                    <span class="input-group-append">
+                      <a data-toggle="modal" href="#myModalSearchMember" data-target="#myModalSearchMember" class="btn btn-primary" title="Search team member">
+                          <i class="fas fa-search"></i> Advanced Search</a>
+                    </span>
                   </div>
                   <div class="modal-footer">
                     <button type="submit" name="Add" class="btn btn-primary"><span class="fas fa-plus"></span> Add</button>
@@ -118,6 +122,69 @@
                   </div>
                 </form>
               </div>
+            </div>
+            <!-- Modal Search Member -->
+            <div class="modal fade" id="myModalSearchMember" tabindex="-1" role="dialog" aria-labelledby="myModalSearchMemberLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="myModalTeamLabel">Search Member</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="ml-4 mr-4" method="POST" action="{{ route('searchMember') }}" enctype="multipart/form-data">
+                                {{ csrf_field() }}
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="skill">Skill</label>
+                                        <select id="skill" name="skill[]" class="form-control"  multiple>
+                                            <option>Skill1</option>
+                                            <option>Skill2</option>
+                                            <option>Skill3</option>
+                                            <option>Skill4</option>
+                                        </select>
+                                        @if ($errors->has('skill'))
+                                        <span class="error">
+                                        {{ $errors->first('skill') }}
+                                      </span>
+                                        @endif
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="faculty">Faculty</label>
+                                        <select id="faculty" name="faculty[]" class="form-control"  multiple>
+                                            <option>Faculty of Architecture</option>
+                                            <option>Faculty of Fine Arts</option>
+                                            <option>Faculty of Science</option>
+                                            <option>Faculty of Sport</option>
+                                            <option>Faculty of Law</option>
+                                            <option>Faculty of Economics</option>
+                                            <option>Faculty of Engineering</option>
+                                            <option>Faculty of Pharmacy</option>
+                                            <option>Faculty of Arts</option>
+                                            <option>Faculty of Medicine</option>
+                                            <option>Faculty of Dental Medicine</option>
+                                            <option>Faculty of Psychology and Education Science</option>
+                                            <option>Abel Salazar Institute of Biomedical Science</option>
+                                            <option>Porto Business School</option>
+                                        </select>
+                                        @if ($errors->has('faculty'))
+                                        <span class="error">
+                                        {{ $errors->first('faculty') }}
+                                      </span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fa fa-search"></i>Search
+                                </button>
+                        </div>
+
+                        </form>
+                    </div>
+                </div>
             </div>
           </div>
         </div>
