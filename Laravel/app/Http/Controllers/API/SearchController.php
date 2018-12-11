@@ -187,7 +187,8 @@ class SearchController extends Controller
 
         return view('pages.search',
             ['users' => $users,
-            'proposals' => $proposals]
+            'proposals' => $proposals,
+            'teams' => $teams]
         );
     }
 }

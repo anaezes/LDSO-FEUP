@@ -19,10 +19,10 @@
                 <a class="nav-link active" id="pills-users-tab" data-toggle="pill" href="#pills-users" role="tab" aria-controls="pills-users" aria-selected="true">Users</a>
             </li>
             <li class="nav-item col-lg-4 text-center">
-                <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Proposals</a>
+                <a class="nav-link" id="pills-proposals-tab" data-toggle="pill" href="#pills-proposals" role="tab" aria-controls="pills-proposals" aria-selected="false">Proposals</a>
             </li>
             <li class="nav-item col-lg-4 text-center">
-                <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Teams</a>
+                <a class="nav-link" id="pills-teams-tab" data-toggle="pill" href="#pills-teams" role="tab" aria-controls="pills-teams" aria-selected="false">Teams</a>
             </li>
         </ul>
         <div class="tab-content" id="pills-tabContent">
@@ -60,7 +60,7 @@
                     @endforelse
                 </div>
             </div>
-            <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+            <div class="tab-pane fade" id="pills-proposals" role="tabpanel" aria-labelledby="pills-proposals-tab">
                 @php
                     $i = 0;
                 @endphp
@@ -101,7 +101,44 @@
                     @endforelse
                 </div>
             </div>
-            <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">...</div>
+            <div class="tab-pane fade" id="pills-teams" role="tabpanel" aria-labelledby="pills-teams-tab">
+                @php
+                    $i = 0;
+                @endphp
+                <div class="row">
+                    @forelse ($teams as $team)
+                        @if ($i != 0 && !($i % 4))
+                            </div>
+                            <div class="row">
+                        @else
+                            @php
+                                $i++;
+                            @endphp
+                        @endif
+                        <div class="col-lg-3 mb-3">
+                            <a href="{{ route('team.show', $team) }}" style="text-decoration: none;">
+                                <div class="card" style="width: 17rem;">
+                                    <div class="card-header">
+                                        {{ $team->teamname }}
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title text-dark">
+                                            {{ substr($team->teamdescription, 0, 100) }}
+                                        </h5>
+                                        <h6 class="card-subtitle mt-3 text-muted">
+                                            {{ $team->user->name }}
+                                        </h6>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    @empty
+                        <h5 class="col-lg-12 text-center text-muted mt-5">
+                            No results found.
+                        </h5>
+                    @endforelse
+                </div>
+            </div>
         </div>
     </div>
 </main>
