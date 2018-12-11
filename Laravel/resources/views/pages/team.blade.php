@@ -101,90 +101,95 @@
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="myModalTeamLabel">Add Member</h5>
+                  <h5 class="modal-title">Member</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
-                <form action="{{ route('team.addMember', $team->id) }}" method="POST">
-                  {{ csrf_field() }}
-                  <div class="modal-body">
-                    <label for="usernameATM">Username</label>
-                    <input type="text" name="username" id="usernameATM" class="w-100" placeholder="User's username" required>
-                    <span class="input-group-append">
-                      <a data-toggle="modal" href="#myModalSearchMember" data-target="#myModalSearchMember" class="btn btn-primary" title="Search team member">
-                          <i class="fas fa-search"></i> Advanced Search</a>
-                    </span>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="submit" name="Add" class="btn btn-primary"><span class="fas fa-plus"></span> Add</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><span class="fas fa-times"></span> Close</button>
-                  </div>
-                </form>
-              </div>
-            </div>
-            <!-- Modal Search Member -->
-            <div class="modal fade" id="myModalSearchMember" tabindex="-1" role="dialog" aria-labelledby="myModalSearchMemberLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="myModalTeamLabel">Search Member</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form class="ml-4 mr-4" method="POST" action="{{ route('searchMember') }}" enctype="multipart/form-data">
-                                {{ csrf_field() }}
-
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="skill">Skill</label>
-                                        <select id="skill" name="skill[]" class="form-control"  multiple>
-                                            <option>Skill1</option>
-                                            <option>Skill2</option>
-                                            <option>Skill3</option>
-                                            <option>Skill4</option>
-                                        </select>
-                                        @if ($errors->has('skill'))
-                                        <span class="error">
-                                        {{ $errors->first('skill') }}
-                                      </span>
-                                        @endif
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="faculty">Faculty</label>
-                                        <select id="faculty" name="faculty[]" class="form-control"  multiple>
-                                            <option>Faculty of Architecture</option>
-                                            <option>Faculty of Fine Arts</option>
-                                            <option>Faculty of Science</option>
-                                            <option>Faculty of Sport</option>
-                                            <option>Faculty of Law</option>
-                                            <option>Faculty of Economics</option>
-                                            <option>Faculty of Engineering</option>
-                                            <option>Faculty of Pharmacy</option>
-                                            <option>Faculty of Arts</option>
-                                            <option>Faculty of Medicine</option>
-                                            <option>Faculty of Dental Medicine</option>
-                                            <option>Faculty of Psychology and Education Science</option>
-                                            <option>Abel Salazar Institute of Biomedical Science</option>
-                                            <option>Porto Business School</option>
-                                        </select>
-                                        @if ($errors->has('faculty'))
-                                        <span class="error">
-                                        {{ $errors->first('faculty') }}
-                                      </span>
-                                        @endif
-                                    </div>
-                                </div>
-                                <button class="btn btn-primary" type="submit">
-                                    <i class="fa fa-search"></i>Search
-                                </button>
-                        </div>
-
-                        </form>
+                <div class="accordion" id="accordionAddMember">
+                  <div class="card">
+                    <div class="card-header" id="headingAddMember">
+                      <h5 class="mb-0 row">
+                        <button class="btn btn-light col-lg-12" type="button" data-toggle="collapse" data-target="#addMember" aria-expanded="true" aria-controls="addMember">
+                          Add Member
+                        </button>
+                      </h5>
                     </div>
+                    <div id="addMember" class="collapse show" aria-labelledby="headingAddMember" data-parent="#accordionAddMember">
+                      <div class="card-body">
+                        <form action="{{ route('team.addMember', $team->id) }}" method="POST">
+                          {{ csrf_field() }}
+                          <div class="form-row">
+                            <div class="form-group col-lg-12">
+                              <label for="usernameATM">Username</label>
+                              <input type="text" name="username" id="usernameATM" class="form-control" placeholder="User's username" required>
+                            </div>
+                          </div>
+                          <div class="form-row float-right mb-3">
+                            <div class="col-lg-12">
+                              <button type="submit" name="Add" class="btn btn-primary">
+                                <span class="fas fa-plus"></span>
+                                Add
+                              </button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="card">
+                    <div class="card-header" id="headingSearchMember">
+                      <h5 class="mb-0 row">
+                        <button class="btn btn-light col-lg-12" type="button" data-toggle="collapse" data-target="#searchMember" aria-expanded="false" aria-controls="searchMember">
+                          Search
+                        </button>
+                      </h5>
+                    </div>
+                    <div id="searchMember" class="collapse" aria-labelledby="headingSearchMember" data-parent="#accordionAddMember">
+                      <div class="card-body">
+                        <form action="{{ route('searchMember') }}" method="POST">
+                          {{ csrf_field() }}
+                          <div class="form-row">
+                            <div class="form-group col-lg-12">
+                              <label for="name">Name</label>
+                              <input type="text" name="name" id="name" class="form-control" placeholder="User's name or username">
+                            </div>
+                          </div>
+                          <div class="form-row">
+                            <div class="form-group col-lg-12">
+                              <label for="skills">Skill</label>
+                              <select name="skills[]" id="skills" class="form-control" size="6" multiple>
+                                @foreach (App\Skill::all() as $skill)
+                                  <option value="{{ $skill->id }}">{{ $skill->skillname }}</option>
+                                @endforeach
+                              </select>
+                            </div>
+                          </div>
+                          <div class="form-row">
+                            <div class="form-group col-lg-12">
+                              <label for="faculties">Faculty</label>
+                              <select name="faculties[]" id="faculties" class="form-control" size="6" multiple>
+                                @foreach (App\Faculty::all() as $faculty)
+                                  <option value="{{ $faculty->id }}">{{ $faculty->facultyname }}</option>
+                                @endforeach
+                              </select>
+                            </div>
+                          </div>
+                          <div class="form-row float-right mb-3">
+                            <div class="col-lg-12">
+                              <button type="submit" name="Search" class="btn btn-primary">
+                                <span class="fas fa-search"></span>
+                                Search
+                              </button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+              </div>
             </div>
           </div>
         </div>
