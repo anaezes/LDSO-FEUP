@@ -276,11 +276,153 @@ class UnitTest extends TestCase
 
         $bid = factory(\App\Bid::class)->create();
 
-        $this->route('GET', 'createBid', [$bid->id]);
-        $this->followRedirects('createBid'.$bid->id);
-        $this->assertResponseOk();
+        $this->route('GET', 'createBid', ['id'=>$bid->id])
+            ->isRedirect('createBid'.$bid->id);
     }
 
+    /**
+     * Test shou teams route
+     *
+     * @return void
+     */
+    public function testRouteTeamShow()
+    {
+        $user = factory(\App\User::class)->create();
+        $this->be($user);
+        $this->post(route('register'), $user->toArray())
+            ->seeInDatabase('users', ['username' => $user->username]);
+        $this->assertTrue(Auth::check());
+
+        $team = factory(\App\Team::class)->create();
+
+        $this->be($user);
+        $this->route('GET', 'team.show', ['id'=> $team->id])
+            ->isRedirect('team'.$team->id);
+    }
+
+    /**
+     * Test team store route
+     *
+     * @return void
+     */
+    public function testRouteTeamStore()
+    {
+        $user = factory(\App\User::class)->create();
+        $this->be($user);
+        $this->post(route('register'), $user->toArray())
+            ->seeInDatabase('users', ['username' => $user->username]);
+        $this->assertTrue(Auth::check());
+
+        $data = array(
+            "teamName" => "nova equipa",
+            "teamDescription" => "bla bla bla",
+            "teamFaculty" => array(1,2)
+        );
+
+        $this->be($user);
+        $this->post(route('team.store'), $data)
+            ->seeInDatabase('team', ['teamname' => $data["teamName"]]);
+    }
+
+    /**
+     * Test update team route
+     *
+     * @return void
+     */
+    public function testRouteTeamUpdate()
+    {
+        $user = factory(\App\User::class)->create();
+        $this->be($user);
+        $this->post(route('register'), $user->toArray())
+            ->seeInDatabase('users', ['username' => $user->username]);
+        $this->assertTrue(Auth::check());
+
+        $team = factory(\App\Team::class)->create([
+            'teamname' => "outro nome qualquer"
+        ]);
+
+        $this->get(route('team.update', ['id' => $team->id]), $team->toArray()); //fixme
+          //  ->seeInDatabase('team', ['teamdescription' => "outro nome qualquer"]);
+    }
+
+    /**
+     * Test add member route
+     *
+     * @return void
+     */
+    public function testRouteTeamAddMember1()
+    {
+        $user = factory(\App\User::class)->create();
+        $this->be($user);
+        $this->post(route('register'), $user->toArray())
+            ->seeInDatabase('users', ['username' => $user->username]);
+        $this->assertTrue(Auth::check());
+
+        $user2 = factory(\App\User::class)->create();
+
+        $team = factory(\App\Team::class)->create();
+
+        $this->post(route('team.addMember', ['id' => $team->id]), $user2->toArray())
+            ->seeInDatabase('team_member', ['idteam' => $team->id, 'iduser' => $user2->id]);
+    }
+
+    /**
+     * Test add member to team route
+     *
+     * @return void
+     */
+    public function testRouteTeamAddMember2()
+    {
+        $user = factory(\App\User::class)->create();
+        $this->be($user);
+        $this->post(route('register'), $user->toArray())
+            ->seeInDatabase('users', ['username' => $user->username]);
+        $this->assertTrue(Auth::check());
+
+        $user2 = factory(\App\User::class)->create([
+            'username' => 12345
+        ]);
+
+        $team = factory(\App\Team::class)->create();
+
+        $this->post(route('team.addMember', ['id' => $team->id]), $user2->toArray())
+            ->assertResponseStatus(302);
+    }
+
+    /**
+     * Test remove member team route
+     *
+     * @return void
+     */
+    public function testRouteTeamRemoveMember()
+    {
+        $user = factory(\App\User::class)->create();
+        $this->be($user);
+        $this->post(route('register'), $user->toArray())
+            ->seeInDatabase('users', ['username' => $user->username]);
+        $this->assertTrue(Auth::check());
+
+        $user2 = factory(\App\User::class)->create();
+
+        $team = factory(\App\Team::class)->create();
+
+        $this->post(route('team.addMember', ['id' => $team->id]), $user2->toArray())
+            ->seeInDatabase('team_member', ['idteam' => $team->id, 'iduser' => $user2->id]);
+
+        $data = array(
+            'memberId' => $user2->id,
+            'source' => 'leader'
+         );
+
+        $response = $this->post(route('team.removeMember', ['id'=>$team->id]), $data);
+        //$response->assertResponseOk(); fixme
+    }
+
+    /**
+     * Test create bid post route
+     *
+     * @return void
+     */
     public function testRouteCreateBidPost()
     {
         $user = factory(\App\User::class)->create();
