@@ -345,6 +345,62 @@ class AcceptanceTests extends TestCase
             ->click('FAQ')
             ->seePageIs('/faq');
 
+
+    }
+
+
+    /**
+     * Test see about page
+     *
+     * @return void
+     */
+
+    public function testAboutPage()
+    {
+        $user = factory(\App\User::class)->create();
+        $this->actingAs($user)
+            ->visit('/home')
+            ->click('About')
+            ->seePageIs('/about');
+
+    }
+
+
+    /**
+     * Test see contact page
+     *
+     * @return void
+     */
+
+    public function testContactPage()
+    {
+        $user = factory(\App\User::class)->create();
+        $this->actingAs($user)
+            ->visit('/home')
+            ->click('Contact')
+            ->seePageIs('/contact');
+
+    }
+
+    /**
+     * Test send msg to contact 
+     *
+     * @return void
+     */
+
+    public function testContactPageMsg()
+    {
+        $user = factory(\App\User::class)->create();
+        $this->actingAs($user)
+            ->visit('/home')
+            ->click('Contact')
+            ->type('Teste', 'name')
+            ->type('Teste@fe.up.pt', 'email')
+            ->type('Teste', 'message')
+            ->press('contactSubmitButton')
+            ->see('Your message was sent. Within 48h, you should receive a reply in your e-mail:')
+            ->dontSee('Rails');
+
     }
 
 
