@@ -34,10 +34,6 @@ class ProfileController extends Controller
      */
     public function show($id)
     {
-        if (!Auth::check()) {
-            return redirect('/home');
-        }
-
         $user = User::find($id);
 
 
@@ -45,14 +41,10 @@ class ProfileController extends Controller
 
         $user->skills=$skills;
 
-       //dd($skills);
-
-
         $images = DB::table('image')->where('idusers', $id)->pluck('source');
         if (sizeof($images) == 0) {
             $images = ["default.png"];
         }
-
 
         return view('pages.profile', ['user' => $user, 'image' => $images[0]]);
     }
