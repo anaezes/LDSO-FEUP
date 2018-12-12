@@ -13,14 +13,12 @@ use database\factories;
 | model instances for testing / seeding your application's database.
 |
 */
-$factory->define(App\User::class, function (Faker $faker) {
+$factory->define(App\Team::class, function (Faker $faker) {
     return [
-        'name' => $faker->name,
-        'username' => $faker->unique()->userName,
-        'email' => $faker->unique()->safeEmail,
-        'phone' => strval($faker->biasedNumberBetween(910000000, 999999999)),
-        'idfaculty' => $faker->biasedNumberBetween(1, 15),
-        'password' => $faker->password,
-        'remember_token' => str_random(10),
+        'teamname' => $faker->text(20),
+        'teamdescription' => $faker->text(200),
+        'idleader' => function () {
+            return factory(App\User::class)->create()->id;
+        }
     ];
 });

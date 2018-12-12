@@ -22,4 +22,11 @@ class TeamMember extends Model
     protected $table = 'team_member';
 
     protected $primaryKey = "id";
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['idteam', 'iduser'];
 }
