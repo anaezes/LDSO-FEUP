@@ -44,16 +44,7 @@ class ProposalController extends Controller
         $proposal = Proposal::find($id);
 
         $timestamp = ProposalController::createTimestamp($proposal->datecreated, $proposal->duration);
-
-        if ($timestamp === "Proposal has ended!" && $proposal->proposal_status != "evaluated") {
-            $proposal->proposal_status = "finished";
-        } else {
-            if ($proposal->proposal_status != "evaluated") {
-                $proposal->proposal_status = "approved";
-            }
-        }
-
-        $update = ProposalController::updateProposals();
+        ProposalController::updateProposals();
 
         return view(
             'pages.proposal',
@@ -124,6 +115,7 @@ class ProposalController extends Controller
         $proposal = new Proposal;
         $proposal->title = $request->input('title');
         $proposal->description = $request->input('description');
+        $proposal->proposal_status = "approved";
         $proposal->proposal_public = $request->has('public_prop');
         $proposal->bid_public = $request->has('public_bid');
         $proposal->duration = $duration;
@@ -235,28 +227,17 @@ class ProposalController extends Controller
      */
     public function updateProposals()
     {
-        $proposals = DB::select("SELECT id, duration, dateApproved, idproponent FROM proposal WHERE proposal_status = ?", ["approved"]);
-        $over = [];
+        $proposals = Proposal::where('proposal_status', 'approved')->get();
 
         foreach ($proposals as $proposal) {
             $timestamp = ProposalController::createTimestamp($proposal->datecreated, $proposal->duration);
-            if ($timestamp === "Proposal has ended!") {
-                array_push($over, $proposal->id);
+            if ($timestamp === 'Proposal has ended!' && $proposal->proposal_status != 'evalueted') {
+                $proposal->proposal_status = 'finished';
+                $proposal->datefinished = date('Y-m-d H:i:s');
+                $proposal->save();
+
+                $this->notifyOwner($proposal->id);
             }
-        }
-
-        if (sizeof($over) == 0) {
-            return;
-        }
-
-        $parameters = implode(',', $over);
-        $query = "UPDATE proposal SET proposal_status = ?, dateFinished = ? WHERE id IN (" . $parameters . ")";
-        DB::update($query, ["finished", "now()"]);
-
-        foreach ($over as $id) {
-            $this->notifyOwner($id);
-            $this->notifyWinnerAndPurchase($id);
-            $this->notifyBidders($id);
         }
     }
 
@@ -413,8 +394,7 @@ class ProposalController extends Controller
     {
         $start = strtotime($dateCreated);
         $end = $start + $duration;
-        $current = time();
-        $time = $end - $current;
+        $time = $end - time();
 
         if ($time <= 0) {
             return "Proposal has ended!";
@@ -424,17 +404,13 @@ class ProposalController extends Controller
         $d = floor($time/86400);
         $ts .= $d . "d ";
 
-
         $h = floor(($time-$d*86400)/3600);
         $ts .= $h . "h ";
 
         $m = floor(($time-($d*86400+$h*3600))/60);
         $ts .= $m . "m ";
 
-
         $ts .= $time-($d*86400+$h*3600+$m*60) . "s";
-
-
 
         if (strpos($ts, "0d ") !== false) {
             $ts = str_replace("0d ", "", $ts);

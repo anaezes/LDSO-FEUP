@@ -157,8 +157,8 @@
                 </h3>
             </div>
             <div class="col-lg-9">
-                    @if($proposal->proposal_status == 'finished')
-                        <h4 id="timeLeft" class="text-danger">Proposal has finished</h4>
+                    @if($proposal->proposal_status == 'finished' || $proposal->proposal_status == 'evalueted')
+                        <h4 id="timeLeft" class="text-danger">Proposal has ended!</h4>
                     @else
                         <h4 id="timeLeft" class="text-danger">{{ $timestamp }}</h4>
                     @endif
@@ -252,6 +252,9 @@
                             <div class="row mt-3">
                                 <div class="col-lg-2">
                                     <h5>
+                                        @if($bid->winner)
+                                            <i class="fas fa-trophy text-warning"></i>
+                                        @endif
                                         <a href="{{ route('bid', $bid) }}" class="text-dark">
                                             {{ $bid->id }}
                                         </a>
