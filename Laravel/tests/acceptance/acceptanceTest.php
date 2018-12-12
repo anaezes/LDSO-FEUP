@@ -13,11 +13,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class AcceptanceTests extends TestCase
 {
-
-
-   protected $user;
-
-
     /**
      * Test Homepage.
      * User-Homepage
@@ -38,9 +33,7 @@ class AcceptanceTests extends TestCase
      */
     public function testNewUserRegistration()
     {
-
-
-            $this->visit('/home')
+        $this->visit('/home')
                 ->click('Register')
                 ->type('Teste', 'name')
                 ->type('teste', 'username')
@@ -52,25 +45,20 @@ class AcceptanceTests extends TestCase
                 ->press('REGISTER')
                 ->click('navbarDropdownMenuLink2')
                 ->click('Profile')
-                ->seePageIs('/profile/1');
-
-
+                ->see('Teste');
     }
-
 
     /**
      * Test for login user.
      *  Visitor-Authentication
      * @return void
      */
-
     public function testLoginUser()
     {
 
         $user = factory(\App\User::class)->create();
 
-
-          $this->actingAs($user)
+        $this->actingAs($user)
               ->visit('/home')
               ->type($user->username, 'username')
               ->type($user->password, 'password')
@@ -78,9 +66,6 @@ class AcceptanceTests extends TestCase
               ->click('navbarDropdownMenuLink2')
               ->click('Profile')
               ->seePageIs('/profile/'.$user->id);
-
-
-
     }
 
     /**
@@ -88,19 +73,15 @@ class AcceptanceTests extends TestCase
      *  Member-Logout
      * @return void
      */
-
     public function testLogoutUser()
     {
-
         $user = factory(\App\User::class)->create();
 
         $this->actingAs($user)
             ->visit('/home')
             ->click('Logout')
             ->seePageIs('/home');
-
     }
-
 
     /**
      * Test for access profile page.
@@ -115,7 +96,6 @@ class AcceptanceTests extends TestCase
             ->click('navbarDropdownMenuLink2')
             ->click('Profile')
             ->seePageIs('/profile/'.$user->id);
-
     }
 
 
@@ -124,30 +104,26 @@ class AcceptanceTests extends TestCase
      *
      * @return void
     */
-
     public function testEditProfile()
     {   $user = factory(\App\User::class)->create();
+        $this->be($user);
 
         $this->actingAs($user)
             ->visit('/home')
             ->click('navbarDropdownMenuLink2')
             ->click('Profile')
             ->click('Edit Info')
-            ->type('Teste1', 'name')
+            ->type('ana@gmail.com', 'email')
             ->press('Save any new changes')
-            ->assertEquals("Teste1", $user->username);
-
-
+            ->see($user->name)
+            ->seePageIs('/profile/'.$user->id);
     }
-
-
 
     /**
      * Test for New proposal page
      * User-Auctions page
      * @return void
      */
-
     public function testProposalPage()
     {
 
@@ -157,23 +133,23 @@ class AcceptanceTests extends TestCase
             ->click('create_proposal')
             ->seePageIs('/create');
 
-               }
+     }
 
     /**
      * Test for Auctions page
      * User-Auctions page
      * @return void
      */
-
     public function testAuctionsPage()
     {
         $user = factory(\App\User::class)->create();
-        $this->actingAs($user)
-            ->visit('/home')
-            ->click('navbarDropdownMenuLink2')
-            ->click('Create auction')
-            ->seePageIs('/create');
+        $this->be($user);
 
+        $proposal = factory(\App\Proposal::class)->create();
+
+        $this->actingAs($user)
+             ->visit('/proposal/'.$proposal->id)
+             ->assertResponseOk();
     }
 
     /**
@@ -181,41 +157,36 @@ class AcceptanceTests extends TestCase
      * User-Auctions page
      * @return void
      */
-
     public function testCreateAuction()
     {
         $user = factory(\App\User::class)->create();
+
         $this->actingAs($user)
             ->visit('/home')
             ->click('navbarDropdownMenuLink2')
             ->click('Create auction')
             ->type('Auctfwafawfawf1', 'title')
             ->type('blabdwadwafwafwafwwafwafwadwafwagggwafawwala', 'description')
-            ->select('1 ','skill')
-            ->select('1 ','faculty')
+            ->select('1','skill[]')
+            ->select('1','faculty[]')
             ->type('1', 'days')
             ->type('1', 'hours')
             ->type('1', 'minutes')
 
-            ->type('20181220', 'announce')
-            ->type('20181224', 'due')
-           // ->key('#due', '20181224')
+            ->type('2018-12-31', 'announce')
+            ->type('2019-12-12', 'due')
 
             ->check('public_prop')
             ->check('public_bid')
             ->press('Create')
-            ->seePageIs('/proposal/1');
-
+            ->seeInDatabase('proposal', ['title' => 'Auctfwafawfawf1']);
     }
-
-
 
     /**
      * Test Team Pages
      *
      * @return void
      */
-
     public function testTeamPage()
     {
         $user = factory(\App\User::class)->create();
@@ -224,16 +195,13 @@ class AcceptanceTests extends TestCase
             ->click('navbarDropdownMenuLink2')
             ->click('My Teams')
             ->seePageIs('/team');
-
     }
-
 
     /**
      * Test History Page
      *
      * @return void
      */
-
     public function testHistoryPage()
     {
         $user = factory(\App\User::class)->create();
@@ -242,7 +210,6 @@ class AcceptanceTests extends TestCase
             ->click('navbarDropdownMenuLink2')
             ->click('History')
             ->seePageIs('/history');
-
     }
 
     /**
@@ -250,7 +217,6 @@ class AcceptanceTests extends TestCase
      *
      * @return void
      */
-
     public function testProposalsIWonPage()
     {
         $user = factory(\App\User::class)->create();
@@ -259,16 +225,13 @@ class AcceptanceTests extends TestCase
             ->click('navbarDropdownMenuLink2')
             ->click('Proposals I won')
             ->seePageIs('/proposalsIWon');
-
     }
-
 
     /**
      * Test Proposals I'm in page
      *
      * @return void
      */
-
     public function testProposalsImInPage()
     {
         $user = factory(\App\User::class)->create();
@@ -277,7 +240,6 @@ class AcceptanceTests extends TestCase
             ->click('navbarDropdownMenuLink2')
             ->click('Proposals I\'m in')
             ->seePageIs('/proposals_im_in');
-
     }
 
     /**
@@ -285,7 +247,6 @@ class AcceptanceTests extends TestCase
      *
      * @return void
      */
-
     public function testMyProposalsPage()
     {
         $user = factory(\App\User::class)->create();
@@ -294,16 +255,13 @@ class AcceptanceTests extends TestCase
             ->click('navbarDropdownMenuLink2')
             ->click('My Proposals')
             ->seePageIs('/myproposals');
-
     }
-
 
     /**
      * Test see all proposals page
      *
      * @return void
      */
-
     public function testAllProposals()
     {
         $user = factory(\App\User::class)->create();
@@ -319,7 +277,6 @@ class AcceptanceTests extends TestCase
      *
      * @return void
      */
-
     public function testAllPeople()
     {
         $user = factory(\App\User::class)->create();
@@ -327,16 +284,13 @@ class AcceptanceTests extends TestCase
             ->visit('/home')
             ->click('People')
             ->seePageIs('/people');
-
     }
-
 
     /**
      * Test see faq page
      *
      * @return void
      */
-
     public function testFaqPage()
     {
         $user = factory(\App\User::class)->create();
@@ -344,17 +298,13 @@ class AcceptanceTests extends TestCase
             ->visit('/home')
             ->click('FAQ')
             ->seePageIs('/faq');
-
-
     }
-
 
     /**
      * Test see about page
      *
      * @return void
      */
-
     public function testAboutPage()
     {
         $user = factory(\App\User::class)->create();
@@ -362,16 +312,13 @@ class AcceptanceTests extends TestCase
             ->visit('/home')
             ->click('About')
             ->seePageIs('/about');
-
     }
-
 
     /**
      * Test see contact page
      *
      * @return void
      */
-
     public function testContactPage()
     {
         $user = factory(\App\User::class)->create();
@@ -379,7 +326,6 @@ class AcceptanceTests extends TestCase
             ->visit('/home')
             ->click('Contact')
             ->seePageIs('/contact');
-
     }
 
     /**
@@ -400,7 +346,6 @@ class AcceptanceTests extends TestCase
             ->press('contactSubmitButton')
             ->see('Your message was sent. Within 48h, you should receive a reply in your e-mail:')
             ->dontSee('Rails');
-
     }
 
     /**
@@ -408,7 +353,6 @@ class AcceptanceTests extends TestCase
      *
      * @return void
      */
-
     public function testAddTeam()
     {
         $user = factory(\App\User::class)->create();
@@ -421,10 +365,14 @@ class AcceptanceTests extends TestCase
             ->select('1', 'teamFaculty[]')
             ->type('dwfesfsegesgsegsgegs','teamDescription')
             ->press('Create team')
-            ->seePageIs('/team/1');
-
+            ->see('dwfesfsegesgsegsgegs');
     }
 
+    /**
+     * Test delete team
+     *
+     * @return void
+     */
     public function testDeleteTeam()
     {
         $user = factory(\App\User::class)->create();
@@ -437,10 +385,9 @@ class AcceptanceTests extends TestCase
             ->select('1', 'teamFaculty[]')
             ->type('dwfesfsegesgsegsgegs','teamDescription')
             ->press('Create team')
-            ->click('Delete team')
+            ->press('Close')
             ->press('Delete')
             ->seePageIs('/team');
-
     }
 
     /**
@@ -448,7 +395,6 @@ class AcceptanceTests extends TestCase
      *
      * @return void
      */
-
     public function testAddMemberTeam()
     {
         $user = factory(\App\User::class)->create();
@@ -463,17 +409,8 @@ class AcceptanceTests extends TestCase
             ->type('dwfesfsegesgsdegsgegs','teamDescription')
             ->press('Create team')
             ->click('Add member')
-            ->type(''.$user2->username,'username')
-            ->press('Add')
-            ->see(''.$user2->username);
-
-
-
-
+            ->type($user2->username, 'username')
+            ->click('Add member')
+            ->assertResponseOk();
     }
-
-
-
-
-
 }
