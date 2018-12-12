@@ -71,7 +71,6 @@ Route::get('api/notifications', 'API\NotificationsController@getNotifications');
 Route::post('/notifications/{id}', 'API\NotificationsController@markAsSeen');
 
 //Search Page
-Route::get('search', 'SearchController@show')->name('search');
 Route::post('search', 'API\SearchController@generalSearch')->name('search');
 Route::post('searchMember', 'API\SearchController@searchMember')->name('searchMember');
 
