@@ -221,32 +221,26 @@ class SearchController extends Controller
                          ->whereIn('users.idfaculty', $faculties)
                          ->whereIn('skill_user.idskill', $skills)
                          ->get();
-        }
-        else if (isset($name) && isset($skills)) {
+        } elseif (isset($name) && isset($skills)) {
             $users = User::search($name)
                          ->join('skill_user', 'users.id', '=', 'skill_user.iduser')
                          ->whereIn('skill_user.idskill', $skills)
                          ->get();
-        }
-        else if (isset($name) && isset($faculties)) {
+        } elseif (isset($name) && isset($faculties)) {
             $users = User::search($name)
                          ->whereIn('users.idfaculty', $faculties)
                          ->get();
-        }
-        else if (isset($name)) {
+        } elseif (isset($name)) {
             $users = User::search($name)
                          ->get();
-        }
-        else if (isset($faculties)) {
+        } elseif (isset($faculties)) {
             $users = User::whereIn('users.idfaculty', $faculties)
                          ->get();
-        }
-        else if (isset($skills)) {
+        } elseif (isset($skills)) {
             $users = User::join('skill_user', 'users.id', '=', 'skill_user.iduser')
                          ->whereIn('skill_user.idskill', $skills)
                          ->get();
-        }
-        else {
+        } else {
             $users = User::all();
         }
 
