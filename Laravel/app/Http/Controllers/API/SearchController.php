@@ -220,4 +220,58 @@ class SearchController extends Controller
             'teams' => $teams]
         );
     }
+
+    /**
+     * Search for users by name, skill or faculty
+     * @param Request $request
+     */
+    public function searchMember(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'nullable|string',
+            'skills' => 'nullable|array|exists:skill,id',
+            'faculties' => 'nullable|array|exists:faculty,id'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                             ->withErrors($validator)
+                             ->withInput();
+        }
+
+        $name = $request->has('name') ? $request->input('name') : null;
+        $skills = $request->has('skills') ? $request->input('skills') : null;
+        $faculties = $request->has('faculties') ? $request->input('faculties') : null;
+
+        if (isset($name) && isset($skills) && isset($faculties)) {
+            $users = User::search($name)
+                         ->join('skill_user', 'users.id', '=', 'skill_user.iduser')
+                         ->whereIn('users.idfaculty', $faculties)
+                         ->whereIn('skill_user.idskill', $skills)
+                         ->get();
+        } elseif (isset($name) && isset($skills)) {
+            $users = User::search($name)
+                         ->join('skill_user', 'users.id', '=', 'skill_user.iduser')
+                         ->whereIn('skill_user.idskill', $skills)
+                         ->get();
+        } elseif (isset($name) && isset($faculties)) {
+            $users = User::search($name)
+                         ->whereIn('users.idfaculty', $faculties)
+                         ->get();
+        } elseif (isset($name)) {
+            $users = User::search($name)
+                         ->get();
+        } elseif (isset($faculties)) {
+            $users = User::whereIn('users.idfaculty', $faculties)
+                         ->get();
+        } elseif (isset($skills)) {
+            $users = User::join('skill_user', 'users.id', '=', 'skill_user.iduser')
+                         ->whereIn('skill_user.idskill', $skills)
+                         ->get();
+        } else {
+            $users = User::all();
+        }
+
+        return view('pages.searchMember', ['users' => $users]);
+    }
 }
