@@ -130,4 +130,21 @@ class User extends Authenticatable
             'skip_verification' => 'true',)
         );
     }
+
+     /**
+     * Scope a query to search users based on their name and username.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  mixed $text
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSearch($query, $search)
+    {
+        if (!$search) {
+            return $query;
+        }
+
+        return $query->whereRaw("searchtext @@ plainto_tsquery('english', ?)", [$search])
+                     ->orderByRaw("ts_rank(searchtext, plainto_tsquery('english', ?)) DESC", [$search]);
+    }
 }

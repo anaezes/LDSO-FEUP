@@ -42,82 +42,11 @@
         <div class="navbar-collapse collapse">
 
         <ul class="navbar-nav ml-auto" id="navbarList">
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle hidden-p-md-down" href="#" id="catDropDown" data-toggle="dropdown" aria-expanded="false">
-                    All Faculties
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" role="menu" id="catslist" aria-labelledby="catDropDown">
-
-                    <a href="#" class="faculty-dropdown dropdown-item">
-                        Faculty of Architecture
-                    </a>
-
-                    <a href="#" class="faculty-dropdown dropdown-item">
-                        Faculty of Fine Arts
-                    </a>
-
-
-                    <a href="#" class="faculty-dropdown dropdown-item">
-                        Faculty of Science
-                    </a>
-
-                    <a href="#" class="faculty-dropdown dropdown-item">
-                        Faculty of Nutrition and Food Science
-                    </a>
-
-                    <a href="#" class="faculty-dropdown dropdown-item">
-                        Faculty of Sports
-                    </a>
-
-                    <a href="#" class="faculty-dropdown dropdown-item">
-                        Faculty of Law
-                    </a>
-
-                    <a href="#" class="faculty-dropdown dropdown-item">
-                        Faculty of Economics
-                    </a>
-
-                    <a href="#" class="faculty-dropdown dropdown-item">
-                        Faculty of Engineering
-                    </a>
-
-                    <a href="#" class="faculty-dropdown dropdown-item">
-                        Faculty of Pharmacy
-                    </a>
-
-                    <a href="#" class="faculty-dropdown dropdown-item">
-                        Faculty of Arts
-                    </a>
-
-                    <a href="#" class="faculty-dropdown dropdown-item">
-                        Faculty of Medicine
-                    </a>
-
-                    <a href="#" class="faculty-dropdown dropdown-item">
-                        Faculty of Dental Medicine
-                    </a>
-
-                    <a href="#" class="faculty-dropdown dropdown-item">
-                        Faculty of Psychology and Education Science
-                    </a>
-
-                    <a href="#" class="faculty-dropdown dropdown-item">
-                        Abel Salazar Institute of Biomedical Science
-                    </a>
-
-
-                    <a href="#" class="faculty-dropdown dropdown-item">
-                        Porto Business School
-                    </a>
-
-            </li>
-
             <li class="nav-item hidden-p-md-down">
                 <form class="form-inline my-2 my-lg-0 mr-lg-2 searchNav" method="POST" action="{{ route('search') }}">
+                    {{ csrf_field() }}
                     <div class="input-group">
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                        <input type="hidden" name="category" value="All">
-                        <input name="searchTerm" class="form-control" type="text" placeholder="Search for...">
+                        <input name="words" class="form-control" type="text" placeholder="Search for..." required>
                         <span class="input-group-append">
                             <button class="btn btn-primary" type="submit">
                                 <i class="fa fa-search"></i>

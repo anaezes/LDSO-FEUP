@@ -7,6 +7,10 @@ use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\TeamMemberController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\Controller;
+use App\User;
+use App\Team;
+use App\Proposal;
+use Validator;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -180,5 +184,40 @@ class SearchController extends Controller
         }
 
         return response()->json($response);
+    }
+
+    /**
+     * Does a general search of users, teams, and proposals
+     * by mathcing keywords
+     * @param Request $request
+     */
+    public function generalSearch(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'words' => 'required|string'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                             ->withErrors($validator)
+                             ->withInput();
+        }
+
+        $words = $request->input('words');
+
+        $users = User::search($words)->get();
+        $proposals = Proposal::search($words)->get();
+        $teams = Team::search($words)->get();
+
+        foreach ($proposals as $proposal) {
+            $proposal->timestamp = ProposalController::createTimestamp($proposal->datecreated, $proposal->duration);
+        }
+
+        return view(
+            'pages.search',
+            ['users' => $users,
+            'proposals' => $proposals,
+            'teams' => $teams]
+        );
     }
 }
