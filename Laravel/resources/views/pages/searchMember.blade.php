@@ -6,13 +6,61 @@
 
 <main>
     <div class="container mt-5 mb-5">
-        <div class="row">
-            <div class="col-lg-12">
+        <div class="row d-flex align-items-center">
+            <div class="col-lg-10">
                 <h4>
                     <i class="fas fa-search"></i>
                     Search Member
                 </h4>
-                <hr id="hr_space" class="mt-2">
+            </div>
+            <div class="col-lg-2">
+                <button class="btn btn-primary w-100 mb-2" type="button" data-toggle="collapse" data-target="#collapseSearchMember" aria-expanded="false" aria-controls="collapseSearchMember">
+                    Search
+                </button>
+            </div>
+        </div>
+        <hr id="hr_space" class="mt-2">
+        <div class="row mb-4">
+            <div class="col-lg-12 collapse" id="collapseSearchMember">
+                <div class="card card-body">
+                    <form action="{{ route('searchMember') }}" method="POST">
+                        {{ csrf_field() }}
+                        <div class="form-row">
+                            <div class="form-group col-lg-12">
+                                <label for="name">Name</label>
+                                <input type="text" name="name" id="name" class="form-control" placeholder="User's name or username">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-lg-12">
+                                <label for="skills">Skill</label>
+                                <select name="skills[]" id="skills" class="form-control" size="6" multiple>
+                                @foreach (App\Skill::all() as $skill)
+                                    <option value="{{ $skill->id }}">{{ $skill->skillname }}</option>
+                                @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-lg-12">
+                                <label for="faculties">Faculty</label>
+                                <select name="faculties[]" id="faculties" class="form-control" size="6" multiple>
+                                @foreach (App\Faculty::all() as $faculty)
+                                    <option value="{{ $faculty->id }}">{{ $faculty->facultyname }}</option>
+                                @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row float-right mb-3">
+                            <div class="col-lg-12">
+                                <button type="submit" name="Search" class="btn btn-primary">
+                                <span class="fas fa-search"></span>
+                                Search
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
         @php
