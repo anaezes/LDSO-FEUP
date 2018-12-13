@@ -17,7 +17,6 @@
             </label>
             </div>
         </div>
-        <div><a data-toggle="modal" data-dismiss="modal" href="#" data-target="#myModalForgotPassword">Forgot password</a></div>
     </div>
     <div class="modal-footer">
         <button class="btn btn-primary btn-block" type="submit">

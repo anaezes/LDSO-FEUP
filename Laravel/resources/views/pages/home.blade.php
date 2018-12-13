@@ -104,7 +104,6 @@
     <!---  Active proposals grid -->
     <div id="proposalsAlbum" class="album py-2">
     </div>
-    <a href="#" id="showmorebutton" class="btn btn-outline-primary my-2 btn-block">Show More</a>
   </div>
 </div>
 
