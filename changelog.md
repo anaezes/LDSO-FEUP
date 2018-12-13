@@ -60,3 +60,33 @@ The sprint ended with a meeting with the PO who validated the issues for this it
 The team worked on bug fixing the bidding system as well as putting the finishing touches on that same system. Besides application oriented issues the team also created a production and staging server with automatic deployment using Gitlab CI. Coding guidelines were also created but not automatically enforced yet.
 
 The sprint ended with a meeting with the PO who validated the issues for this iteration and approved the next sprint. An estimate of what would be completed was provided to the PO (around 20 weight points).
+
+# 0.5 (10/12/2018)
+## Closed PBIs
+
+* [Remove useless buttons actions](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/90)
+* [Add github credentials to Composer](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/89)
+* [Fix proposal card bug](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/88)
+* [Search members improvement](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/87)
+* [General search](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/86)
+* [Cleanup files and minor issue](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/85)
+* [Fix proposal status and queries bug](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/83)
+* [Proposal Listing Improvement](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/81)
+* [FAQ](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/80)
+* [Fix delete team bug](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/79)
+* [Create Proposal page improvement](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/78)
+* [History Page](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/77)
+* [Proposal Page improvement](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/75)
+* [Code fixes](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/74)
+* [Unit tests](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/71)
+* [Acceptance tests (BDD/E2E)](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/69)
+* [Unit test coverage](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/68)
+* [Edit proposal](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/61)
+* [Automatic enforcement of coding guidelines using linters](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/54)
+* [Edit profile](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/21)
+* [People page](https://gitlab.com/feup-tbs/ldso18-19/t2g4/issues/4)
+
+## Increment description
+The team worked on overall bug fixing and enhancements to the existing product features. A search functionality was implemented, a proposal history page and a people page was also created. Besides application oriented issues the team also worked on continuous integration such as: automatic enforcement of coding guidelines using linters in Gitlab CI and also unit tests and acceptance tests running in Gitlab CI. Unit tests and Acceptance tests were developed from scratch, coverage reached 40% line coverage.
+
+The sprint ended with a meeting with the PO who validated the issues for this iteration. The final state of the project was shown and the handover details were fleshed out with the PO, a user guide and user story videos showing the main interactions with the platform.
