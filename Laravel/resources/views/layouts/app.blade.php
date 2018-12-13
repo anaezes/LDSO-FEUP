@@ -35,88 +35,18 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav hidden-p-md-down">
             <a class="nav-item nav-link" href={{ url("allproposals") }}>Proposals</a>
-            <a class="nav-item nav-link" href="#">People</a>
+            <a class="nav-item nav-link" href="{{ route('people') }}">People</a>
+            <a class="nav-item nav-link" href="{{ route('faq') }}">FAQ</a>
         </div>
 
         <div class="navbar-collapse collapse">
 
         <ul class="navbar-nav ml-auto" id="navbarList">
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle hidden-p-md-down" href="#" id="catDropDown" data-toggle="dropdown" aria-expanded="false">
-                    All Faculties
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" role="menu" id="catslist" aria-labelledby="catDropDown">
-
-                    <a href="#" class="faculty-dropdown dropdown-item">
-                        Faculty of Architecture
-                    </a>
-
-                    <a href="#" class="faculty-dropdown dropdown-item">
-                        Faculty of Fine Arts
-                    </a>
-
-
-                    <a href="#" class="faculty-dropdown dropdown-item">
-                        Faculty of Science
-                    </a>
-
-                    <a href="#" class="faculty-dropdown dropdown-item">
-                        Faculty of Nutrition and Food Science
-                    </a>
-
-                    <a href="#" class="faculty-dropdown dropdown-item">
-                        Faculty of Sports
-                    </a>
-
-                    <a href="#" class="faculty-dropdown dropdown-item">
-                        Faculty of Law
-                    </a>
-
-                    <a href="#" class="faculty-dropdown dropdown-item">
-                        Faculty of Economics
-                    </a>
-
-                    <a href="#" class="faculty-dropdown dropdown-item">
-                        Faculty of Engineering
-                    </a>
-
-                    <a href="#" class="faculty-dropdown dropdown-item">
-                        Faculty of Pharmacy
-                    </a>
-
-                    <a href="#" class="faculty-dropdown dropdown-item">
-                        Faculty of Arts
-                    </a>
-
-                    <a href="#" class="faculty-dropdown dropdown-item">
-                        Faculty of Medicine
-                    </a>
-
-                    <a href="#" class="faculty-dropdown dropdown-item">
-                        Faculty of Dental Medicine
-                    </a>
-
-                    <a href="#" class="faculty-dropdown dropdown-item">
-                        Faculty of Psychology and Education Science
-                    </a>
-
-                    <a href="#" class="faculty-dropdown dropdown-item">
-                        Abel Salazar Institute of Biomedical Science
-                    </a>
-
-
-                    <a href="#" class="faculty-dropdown dropdown-item">
-                        Porto Business School
-                    </a>
-
-            </li>
-
             <li class="nav-item hidden-p-md-down">
                 <form class="form-inline my-2 my-lg-0 mr-lg-2 searchNav" method="POST" action="{{ route('search') }}">
+                    {{ csrf_field() }}
                     <div class="input-group">
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                        <input type="hidden" name="category" value="All">
-                        <input name="searchTerm" class="form-control" type="text" placeholder="Search for...">
+                        <input name="words" class="form-control" type="text" placeholder="Search for..." required>
                         <span class="input-group-append">
                             <button class="btn btn-primary" type="submit">
                                 <i class="fa fa-search"></i>
@@ -179,6 +109,7 @@
                     <a class="dropdown-item" href="{{ url("create/") }}">Create auction</a>
                     <a class="dropdown-item" href="{{ url("myproposals") }}">My Proposals</a>
                     <a class="dropdown-item" href="{{ url("proposals_im_in") }}">Proposals I'm in</a>
+                    <a class="dropdown-item" href="{{ url("proposalsIWon") }}">Proposals I won</a>
                     <a class="dropdown-item" href="{{ url("history") }}">History</a>
                     <a class="dropdown-item" href="{{ url("team") }}">My Teams</a>
                     <!--<a class="dropdown-item" href="messages.html">Messages</a>-->
@@ -261,7 +192,7 @@
 <!-- Footer -->
 <footer class="footer footer-offset py-2 bg-dark">
     <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; BookHub 2018</p>
+        <p class="m-0 text-center text-white">Copyright &copy; U.Openlab 2018</p>
         <p class="m-0 text-center text-white">
             <a class="text-white" href="{{ url('about/') }}"> About</a> &nbsp; | &nbsp;
             <a class="text-white" href="{{ url('contact/') }}"> Contact</a>

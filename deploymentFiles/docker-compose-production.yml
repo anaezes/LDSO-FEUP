@@ -16,6 +16,7 @@ services:
         DB_PASSWORD: pg!fcp
         DB_CONNECTION: pgsql
     command: bash -c "composer install
+             && composer update
              && php artisan db:seed
              && php artisan serve --host=0.0.0.0 --port=80"
 

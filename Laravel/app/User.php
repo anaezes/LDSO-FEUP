@@ -32,15 +32,18 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    protected $primaryKey = 'id';
+    public $table = "users";
+
+    public $primaryKey = 'id';
 
     /**
      *
      * This user's faculty
      *
      */
-    public function faculty(){
-        return $this->hasOne('App\Faculty','id','idfaculty');
+    public function faculty()
+    {
+        return $this->hasOne('App\Faculty', 'id', 'idfaculty');
     }
 
     /**
@@ -48,21 +51,24 @@ class User extends Authenticatable
      * This user's proposals
      *
      */
-    public function proposals(){
-       return $this->hasMany('App\Proposal','id','idproponent');
+    public function proposals()
+    {
+         return $this->hasMany('App\Proposal', 'id', 'idproponent');
     }
 
     /**
      * This user's teams
      */
-    public function teams(){
+    public function teams()
+    {
         return $this->belongsToMany('App\Team', 'team_member', 'iduser', 'idteam');
     }
 
     /**
      * This user's notifications
      */
-    public function notifications(){
+    public function notifications()
+    {
         return $this->hasMany('App\Notification', 'idusers', 'id');
     }
 
@@ -71,25 +77,30 @@ class User extends Authenticatable
      * This user's gets for the account status
      *
      */
-    public function isBanned(){
+    public function isBanned()
+    {
         return $this->users_status=='banned';
     }
 
-    public function isNormal(){
+    public function isNormal()
+    {
         return $this->users_status=='normal';
     }
 
-    public function isTerminated(){
+    public function isTerminated()
+    {
         return $this->users_status=='terminated';
-    }    
+    }
 
-    public function isAdmin(){
+    public function isAdmin()
+    {
         return $this->users_status=='admin';
-    }    
+    }
 
-    public function isModerator(){
+    public function isModerator()
+    {
         return $this->users_status=='moderator';
-    } 
+    }
 
     /**
      * Send the password reset notification.
@@ -110,14 +121,32 @@ class User extends Authenticatable
         $mailgun = new \Mailgun\Mailgun('key-44a6c35045fe3c3add9fcf0a018e654e', $adapter);
 
         # Send the email
-        $result = $mailgun->sendMessage("$domain",
+        $result = $mailgun->sendMessage(
+            "$domain",
             array('from' => 'Home remote Sandbox <postmaster@sandboxeb3d0437da8c4b4f8d5a428ed93f64cc.mailgun.org>',
-                'to' => $this->name.' <'.$this->email.'>',
-                'subject' => 'Reset password',
-                'text' => 'Someone asked for password reset a contact message using the contact page. the token is: '.$token.'
-                To reset your password please visit http://lbaw1726.lbaw-prod.fe.up.pt/password/reset/'.$token,
-                'require_tls' => 'false',
-                'skip_verification' => 'true',
-            ));
-    }          
+            'to' => $this->name.' <'.$this->email.'>',
+            'subject' => 'Reset password',
+            'text' => 'Someone asked for password reset a contact message using the contact page. the token is: '.$token.'
+            To reset your password please visit http://lbaw1726.lbaw-prod.fe.up.pt/password/reset/'.$token,
+            'require_tls' => 'false',
+            'skip_verification' => 'true',)
+        );
+    }
+
+     /**
+     * Scope a query to search users based on their name and username.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  mixed $text
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSearch($query, $search)
+    {
+        if (!$search) {
+            return $query;
+        }
+
+        return $query->whereRaw("searchtext @@ plainto_tsquery('english', ?)", [$search])
+                     ->orderByRaw("ts_rank(searchtext, plainto_tsquery('english', ?)) DESC", [$search]);
+    }
 }

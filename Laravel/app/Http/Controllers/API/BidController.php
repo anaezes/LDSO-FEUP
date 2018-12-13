@@ -80,8 +80,9 @@ class BidController extends Controller
             $bidValue = $request->input('value');
 
             $hasPayment = DB::select("SELECT paypalemail FROM users WHERE id = ?", [$userID]);
-            if ($hasPayment[0]->paypalemail == null)
+            if ($hasPayment[0]->paypalemail == null) {
                 return response()->json(['success' => false, 'message' => "You cannot bid without having a payment method attached to your account"]);
+            }
 
             $proposal = DB::select("SELECT proposal_status FROM proposal WHERE id = ?", [$proposalID]);
             if ($proposal[0]->proposal_status != "approved") {
@@ -100,7 +101,6 @@ class BidController extends Controller
 
                 $notifID = DB::table('notification')->insertGetId(['information' => $info, 'idusers' => $lastbidder[0]->idbuyer]);
                 DB::insert("INSERT INTO notification_proposal (idproposal, idNotification) VALUES (?, ?)", [$proposalID, $notifID]);
-
             } else {
                 $lastbidder = DB::select('SELECT bid.idBuyer FROM bid WHERE idproposal = ? ORDER BY bidValue DESC', [$proposalID]);
 

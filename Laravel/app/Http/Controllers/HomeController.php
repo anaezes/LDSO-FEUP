@@ -26,6 +26,5 @@ class HomeController extends Controller
     {
         $proposals = Proposal::all();
         return view('pages.home', ['proposals' => $proposals]);
-
     }
 }

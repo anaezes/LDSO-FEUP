@@ -19,7 +19,10 @@
                 @if($action=="proposalS_IN")
                     <i class="fa fa-clock"></i> Proposals I'm in
                 @endif
-                @if($action=="HISTORY")
+                @if($action=="proposalsIWon")
+                    <i class="fa fa-clock"></i> Proposals I won
+                @endif
+                @if($action=="history")
                     <i class="fa fa-history"></i> History
                 @endif
                 @if($action=="TEAMS")

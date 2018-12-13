@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\User;
+use App\Image;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,25 +34,17 @@ class ProfileController extends Controller
      */
     public function show($id)
     {
-        if (!Auth::check()) {
-            return redirect('/home');
-        }
-
         $user = User::find($id);
 
 
-        $skills = DB::select("SELECT skillName FROM skill,skill_user WHERE skill.id=skill_user.idSkill AND skill_user.idUser = ?",[$user->id]);
+        $skills = DB::select("SELECT skillName FROM skill, skill_user WHERE skill.id=skill_user.idSkill AND skill_user.idUser = ?", [$user->id]);
 
         $user->skills=$skills;
-
-       //dd($skills);
-
 
         $images = DB::table('image')->where('idusers', $id)->pluck('source');
         if (sizeof($images) == 0) {
             $images = ["default.png"];
         }
-
 
         return view('pages.profile', ['user' => $user, 'image' => $images[0]]);
     }
@@ -99,13 +92,12 @@ class ProfileController extends Controller
             if ($input['phone'] !== null) {
                 DB::update('update users set phone = ? where id = ?', [$input['phone'], $id]);
             }
-
             $image = $request->file('image');
             if ($image !== null) {
-                $input['imagename'] = time() . $image->getClientOriginalName();
+                $input['imagename'] = time().$image->getClientOriginalName();
                 $image->move('img', $input['imagename']);
-                if (sizeof(DB::select('select * FROM image WHERE idusers = ?', [$id])) > 0) {
-                    DB::update('update image set source = ? where idusers = ?', [$input['imagename'], $id]);
+                if (sizeof(DB::select('SELECT * FROM image WHERE idusers = ?', [$id])) > 0) {
+                    DB::update('UPDATE image SET source = ? WHERE idusers = ?', [$input['imagename'], $id]);
                 } else {
                     DB::insert('INSERT INTO image (source,idusers) VALUES(?,?)', [$input['imagename'], $id]);
                 }
@@ -122,6 +114,4 @@ class ProfileController extends Controller
         }
         return redirect()->route('profile', ['id' => Auth::user()->id]);
     }
-
-
 }

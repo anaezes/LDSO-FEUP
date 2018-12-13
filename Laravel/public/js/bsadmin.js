@@ -111,6 +111,9 @@ if (showmorebutton != null)
             case "/history":
                 album.innerHTML += historyAlbum();
                 break;
+            case "/proposalsIWon":
+                album.innerHTML += proposalsIWonAlbum();
+                break;
             case "/teams":
                 album.innerHTML += teamsAlbum();
                 break;
@@ -143,6 +146,11 @@ if (window.location.pathname === "/allproposals")
 if (window.location.pathname === "/proposals_im_in")
 {
     ajaxCallGet("api/search?userBidOn=true", proposalAlbumHandler);
+}
+
+if (window.location.pathname === "/proposalsIWon")
+{
+    ajaxCallGet("api/search?userBidWinner=true", proposalsIWonAlbumHandler);
 }
 
 if (window.location.pathname === "/history")
@@ -197,12 +205,14 @@ function teamsAlbum()
 
 function historyAlbumHandler()
 {
+    console.log(this.responseText);
     proposals = JSON.parse(this.responseText);
     album.innerHTML = historyAlbum();
 }
 
 function historyAlbum()
 {
+    console.log(proposals);
     let htmlproposal = `<div class="row">`;
     let max = i + 12;
 
@@ -213,28 +223,25 @@ function historyAlbum()
         {
             htmlproposal += `</div><div class="row">`;
         }
+        console.log(element);
         htmlproposal += `<div class="col-md-3 proposalItem"  data-id="${element.id}">
         <a href="proposal/${element.id}" class="list-group-item-action">
             <div class="card mb-4 box-shadow">
-                <div class="col-md-6 img-fluid media-object align-self-center ">
-                    <!--<img class="width100" src="../img/book.png" alt="cover image">-->
-                    <img class="width100" src="../img/${element.image}" alt="book image">
-                </div>
                 <div class="card-body">
-                    <p class="card-text text-center hidden-p-md-down font-weight-bold" style="font-size: larger"> ${element.title} </p>
-                    <p class="card-text text-center hidden-p-md-down">By ${element.author} </p>
-                    <div class="text-center align-items-center">
-                        <small class="text-success">Sold for ${element.bidMsg} </small>
+                    <p class="card-text text-center hidden-p-sm-down font-weight-bold" style="font-size: larger"> ${element.title} </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-success">${element.nBids} bids </small>
+                        <small class="text-danger">
+                                ${proposalStatus(element.proposal_status)}</small>
                     </div>
                 </div>
             </div>
         </a>
     </div>`;
     };
-
+    htmlproposal += `</div>`;
     if (i == proposals.length)
         showmorebutton.parentNode.removeChild(showmorebutton);
-    htmlproposal += `</div>`;
     return htmlproposal;
 }
 
@@ -258,15 +265,16 @@ function myproposalsAlbum()
         {
             htmlproposal += `</div><div class="row">`;
         }
+        console.log(element);
         htmlproposal += `<div class="col-md-3 proposalItem"  data-id="${element.id}">
         <a href="proposal/${element.id}" class="list-group-item-action">
             <div class="card mb-4 box-shadow">
                 <div class="card-body">
                     <p class="card-text text-center hidden-p-sm-down font-weight-bold" style="font-size: larger"> ${element.title} </p>
                     <div class="d-flex justify-content-between align-items-center">
-                        <small class="text-success">${element.bidMsg} </small>
+                        <small class="text-success">${element.nBids} bids </small>
                         <small class="text-danger">
-                                ${element.time}</small>
+                                ${proposalStatus(element.proposal_status)}</small>
                     </div>
                 </div>
             </div>
@@ -305,9 +313,48 @@ function allproposalsAlbum()
                 <div class="card-body">
                     <p class="card-text text-center hidden-p-sm-down font-weight-bold" style="font-size: larger"> ${element.title} </p>
                     <div class="d-flex justify-content-between align-items-center">
-                        <small class="text-success">${element.bidMsg} </small>
+                        <small class="text-success">${element.nBids} bids</small>
                         <small class="text-danger">
-                                ${element.time}</small>
+                            ${proposalStatus(element.proposal_status)}</small>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>`;
+    };
+    htmlproposal += `</div>`;
+    if (i == proposals.length)
+        showmorebutton.parentNode.removeChild(showmorebutton);
+    return htmlproposal;
+}
+
+function proposalsIWonAlbumHandler(){
+    console.log(this.responseText);
+    proposals = JSON.parse(this.responseText);
+    album.innerHTML = proposalsIWonAlbum();
+}
+
+function proposalsIWonAlbum(){
+    console.log(proposals);
+    let htmlproposal = `<div class="row">`;
+    let max = i + 12;
+
+    for (i; i < max && i < proposals.length; i++)
+    {
+        let element = proposals[i];
+        if (i % 4 === 0 && i !== 0)
+        {
+            htmlproposal += `</div><div class="row">`;
+        }
+        htmlproposal += `<div class="col-md-3 proposalItem"  data-id="${element.id}">
+        <a href="proposal/${element.id}" class="list-group-item-action">
+            <div class="card mb-4 box-shadow">
+                <div class="card-body">
+                    <p class="card-text text-center hidden-p-sm-down font-weight-bold" style="font-size: larger"> ${element.title} </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-success">${element.nBids} bids</small>
+                        <small class="text-danger">
+                            ${proposalStatus(element.proposal_status)}</small>
                     </div>
                 </div>
             </div>
@@ -343,23 +390,16 @@ function makeAlbum()
         htmlproposal += `<div class="col-md-3 proposalItem"  data-id="${element.id}">
         <a href="proposal/${element.id}" class="list-group-item-action">
             <div class="card mb-4 box-shadow">
-                <div class="col-md-6 img-fluid media-object align-self-center ">
-
-                    <img class="width100" src="../img/${element.image}" alt="book image">
-                </div>
                 <div class="card-body">
-                    <p class="card-text text-center hidden-p-md-down font-weight-bold" style="font-size: larger"> ${element.title} </p>
-                    <p class="card-text text-center hidden-p-md-down">By ${element.author} </p>
+                    <p class="card-text text-center hidden-p-sm-down font-weight-bold" style="font-size: larger"> ${element.title} </p>
                     <div class="d-flex justify-content-between align-items-center">
-                        ${element.wishlisted}
-                        <small class="text-success">${element.bidMsg} </small>
+                        <small class="text-success">${element.nBids} bids</small>
                         <small class="text-danger">
-                                ${element.time}</small>
+                            ${proposalStatus(element.proposal_status)}</small>
                     </div>
                 </div>
-
             </div>
-            </a>
+        </a>
     </div>`;
     };
     htmlproposal += `</div>`;
@@ -406,6 +446,26 @@ function makeSearchAlbum(proposals)
     });
     htmlproposal += `</div>`;
     return htmlproposal;
+}
+
+function proposalStatus(e) {
+    switch (e) {
+        case 'waitingApproval':
+            return 'Waiting Approval';
+            break;
+        case 'approved':
+            return 'Approved'
+            break;
+        case 'finished':
+            return 'Finished'
+            break;
+        case 'evaluated':
+            return 'Evaluated'
+            break;
+        default:
+            return 'Error'
+            break;
+    }
 }
 
 /**
@@ -459,7 +519,7 @@ function notificationsHandler(response)
 function getNotCounter(response)
 {
     let notifications = JSON.parse(JSON.stringify(response));
-    if (notifications.length != 0)
+    if (notifications.length != 0 && notifications instanceof Array)
     {
         counter.innerHTML = notifications.length;
     }
@@ -589,35 +649,7 @@ function commentsHandler(response)
     }
 }
 
-function setLike()
-{
-    like = true;
-    console.log(like);
-}
 
-function setUnlike()
-{
-    like = false;
-    console.log(like);
-}
-
-function postFeedback(senderID)
-{
-    let feedback = document.querySelector('#left-feedback').value;
-    console.log(feedback);
-    if (feedback !== null)
-    {
-        let params = {
-            "id_sender": senderID,
-            "text": feedback,
-            "id_receiver": getProfileID(),
-            "liked": like,
-            "id_parent": null
-        };
-        ajaxCallPost('/users/{id}', params, null);
-        window.location.reload();
-    }
-}
 
 function getProfileID()
 {
@@ -699,25 +731,20 @@ for (let i = 0; i < cats.length; i++)
 /**
  * JS for bidding-related stuff and APIs
  */
-if (window.location.href.includes("proposal/"))
-{
+if (window.location.href.includes("proposal/")) {
     let editButton = document.querySelector("#edit-proposal");
-    if (editButton != null)
-    {
-        editButton.addEventListener("click", function()
-        {
+    if (editButton != null) {
+        editButton.addEventListener("click", function () {
             window.location.href = window.location.href + "/edit";
         });
     }
 
     let timeLeft = document.querySelector("#timeLeft").innerHTML;
-    if (timeLeft !== "Proposal hasn't been approved yet" && timeLeft !== "Proposal has ended!")
-    {
+    if (timeLeft !== "Proposal hasn't been approved yet" && timeLeft !== "Proposal has ended!") {
         let elements = timeLeft.split(" ");
         let days, hours, minutes, seconds;
 
-        switch (elements.length)
-        {
+        switch (elements.length) {
             case 4:
                 days = parseInt(elements[0].slice(0, -1));
                 hours = parseInt(elements[1].slice(0, -1));
@@ -746,18 +773,17 @@ if (window.location.href.includes("proposal/"))
 
         let timer = new Timer();
         timer.start(
-        {
-            countdown: true,
-            startValues:
             {
-                days: days,
-                hours: hours,
-                minutes: minutes,
-                seconds: seconds
-            }
-        });
-        timer.addEventListener('secondsUpdated', function(e)
-        {
+                countdown: true,
+                startValues:
+                {
+                    days: days,
+                    hours: hours,
+                    minutes: minutes,
+                    seconds: seconds
+                }
+            });
+        timer.addEventListener('secondsUpdated', function (e) {
             let newTime = "";
             if (timer.getTimeValues().days > 0)
                 newTime += timer.getTimeValues().days + "d ";
@@ -773,31 +799,26 @@ if (window.location.href.includes("proposal/"))
             document.querySelector("#timeLeft").innerHTML = newTime;
 
             let bidBox = document.querySelector("#bid-box");
-            if (newTime === "Proposal has ended!")
-            {
+            if (newTime === "Proposal has ended!") {
                 bidBox.disabled = true;
                 bidBox.innerHTML = "Proposal is unbiddable right now";
             }
         });
     }
 
-    window.setInterval(function()
-    {
+    window.setInterval(function () {
         let proposalID = getproposalID();
         let requestURL = "/api/bid/?proposalID=" + proposalID;
         //ajaxCallGet(requestURL, getBidHandler);
         ajaxCallGet2('/proposal',
-        {}, null);
+            {}, null);
     }, 2000);
 
     let bidBox = document.querySelector("#bid-box");
-    if (bidBox != null)
-    {
-        bidBox.addEventListener("click", function()
-        {
+    if (bidBox != null) {
+        bidBox.addEventListener("click", function () {
             let currVal = document.querySelector("#currentBid").value;
-            if (currVal == "")
-            {
+            if (currVal == "") {
                 let header = document.querySelector("#bidResultHeader");
                 let body = document.querySelector("#bidResultBody");
                 header.innerHTML = "Bidding value not set";
@@ -811,8 +832,7 @@ if (window.location.href.includes("proposal/"))
             let maxVal = document.querySelector("#currentMaxBid").innerHTML;
             maxVal = parseFloat(maxVal);
 
-            if (currVal <= maxVal)
-            {
+            if (currVal <= maxVal) {
                 let header = document.querySelector("#bidResultHeader");
                 let body = document.querySelector("#bidResultBody");
                 header.innerHTML = "Insufficient bidding value";
@@ -911,6 +931,10 @@ function advSearchHandler()
     header.innerHTML = sentence;
     htmlAlbum = makeSearchAlbum(answer);
     album.innerHTML = htmlAlbum;
+}
+
+function searchMember(){
+
 }
 
 /**

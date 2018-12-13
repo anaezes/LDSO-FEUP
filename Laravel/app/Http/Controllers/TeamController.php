@@ -10,7 +10,6 @@ use App\Team;
 use App\User;
 use App\Faculty;
 
-
 class TeamController extends Controller
 {
     /**
@@ -20,7 +19,7 @@ class TeamController extends Controller
     */
     public function __construct()
     {
-      $this->middleware('guest')->except('logout');
+        $this->middleware('guest')->except('logout');
     }
 
     /**
@@ -68,12 +67,10 @@ class TeamController extends Controller
 
         $faculties = $request->input('teamFaculty.*', []);
         if ($faculties == []) {
-          $team->faculties()->syncWithoutDetaching($team->user->faculty->id);
+            $team->faculties()->syncWithoutDetaching($team->user->faculty->id);
+        } else {
+            $team->faculties()->syncWithoutDetaching($faculties);
         }
-        else {
-          $team->faculties()->syncWithoutDetaching($faculties);
-        }
-
 
         return redirect()->route('team.show', $team->id);
     }
@@ -86,8 +83,8 @@ class TeamController extends Controller
      */
     public function show($id)
     {
-      $team = Team::find($id);
-      return view('pages.team', ['team' => $team]);
+        $team = Team::find($id);
+        return view('pages.team', ['team' => $team]);
     }
 
     /**
@@ -110,48 +107,46 @@ class TeamController extends Controller
      */
     public function update(Request $request, $id)
     {
-      $team = Team::findOrFail($id);
+        $team = Team::findOrFail($id);
 
-      $validator = Validator::make($request->all(), [
-        'teamname' => [
+        $validator = Validator::make($request->all(), [
+          'teamname' => [
           'required',
           'string',
           'max:70',
-          function ($attribute, $value, $fail) use($team){
-            if (Team::where($attribute, $value)->exists() and $team->teamname != $value) {
-              $fail($value.' is already on use.');
-            }
-          },
-        ],
-        'teamdescription' => 'required|string|max:200',
-        'teamfaculty' => 'array|exists:faculty,id',
-      ]);
+            function ($attribute, $value, $fail) use ($team) {
+                if (Team::where($attribute, $value)->exists() and $team->teamname != $value) {
+                    $fail($value.' is already on use.');
+                }
+            },
+          ],
+          'teamdescription' => 'required|string|max:200',
+          'teamfaculty' => 'array|exists:faculty,id',
+        ]);
 
-      if ($validator->fails()) {
-        return redirect()->back()
+        if ($validator->fails()) {
+            return redirect()->back()
                          ->withErrors($validator)
                          ->withInput();
-      }
-
-      $team->teamname = $request->input('teamname');
-      $team->teamdescription = $request->input('teamdescription');
-      $team->save();
-
-      $faculties = $request->input('teamfaculty.*', []);
-      foreach ($team->faculties as $faculty) {
-        if (!in_array($faculty->id, $faculties)) {
-          $team->faculties()->detach($faculty->id);
         }
-      }
-      if ($faculties == []) {
-        $team->faculties()->syncWithoutDetaching($team->user->faculty->id);
-      }
-      else {
-        $team->faculties()->syncWithoutDetaching($faculties);
-      }
 
+        $team->teamname = $request->input('teamname');
+        $team->teamdescription = $request->input('teamdescription');
+        $team->save();
 
-      return back()->withInput();
+        $faculties = $request->input('teamfaculty.*', []);
+        foreach ($team->faculties as $faculty) {
+            if (!in_array($faculty->id, $faculties)) {
+                $team->faculties()->detach($faculty->id);
+            }
+        }
+        if ($faculties == []) {
+            $team->faculties()->syncWithoutDetaching($team->user->faculty->id);
+        } else {
+            $team->faculties()->syncWithoutDetaching($faculties);
+        }
+
+        return back()->withInput();
     }
 
     /**
@@ -183,16 +178,16 @@ class TeamController extends Controller
             'required',
             'string',
             'exists:users,username',
-            function ($attribute, $value, $fail) use($team){
-              if ($team->members()->where($attribute, $value)->exists()) {
-                $fail($value.' is already on the team.');
-              }
+            function ($attribute, $value, $fail) use ($team) {
+                if ($team->members()->where($attribute, $value)->exists()) {
+                    $fail($value.' is already on the team.');
+                }
             },
           ],
         ]);
 
         if ($validator->fails()) {
-          return redirect()->back()
+            return redirect()->back()
                            ->withErrors($validator)
                            ->withInput();
         }
@@ -220,19 +215,17 @@ class TeamController extends Controller
         ]);
 
         if ($validator->fails()) {
-          return redirect()->back()
+            return redirect()->back()
                            ->withErrors($validator)
                            ->withInput();
         }
 
         $team->members()->detach($request->input('memberId'));
 
-        if($request->input('source') == 'member') {
-          return redirect()->route('team.index');
+        if ($request->input('source') == 'member') {
+            return redirect()->route('team.index');
+        } else {
+            return back()->withInput();
         }
-        else {
-          return back()->withInput();
-        }
-
     }
 }

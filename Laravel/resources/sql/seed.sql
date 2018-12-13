@@ -1,3 +1,6 @@
+DROP TRIGGER IF EXISTS ts_searchtext_users ON users;
+DROP TRIGGER IF EXISTS ts_searchtext_team ON team;
+DROP TRIGGER IF EXISTS ts_searchtext_proposal ON proposal;
 DROP TRIGGER IF EXISTS  tr_check_number_off_row_admin ON users CASCADE;
 DROP TRIGGER IF EXISTS  tr_change_users_status ON users CASCADE;
 DROP TRIGGER IF EXISTS  tr_change_proposal_status ON proposal CASCADE;
@@ -11,6 +14,10 @@ DROP FUNCTION IF EXISTS  change_proposal_status() CASCADE;
 DROP FUNCTION IF EXISTS  check_approved_proposal() CASCADE;
 DROP FUNCTION IF EXISTS  change_proposal_modification_is_approved() CASCADE;
 DROP FUNCTION IF EXISTS image_proposal_or_users() CASCADE;
+
+DROP INDEX IF EXISTS users_searchtext_gin;
+DROP INDEX IF EXISTS team_searchtext_gin;
+DROP INDEX IF EXISTS proposal_searchtext_gin;
 
 DROP TABLE IF EXISTS public.password_resets CASCADE;
 DROP TABLE IF EXISTS image CASCADE;
@@ -57,6 +64,8 @@ CREATE TABLE users (
     CONSTRAINT status_ck CHECK ((users_status = ANY (ARRAY['moderator'::text, 'banned'::text, 'normal'::text, 'terminated'::text,'admin'::text])))
 );
 
+ALTER TABLE users ADD COLUMN searchtext TSVECTOR;
+UPDATE users SET searchtext = to_tsvector('english', name || '' || username);
 
 
 --4
@@ -84,9 +93,12 @@ CREATE TABLE proposal (
     dueDate TIMESTAMP WITH TIME zone NOT NULL,
     announceDate TIMESTAMP WITH TIME zone NOT NULL,
     idProponent INTEGER NOT NULL REFERENCES users(id),
-    CONSTRAINT proposal_status_ck CHECK ((proposal_status = ANY (ARRAY['approved'::text, 'removed'::text, 'waitingApproval'::text, 'finished'::text]))),
+    CONSTRAINT proposal_status_ck CHECK ((proposal_status = ANY (ARRAY['approved'::text, 'removed'::text, 'waitingApproval'::text, 'finished'::text, 'evaluated'::text]))),
     CONSTRAINT duration_ck CHECK (duration >= 300)
 );
+
+ALTER TABLE proposal ADD COLUMN searchtext TSVECTOR;
+UPDATE proposal SET searchtext = to_tsvector('english', title || '' || description);
 
 CREATE TABLE skill (
   id SERIAL PRIMARY KEY,
@@ -118,19 +130,23 @@ CREATE TABLE faculty_proposal (
 CREATE TABLE team (
      id SERIAL PRIMARY KEY,
      teamName TEXT NOT NULL UNIQUE,
-     idLeader INTEGER NOT NULL REFERENCES users(id),
+     idLeader INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
      teamDescription TEXT NOT NULL
 );
 
+ALTER TABLE team ADD COLUMN searchtext TSVECTOR;
+UPDATE team SET searchtext = to_tsvector('english', teamname || '' || teamdescription);
+
+
 CREATE TABLE team_member(
-      idTeam INTEGER NOT NULL REFERENCES team(id),
-      idUser INTEGER NOT NULL REFERENCES users(id),
+      idTeam INTEGER NOT NULL REFERENCES team(id) ON DELETE CASCADE,
+      idUser INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
       PRIMARY KEY (idTeam,idUser)
 );
 
 CREATE TABLE team_faculty (
-      idTeam INTEGER NOT NULL REFERENCES team(id),
-      idFaculty INTEGER NOT NULL REFERENCES faculty(id),
+      idTeam INTEGER NOT NULL REFERENCES team(id) ON DELETE CASCADE,
+      idFaculty INTEGER NOT NULL REFERENCES faculty(id) ON DELETE CASCADE,
       PRIMARY KEY (idTeam, idFaculty)
 );
 
@@ -143,7 +159,8 @@ CREATE TABLE bid (
     bidDate TIMESTAMP WITH TIME zone DEFAULT now() NOT NULL,
     description text NOT NULL,
     winner boolean DEFAULT FALSE,
-    submissionDate TIMESTAMP WITH TIME zone NOT NULL
+    submissionDate TIMESTAMP WITH TIME zone NOT NULL,
+    selfevaluation INTEGER DEFAULT NULL
 );
 
 --12
@@ -212,12 +229,20 @@ CREATE INDEX image_index ON image USING hash (id);
 
 CREATE INDEX title_index ON proposal USING GIST (to_tsvector('english', title));
 
---CREATE INDEX author_index ON proposal USING GIST (to_tsvector('english', author));
+CREATE INDEX users_searchtext_gin ON users USING GIN(searchtext);
+CREATE INDEX team_searchtext_gin ON team USING GIN(searchtext);
+CREATE INDEX proposal_searchtext_gin ON proposal USING GIN(searchtext);
 
 
 -----------------------------------------------------
  --TRIGGERS AND UDFs
 ----------------------------------------------------
+
+CREATE TRIGGER ts_searchtext_users BEFORE INSERT OR UPDATE ON users FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('searchtext', 'pg_catalog.english', 'name', 'username'); 
+
+CREATE TRIGGER ts_searchtext_team BEFORE INSERT OR UPDATE ON team FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('searchtext', 'pg_catalog.english', 'teamname', 'teamdescription'); 
+
+CREATE TRIGGER ts_searchtext_proposal BEFORE INSERT OR UPDATE ON proposal FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('searchtext', 'pg_catalog.english', 'title', 'description'); 
 
 CREATE FUNCTION check_number_of_row_admin() RETURNS TRIGGER AS
 $BODY$
@@ -334,22 +359,22 @@ CREATE TRIGGER tr_change_proposal_modification_is_approved
         FOR EACH ROW
 		      EXECUTE PROCEDURE change_proposal_modification_is_approved();
 
-CREATE FUNCTION image_proposal_or_users() RETURNS TRIGGER AS
-$BODY$
-BEGIN
-
-	IF (NEW.idusers!=NULL) AND (NEW.idproposal!=NULL OR NEW.idproposalModification!= NULL) THEN
-        RAISE EXCEPTION 'An image cant belong to an proposal and an user';
-    END IF;
-	RETURN NEW;
-END
-$BODY$
-LANGUAGE plpgsql;
-
-CREATE TRIGGER tr_image_proposal_or_users
-     BEFORE INSERT OR UPDATE ON image
-        FOR EACH ROW
-		      EXECUTE PROCEDURE image_proposal_or_users();
+--CREATE FUNCTION image_proposal_or_users() RETURNS TRIGGER AS
+--$BODY$
+--BEGIN
+--
+--	IF (NEW.idusers!=NULL) AND (NEW.idproposal!=NULL OR NEW.idproposalModification!= NULL) THEN
+        --RAISE EXCEPTION 'An image cant belong to an proposal and an user';
+    --END IF;
+	--RETURN NEW;
+--END
+--$BODY$
+--LANGUAGE plpgsql;
+--
+--CREATE TRIGGER tr_image_proposal_or_users
+  --   BEFORE INSERT OR UPDATE ON image
+  --      FOR EACH ROW
+		      --EXECUTE PROCEDURE image_proposal_or_users();
 
 
 --1
@@ -375,6 +400,8 @@ INSERT INTO "skill" (skillName) VALUES ('Skill1');
 INSERT INTO "skill" (skillName) VALUES ('Skill2');
 INSERT INTO "skill" (skillName) VALUES ('Skill3');
 INSERT INTO "skill" (skillName) VALUES ('Skill4');
+
+
 
 
 

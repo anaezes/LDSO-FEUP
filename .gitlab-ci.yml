@@ -4,7 +4,30 @@ before_script:
   - export SSHPASS=$USER_PASS
 
 stages:
+  - linter
+  - testing
   - deploy
+
+lint:
+  stage: linter
+  script:
+    - cd filesForCI
+    - composer install
+    - php ./vendor/bin/phpcs ../Laravel/app --standard=PSR2 --exclude=Generic.Files.LineLength
+    - php ./vendor/bin/phpcs ../Laravel/routes --standard=PSR2 --exclude=Generic.Files.LineLength
+
+deploy-testing:
+  stage: testing
+  environment:
+    name: testing
+    url: http://46.101.156.192:8200
+  script:
+    - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "cd ~/testing && chmod 777 script.sh && ./script.sh $CI_COMMIT_REF_NAME"
+    - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "cd ~/testing && chmod 777 wait-on-health.sh && sh wait-on-health.sh"
+    - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "docker exec -t laravel-test_web-prod_1 php ./vendor/bin/codecept build"
+    - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "docker exec -t laravel-test_web-prod_1 php ./vendor/bin/codecept run acceptance"
+    - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "docker exec -t laravel-test_web-prod_1 php ./vendor/bin/phpunit"
+    - sshpass -e ssh -o StrictHostKeyChecking=no root@46.101.156.192 "cd ~/testing/t2g4/Laravel && rm -rf /var/www/html && mv report /var/www/html"
 
 deploy-staging:
   stage: deploy

@@ -21,11 +21,13 @@ class Notification extends Model
      */
     protected $table = 'notification';
 
-    public function proposal(){
+    public function proposal()
+    {
         return $this->belongsTo('App\Proposal', 'idproposal');
     }
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo('App\User', 'idusers');
     }
 }
