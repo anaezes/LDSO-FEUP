@@ -20,15 +20,16 @@ other factors contributing to the success and future replication of this experie
 
 ## How to compile/run
 
+You must first install ```docker``` and ```docker-compose``` commands for your OS, then:
+ 
 * navigate to the root folder of the project - "Laravel"
-* create a ".env" file and place it in the root folder - [example .env](https://pastebin.com/EmMfU0UA)
-* open 2 terminal windows inside the root folder
-* run "composer install"
-* run "docker-compose up" on terminal #1
-* run "php artisan db:seed" on terminal #2
-* run "php artisan serve" on terminal #2
-
-The database will be available at localhost:5050
+* create a ```.env``` file and place it in the root folder - [example .env](https://pastebin.com/EmMfU0UA)
+* open a terminal window inside the root folder
+* run ```docker-compose up --build```
+* you can run ```docker exec -t laravel_web_1 php artisan db:seed``` to re-seed the database, it is already done once at each execution
+ 
+The database admin will be available at localhost:5050
+ 
 The website will be available at localhost:8000
 
 ## Bug reporting
