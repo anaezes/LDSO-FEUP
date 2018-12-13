@@ -98,11 +98,6 @@
                   <i class="fa fa-user-plus"></i> Edit Info
                   </a>
                </div>
-               <div class="col-lg-6">
-                  <a class="btn btn-outline-primary btn-block" data-toggle="modal" data-target="#myModalPassword">
-                  <i class="fa fa-user-plus"></i> Change Password
-                  </a>
-               </div>
             </div>
          </div>
       </div>
@@ -165,35 +160,6 @@
                            @endif
                         </div>
                         <button type="submit" class="btn btn-primary btn-block mb-4">Save any new changes</button>
-                     </form>
-                  </div>
-               </div>
-            </div>
-         </div>
-         <div class="modal fade" id="myModalPassword" tabindex="-1" role="dialog" aria-labelledby="myModalPasswordLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-               <div class="modal-content">
-                  <div class="modal-header">
-                     <h5 class="modal-title" id="myModalPasswordLabel">Change Password</h5>
-                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                     <span aria-hidden="true">&times;</span>
-                     </button>
-                  </div>
-                  <div class="modal-body">
-                     <form>
-                        <div class="form-group">
-                           <label for="exampleInputPassword1">Current password</label>
-                           <input class="form-control" id="exampleInputPassword1" type="password" placeholder="Your password">
-                        </div>
-                        <div class="form-group">
-                           <label for="exampleNewPassword">New Password</label>
-                           <input class="form-control" id="exampleNewPassword" type="password" placeholder="New password">
-                        </div>
-                        <div class="form-group">
-                           <label for="exampleConfirmPassword">Confirm Password</label>
-                           <input class="form-control" id="exampleConfirmPassword" type="password" placeholder="Confirm password">
-                        </div>
-                        <button class="btn btn-primary btn-block mb-4">Change Password</button>
                      </form>
                   </div>
                </div>
