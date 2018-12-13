@@ -52,5 +52,6 @@
         @endif
 
         </div>
+        <a href="#" id="showmorebutton" class="btn btn-outline-primary my-2 btn-block">Show More</a>
     </main>
 </div>
